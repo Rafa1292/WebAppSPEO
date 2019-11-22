@@ -340,7 +340,6 @@
     <Content Include="Views\UbicationFeatures\Index.cshtml" />
     <Content Include="Views\Cantons\Create.cshtml" />
     <Content Include="Views\Cantons\Delete.cshtml" />
-    <Content Include="Views\Cantons\Details.cshtml" />
     <Content Include="Views\Cantons\Edit.cshtml" />
     <Content Include="Views\Cantons\Index.cshtml" />
     <Content Include="Views\Distrits\Create.cshtml" />

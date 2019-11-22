@@ -4,30 +4,28 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="justify-content-center d-flex">
+    <h3 class="url-label">Cantones</h3>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
+<div class="d-flex mb-2">
+    @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-outline-primary" })
+</div>
+<hr />
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
+
+
+@foreach (var item in Model)
+{
+    <div class="container row d-flex mb-3">
+        <div class="col-md-6">
             @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CantonId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CantonId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CantonId })
-        </td>
-    </tr>
+        </div>
+        <div class="col-md-6 justify-content-end d-flex">
+            @Html.ActionLink("Edit", "Edit", new { id = item.CantonId }, new { @class = "btn btn-outline-info" })
+            @Html.ActionLink("Delete", "Delete", new { id = item.CantonId }, new { @class = "btn btn-outline-danger delete-button" })
+        </div>
+    </div>
+    <hr />
 }
 
-</table>
