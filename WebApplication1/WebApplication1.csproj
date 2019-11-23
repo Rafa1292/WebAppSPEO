@@ -196,6 +196,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="Models\ArticleClient.cs" />
@@ -344,7 +345,6 @@
     <Content Include="Views\Cantons\Index.cshtml" />
     <Content Include="Views\Distrits\Create.cshtml" />
     <Content Include="Views\Distrits\Delete.cshtml" />
-    <Content Include="Views\Distrits\Details.cshtml" />
     <Content Include="Views\Distrits\Edit.cshtml" />
     <Content Include="Views\Distrits\Index.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />

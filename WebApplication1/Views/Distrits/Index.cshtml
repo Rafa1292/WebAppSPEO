@@ -4,36 +4,46 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="justify-content-center d-flex">
+    <h3 class="url-label">Distritos</h3>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Canton.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
+<div class="d-flex mb-2">
+    @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-outline-primary" })
+</div>
+<hr />
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Canton.Name)
-        </td>
-        <td>
+
+<div class="container row d-flex text-center">
+    <div class="col-md-4 ">
+        <strong>
+            Distrito
+        </strong>
+    </div>
+    <div class="col-md-4 ">
+        <strong>
+            Canton
+        </strong>        
+    </div>
+</div>
+<hr />
+
+
+
+@foreach (var item in Model)
+{
+    <div class="container row d-flex mb-3 text-center">
+        <div class="col-md-4 ">
             @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.DistritId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.DistritId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.DistritId })
-        </td>
-    </tr>
+        </div>
+        <div class="col-md-4">
+            @Html.DisplayFor(modelItem => item.Canton.Name)
+        </div>
+        <div class="col-md-4 justify-content-center d-flex">
+            @Html.ActionLink("Editar", "Edit", new { id = item.DistritId }, new { @class = "btn btn-outline-info" }) 
+            @Html.ActionLink("Borrar", "Delete", new { id = item.DistritId }, new { @class = "btn btn-outline-danger delete-button" })
+        </div>
+    </div>
 }
 
-</table>
+<hr />
