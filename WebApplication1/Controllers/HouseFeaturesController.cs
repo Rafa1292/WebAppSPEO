@@ -17,8 +17,7 @@ namespace WebApplication1.Controllers
         // GET: HouseFeatures
         public ActionResult Index()
         {
-            var houseFeatures = db.HouseFeatures.Include(h => h.Content);
-            return View(houseFeatures.ToList());
+            return View(db.HouseFeatures.ToList());
         }
 
         // GET: HouseFeatures/Details/5
@@ -39,7 +38,6 @@ namespace WebApplication1.Controllers
         // GET: HouseFeatures/Create
         public ActionResult Create()
         {
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description");
             return View();
         }
 
@@ -48,7 +46,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "HouseFeatureId,Description,ContentTypeId")] HouseFeature houseFeature)
+        public ActionResult Create([Bind(Include = "HouseFeatureId,Description")] HouseFeature houseFeature)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +55,6 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", houseFeature.ContentTypeId);
             return View(houseFeature);
         }
 
@@ -73,7 +70,6 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", houseFeature.ContentTypeId);
             return View(houseFeature);
         }
 
@@ -82,7 +78,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "HouseFeatureId,Description,ContentTypeId")] HouseFeature houseFeature)
+        public ActionResult Edit([Bind(Include = "HouseFeatureId,Description")] HouseFeature houseFeature)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +86,6 @@ namespace WebApplication1.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", houseFeature.ContentTypeId);
             return View(houseFeature);
         }
 

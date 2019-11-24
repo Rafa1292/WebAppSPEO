@@ -15,8 +15,6 @@ namespace WebApplication1.Models
         [StringLength(50, ErrorMessage = "Maximo 50 caracteres")]
         [Required(ErrorMessage = "Debes agregar una descripcion")]
         public string Description { get; set; }
-        public int ContentTypeId { get; set; }
-        public virtual ContentType Content { get; set; }
         public ICollection<HouseFeatureHouse> HouseFeaturesHouse { get; set; }
     }
 }

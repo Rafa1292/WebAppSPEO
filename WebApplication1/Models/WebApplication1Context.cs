@@ -31,8 +31,6 @@ namespace WebApplication1.Models
 
         public System.Data.Entity.DbSet<WebApplication1.Models.TerrainFeature> TerrainFeatures { get; set; }
 
-        public System.Data.Entity.DbSet<WebApplication1.Models.ContentType> ContentTypes { get; set; }
-
         public System.Data.Entity.DbSet<WebApplication1.Models.HouseFeature> HouseFeatures { get; set; }
 
         public System.Data.Entity.DbSet<WebApplication1.Models.UbicationFeature> UbicationFeatures { get; set; }

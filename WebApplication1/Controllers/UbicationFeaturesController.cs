@@ -17,8 +17,7 @@ namespace WebApplication1.Controllers
         // GET: UbicationFeatures
         public ActionResult Index()
         {
-            var ubicationFeatures = db.UbicationFeatures.Include(u => u.ContentType);
-            return View(ubicationFeatures.ToList());
+            return View(db.UbicationFeatures.ToList());
         }
 
         // GET: UbicationFeatures/Details/5
@@ -39,7 +38,6 @@ namespace WebApplication1.Controllers
         // GET: UbicationFeatures/Create
         public ActionResult Create()
         {
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description");
             return View();
         }
 
@@ -48,7 +46,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UbicationFeatureId,Description,ContentTypeId")] UbicationFeature ubicationFeature)
+        public ActionResult Create([Bind(Include = "UbicationFeatureId,Description")] UbicationFeature ubicationFeature)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +55,6 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", ubicationFeature.ContentTypeId);
             return View(ubicationFeature);
         }
 
@@ -73,7 +70,6 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", ubicationFeature.ContentTypeId);
             return View(ubicationFeature);
         }
 
@@ -82,7 +78,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UbicationFeatureId,Description,ContentTypeId")] UbicationFeature ubicationFeature)
+        public ActionResult Edit([Bind(Include = "UbicationFeatureId,Description")] UbicationFeature ubicationFeature)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +86,6 @@ namespace WebApplication1.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", ubicationFeature.ContentTypeId);
             return View(ubicationFeature);
         }
 

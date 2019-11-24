@@ -17,8 +17,7 @@ namespace WebApplication1.Controllers
         // GET: TerrainFeatures
         public ActionResult Index()
         {
-            var terrainFeatures = db.TerrainFeatures.Include(t => t.ContentType);
-            return View(terrainFeatures.ToList());
+            return View(db.TerrainFeatures.ToList());
         }
 
         // GET: TerrainFeatures/Details/5
@@ -39,7 +38,6 @@ namespace WebApplication1.Controllers
         // GET: TerrainFeatures/Create
         public ActionResult Create()
         {
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description");
             return View();
         }
 
@@ -48,7 +46,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TerrainFeatureId,Description,ContentTypeId")] TerrainFeature terrainFeature)
+        public ActionResult Create([Bind(Include = "TerrainFeatureId,Description")] TerrainFeature terrainFeature)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +55,6 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", terrainFeature.ContentTypeId);
             return View(terrainFeature);
         }
 
@@ -73,7 +70,6 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", terrainFeature.ContentTypeId);
             return View(terrainFeature);
         }
 
@@ -82,7 +78,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TerrainFeatureId,Description,ContentTypeId")] TerrainFeature terrainFeature)
+        public ActionResult Edit([Bind(Include = "TerrainFeatureId,Description")] TerrainFeature terrainFeature)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +86,6 @@ namespace WebApplication1.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ContentTypeId = new SelectList(db.ContentTypes, "ContentTypeId", "Description", terrainFeature.ContentTypeId);
             return View(terrainFeature);
         }
 
