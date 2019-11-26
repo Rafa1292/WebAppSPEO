@@ -328,7 +328,6 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\HouseFeatures\Create.cshtml" />
     <Content Include="Views\HouseFeatures\Delete.cshtml" />
-    <Content Include="Views\HouseFeatures\Details.cshtml" />
     <Content Include="Views\HouseFeatures\Edit.cshtml" />
     <Content Include="Views\HouseFeatures\Index.cshtml" />
     <Content Include="Views\TerrainFeatures\Create.cshtml" />

@@ -9,7 +9,7 @@ namespace WebApplication1.Models
 {
     public class IndividualContributor
     {
-        [Key, ForeignKey("IcPicture")]
+        [Key]
         public int IndividualContributorId { get; set; }
 
         [Display(Name = "Nombre")]
