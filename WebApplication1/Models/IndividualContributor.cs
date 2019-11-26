@@ -29,8 +29,7 @@ namespace WebApplication1.Models
         [Required(ErrorMessage = "Debes agregar un correo")]
         [EmailAddress(ErrorMessage = "Direccion  de correo invalida")]
         public string Mail { get; set; }
-        public virtual IcPicture IcPicture { get; set; }
-        public int IcPictureId { get; set; }
+        public ICollection<IndividualContributorPicture> IndividualContributorPictures { get; set; }
         public ICollection<Article> Articles { get; set; }
     }
 }

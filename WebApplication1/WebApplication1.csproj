@@ -188,7 +188,6 @@
     <Compile Include="Controllers\DistritsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseFeaturesController.cs" />
-    <Compile Include="Controllers\IndividualContributorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TerrainFeaturesController.cs" />
     <Compile Include="Controllers\UbicationFeaturesController.cs" />
@@ -206,7 +205,6 @@
     <Compile Include="Models\House.cs" />
     <Compile Include="Models\HouseFeature.cs" />
     <Compile Include="Models\HouseFeatureHouse.cs" />
-    <Compile Include="Models\IcPicture.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IndividualContributor.cs" />
     <Compile Include="Models\IndividualContributorPicture.cs" />

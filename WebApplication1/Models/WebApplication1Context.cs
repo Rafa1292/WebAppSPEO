@@ -27,8 +27,6 @@ namespace WebApplication1.Models
 
         public System.Data.Entity.DbSet<WebApplication1.Models.IndividualContributor> IndividualContributors { get; set; }
 
-        public System.Data.Entity.DbSet<WebApplication1.Models.IcPicture> IcPictures { get; set; }
-
         public System.Data.Entity.DbSet<WebApplication1.Models.TerrainFeature> TerrainFeatures { get; set; }
 
         public System.Data.Entity.DbSet<WebApplication1.Models.HouseFeature> HouseFeatures { get; set; }
