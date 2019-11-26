@@ -332,7 +332,6 @@
     <Content Include="Views\HouseFeatures\Index.cshtml" />
     <Content Include="Views\TerrainFeatures\Create.cshtml" />
     <Content Include="Views\TerrainFeatures\Delete.cshtml" />
-    <Content Include="Views\TerrainFeatures\Details.cshtml" />
     <Content Include="Views\TerrainFeatures\Edit.cshtml" />
     <Content Include="Views\TerrainFeatures\Index.cshtml" />
     <Content Include="Views\UbicationFeatures\Create.cshtml" />

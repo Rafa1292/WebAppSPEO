@@ -4,30 +4,36 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="justify-content-center d-flex">
+    <h3 class="url-label">Caracteristicas de terreno</h3>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
+<div class="d-flex mb-2">
+    @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-outline-primary" })
+</div>
+<hr />
+
+<div class="container row d-flex text-center">
+    <div class="col-md-6 ">
+        <strong>
             @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
+        </strong>
+    </div>
+</div>
+<hr />
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TerrainFeatureId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.TerrainFeatureId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.TerrainFeatureId })
-        </td>
-    </tr>
-}
 
-</table>
+    @foreach (var item in Model)
+    {
+        <div class="container row d-flex mb-3 text-center">
+            <div class="col-md-6">
+                @Html.DisplayFor(modelItem => item.Description)
+            </div>
+            <div class="col-md-6 justify-content-center d-flex">
+                @Html.ActionLink("Editar", "Edit", new { id = item.TerrainFeatureId }, new { @class = "btn btn-outline-info" })
+                @Html.ActionLink("Borrar", "Delete", new { id = item.TerrainFeatureId }, new { @class = "btn btn-outline-danger delete-button" })
+            </div>
+        </div>
+        <hr />
+    }
+
