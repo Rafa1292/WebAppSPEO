@@ -336,7 +336,6 @@
     <Content Include="Views\TerrainFeatures\Index.cshtml" />
     <Content Include="Views\UbicationFeatures\Create.cshtml" />
     <Content Include="Views\UbicationFeatures\Delete.cshtml" />
-    <Content Include="Views\UbicationFeatures\Details.cshtml" />
     <Content Include="Views\UbicationFeatures\Edit.cshtml" />
     <Content Include="Views\UbicationFeatures\Index.cshtml" />
   </ItemGroup>
