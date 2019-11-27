@@ -21,20 +21,6 @@ namespace WebApplication1.Controllers
             return View(db.IndividualContributors.ToList());
         }
 
-        // GET: IndividualContributors/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            IndividualContributor individualContributor = db.IndividualContributors.Find(id);
-            if (individualContributor == null)
-            {
-                return HttpNotFound();
-            }
-            return View(individualContributor);
-        }
 
         // GET: IndividualContributors/Create
         public ActionResult Create()
@@ -86,6 +72,9 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
+                HttpPostedFileBase ImageWeb = Request.Files[0];
+                WebImage image = new WebImage(ImageWeb.InputStream);
+                individualContributor.PictureArray = image.GetBytes();
                 db.Entry(individualContributor).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

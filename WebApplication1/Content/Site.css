@@ -38,3 +38,19 @@ textarea {
     align-items: center;
     justify-content: center;
 }
+
+.image-label-style {
+    display: flex;
+    height: 90px;
+    width: 90px;
+    border: dashed;
+    justify-content: center;
+    align-items: center;
+    border-color: gray;
+}
+
+.image-preview-style {
+    width: 90px;
+    height: 90px;
+    margin-left: -50px;
+}

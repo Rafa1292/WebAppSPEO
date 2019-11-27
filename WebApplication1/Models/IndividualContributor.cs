@@ -20,7 +20,7 @@ namespace WebApplication1.Models
         [RegularExpression("[0-9]{4}\\-[0-9]{4}", ErrorMessage = "Debes digitar los primeros 4 digitos seguidos de un guion(-) y los ultimos 4 digitos")]
         [Display(Name = "Telefono", Prompt = "0000-0000")]
         [Required(ErrorMessage = "Debes agregar un numero de telefono")]
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Display(Name = "Identificacion")]
         [Required(ErrorMessage = "Debes agregar un numero de identificacion")]
