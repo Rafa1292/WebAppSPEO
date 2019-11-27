@@ -188,6 +188,7 @@
     <Compile Include="Controllers\DistritsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseFeaturesController.cs" />
+    <Compile Include="Controllers\IndividualContributorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TerrainFeaturesController.cs" />
     <Compile Include="Controllers\UbicationFeaturesController.cs" />
@@ -207,7 +208,6 @@
     <Compile Include="Models\HouseFeatureHouse.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IndividualContributor.cs" />
-    <Compile Include="Models\IndividualContributorPicture.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Terrain.cs" />
     <Compile Include="Models\TerrainFeature.cs" />
@@ -338,6 +338,10 @@
     <Content Include="Views\UbicationFeatures\Delete.cshtml" />
     <Content Include="Views\UbicationFeatures\Edit.cshtml" />
     <Content Include="Views\UbicationFeatures\Index.cshtml" />
+    <Content Include="Views\IndividualContributors\Create.cshtml" />
+    <Content Include="Views\IndividualContributors\Delete.cshtml" />
+    <Content Include="Views\IndividualContributors\Edit.cshtml" />
+    <Content Include="Views\IndividualContributors\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

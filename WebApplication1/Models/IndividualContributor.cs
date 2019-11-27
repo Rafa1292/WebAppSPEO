@@ -24,12 +24,12 @@ namespace WebApplication1.Models
         [Display(Name = "Identificacion")]
         [Required(ErrorMessage = "Debes agregar un numero de identificacion")]
         public int Identification { get; set; }
+        public byte[] PictureArray { get; set; }
 
         [Display(Name = "Correo")]
         [Required(ErrorMessage = "Debes agregar un correo")]
         [EmailAddress(ErrorMessage = "Direccion  de correo invalida")]
         public string Mail { get; set; }
-        public ICollection<IndividualContributorPicture> IndividualContributorPictures { get; set; }
         public ICollection<Article> Articles { get; set; }
     }
 }

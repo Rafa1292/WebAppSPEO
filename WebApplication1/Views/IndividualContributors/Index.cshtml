@@ -1,0 +1,75 @@
+﻿@model IEnumerable<WebApplication1.Models.IndividualContributor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="justify-content-center d-flex">
+    <h3 class="url-label">Colaboradores</h3>
+</div>
+
+<div class="d-flex mb-2">
+    @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-outline-primary" })
+</div>
+<hr />
+
+<div class="container row d-flex text-center">
+    <div class="col-md-2">
+        <strong>
+            Foto
+        </strong>
+    </div>
+    <div class="col-md-2">
+        <strong>
+            @Html.DisplayNameFor(model => model.Name)
+        </strong>
+    </div>
+    <div class="col-md-2">
+        <strong>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </strong>
+    </div>
+    <div class="col-md-2">
+        <strong>
+            @Html.DisplayNameFor(model => model.Identification)
+        </strong>
+    </div>
+    <div class="col-md-2">
+        <strong>
+            @Html.DisplayNameFor(model => model.Mail)
+        </strong>
+    </div>
+</div>
+<hr />
+
+    @foreach (var item in Model)
+    {
+    <div class="container row d-flex mb-3 text-center">
+        <div class="col-md-2 ">
+           @{
+            var base64 = Convert.ToBase64String(item.PictureArray);
+            var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+
+            <img src="@imgSrc" style="width:90px; height: 90px;">
+            }
+
+        </div>
+        <div class="col-md-2 icAlignStyle">
+            @Html.DisplayFor(modelItem => item.Name)
+        </div>
+        <div class="col-md-2 icAlignStyle">
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </div>
+        <div class="col-md-2 icAlignStyle">
+            @Html.DisplayFor(modelItem => item.Identification)
+        </div>
+        <div class="col-md-2 icAlignStyle">
+            @Html.DisplayFor(modelItem => item.Mail)
+        </div>
+        <div class="col-md-2 icAlignStyle">
+            @Html.ActionLink("Editar", "Edit", new { id = item.IndividualContributorId }, new { @class = "btn btn-outline-info" })
+            @Html.ActionLink("Borrar", "Delete", new { id = item.IndividualContributorId }, new { @class = "btn btn-outline-danger delete-button" })
+        </div>
+    </div>
+    }
+
