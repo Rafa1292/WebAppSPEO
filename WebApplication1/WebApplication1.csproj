@@ -192,6 +192,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TerrainFeaturesController.cs" />
     <Compile Include="Controllers\UbicationFeaturesController.cs" />
+    <Compile Include="Controllers\UbicationsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -342,6 +343,11 @@
     <Content Include="Views\IndividualContributors\Delete.cshtml" />
     <Content Include="Views\IndividualContributors\Edit.cshtml" />
     <Content Include="Views\IndividualContributors\Index.cshtml" />
+    <Content Include="Views\Ubications\Create.cshtml" />
+    <Content Include="Views\Ubications\Delete.cshtml" />
+    <Content Include="Views\Ubications\Details.cshtml" />
+    <Content Include="Views\Ubications\Edit.cshtml" />
+    <Content Include="Views\Ubications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

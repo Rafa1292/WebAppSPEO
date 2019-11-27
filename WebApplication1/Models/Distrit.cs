@@ -17,5 +17,7 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         public virtual Canton Canton { get; set; }
         public int CantonId { get; set; }
+
+        public ICollection<Ubication> Ubications { get; set; }
     }
 }

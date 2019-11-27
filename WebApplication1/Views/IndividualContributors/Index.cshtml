@@ -50,7 +50,7 @@
             var base64 = Convert.ToBase64String(item.PictureArray);
             var imgSrc = String.Format("data:image/png;base64,{0}", base64);
 
-            <img src="@imgSrc" style="width:90px; height: 90px;">
+            <img class="rounded-circle" src="@imgSrc" style="width:90px; height: 90px;">
             }
 
         </div>
