@@ -18,7 +18,7 @@ namespace WebApplication1.Models
         public ICollection<UbicationPicture> UbicationPictures { get; set; }
         public ICollection<Article> Articles { get; set; }
         public ICollection<UbicationFeatureUbication> UbicationFeaturesUbication { get; set; }
-        public int CantonId { get; set; }
-        public virtual Canton Canton { get; set; }
+        public int DistritId { get; set; }
+        public virtual Distrit Distrit { get; set; }
     }
 }
