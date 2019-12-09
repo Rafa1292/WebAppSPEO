@@ -34,5 +34,11 @@ namespace WebApplication1.Models
         public System.Data.Entity.DbSet<WebApplication1.Models.UbicationFeature> UbicationFeatures { get; set; }
 
         public System.Data.Entity.DbSet<WebApplication1.Models.Ubication> Ubications { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.UbicationPicture> UbicationPictures { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.UbicationFeatureUbication> UbicationFeaturesUbication { get; set; }
+
+
     }
 }

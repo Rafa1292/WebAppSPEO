@@ -11,7 +11,7 @@ namespace WebApplication1.Models
         [Key]
         public int UbicationId { get; set; }
 
-        [Display(Name = "Descripcion")]
+        [Display(Name = "Nombre")]
         [StringLength(50, ErrorMessage = "Maximo 50 caracteres")]
         [Required(ErrorMessage = "Debes agregar un nombre")]
         public string Name { get; set; }

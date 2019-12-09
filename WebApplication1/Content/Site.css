@@ -23,7 +23,7 @@ textarea {
     max-width: 280px;
 }
 
-.delete-button{
+.delete-button {
     margin-left: 3px;
 }
 
@@ -49,8 +49,55 @@ textarea {
     border-color: gray;
 }
 
+.list-style {
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    margin-bottom: -1px;
+}
+
 .image-preview-style {
     width: 90px;
     height: 90px;
     margin-left: -50px;
+}
+
+.ubication-feature-lbl {
+    background-color: white;
+    color: black;
+}
+
+    .ubication-feature-lbl:hover {
+        background-color: darkgreen;
+        color: white;
+    }
+
+.ubication-feature-lbl-selected {
+    background-color: darkgreen;
+    color: white;
+}
+
+    .ubication-feature-lbl-selected:hover {
+        background-color: darkred;
+        color: white;
+    }
+
+.thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    box-shadow: 3px 3px 2px rgba(0,0,0,.175);
+}
+
+.close-button-style {
+    color: red;
+    font-size: 18px;
+    margin-left: -8px;
+    margin-top: -8px;
+    z-index: 1000;
+    background-color: white;
+    height: 14px;
+    width: 13px;
+    border-radius: 100px;
 }

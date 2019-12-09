@@ -11,6 +11,7 @@ namespace WebApplication1.Models
         [Key]
         public int UbicationPictureId { get; set; }
         public int UbicationId { get; set; }
+        public byte[] PictureArray { get; set; }
 
     }
 }

@@ -1,11 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -21,25 +25,14 @@ namespace WebApplication1.Controllers
             return View(ubications.ToList());
         }
 
-        // GET: Ubications/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ubication ubication = db.Ubications.Find(id);
-            if (ubication == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ubication);
-        }
+
 
         // GET: Ubications/Create
         public ActionResult Create()
         {
-            ViewBag.DistritId = new SelectList(db.Distrits, "DistritId", "Name");
+            ViewBag.UbicationFeaturesId = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
+            ViewBag.CantonId = new SelectList(db.Cantons, "CantonId", "Name");
+
             return View();
         }
 
@@ -48,16 +41,57 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UbicationId,Name,DistritId")] Ubication ubication)
+        public ActionResult Create([Bind(Include = "UbicationId,Name,DistritId")] Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId)
         {
-            if (ModelState.IsValid)
+            urls = urls != null ? urls : new string[0];
+
+
+
+            if (ubication.Name != null && ubication.DistritId > 0 && urls.Length > 0 && ubicationFeatures.Length > 0)
             {
                 db.Ubications.Add(ubication);
                 db.SaveChanges();
+
+                List<UbicationPicture> Pictures = new List<UbicationPicture>();
+                List<UbicationFeatureUbication> Features = new List<UbicationFeatureUbication>();
+
+                foreach (var url in urls)
+                {
+                    UbicationPicture picture = new UbicationPicture();
+                    string base64 = url;// load base 64 code to this variable from js 
+                    Byte[] bitmapData = new Byte[base64.Length];
+                    bitmapData = Convert.FromBase64String(base64);
+                    picture.PictureArray = bitmapData;
+                    picture.UbicationId = ubication.UbicationId;
+                    Pictures.Add(picture);
+                }
+
+                foreach (var feature in ubicationFeatures)
+                {
+                    UbicationFeatureUbication ubicationFeature = new UbicationFeatureUbication();
+                    ubicationFeature.UbicationFeatureId = feature;
+                    ubicationFeature.UbicationId = ubication.UbicationId;
+                    Features.Add(ubicationFeature);
+                }
+
+                db.UbicationPictures.AddRange(Pictures);
+                db.UbicationFeaturesUbication.AddRange(Features);
+                db.SaveChanges();
+
+
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DistritId = new SelectList(db.Distrits, "DistritId", "Name", ubication.DistritId);
+            ViewBag.urls = urls;
+            ViewBag.CantonId = new SelectList(db.Cantons.ToList(), "CantonId", "Name"); 
+            var distritList = from d in db.Distrits
+                              where d.CantonId.ToString() == CantonId
+                              select d;
+            ViewBag.DistritId = new SelectList(distritList.ToList(),"DistritId","Name");
+            ViewBag.SelectedCanton = CantonId;
+            ViewBag.SelectedDistrit = ubication.DistritId.ToString();
+            ViewBag.UbicationFeaturesId = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
+            ViewBag.SelectedUbicationFeatures = ubicationFeatures;
             return View(ubication);
         }
 
@@ -118,6 +152,27 @@ namespace WebApplication1.Controllers
             db.Ubications.Remove(ubication);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public string GetDistrits(int CantonId)
+        {
+            List<Distrit> FilterList = db.Distrits.Where(x => x.CantonId == CantonId).ToList();
+            string data = "";
+            data += "<option value=0 disabled selected>Seleccione un distrito</option >";
+
+            foreach (var distrit in FilterList)
+            {
+                data += "<option value = " + distrit.DistritId + " >" + distrit.Name + "</option >";
+            }
+            return data;
+        }
+
+
+        public static string FixBase64ForImage(string image)
+        {
+            string converted = image.Replace('-', '+');
+            converted = converted.Replace('_', '/');
+            return converted;
         }
 
         protected override void Dispose(bool disposing)

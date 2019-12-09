@@ -4,45 +4,365 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<div class="justify-content-center d-flex">
+    <h3 class="url-label" style="margin-left:-28px">Ubicaciones</h3>
+</div>
+<hr />
 
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Ubications", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Ubication</h4>
+
+    <div class="container-fluid row">
+        <div class="col-md-3">
+            <div class="form-horizontal">
+                <h4 class="text-center">Ubicacion</h4>
+                <hr />
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Canton</label>
+                    <div class="col-md-10">
+                        <select name="CantonId" id="Canton" class="form-control" onchange="FillDistrits(this.value)">
+                            <option selected disabled>Seleccione un canton</option>
+                            @foreach (var canton in ViewBag.CantonId)
+                            {
+                                var selectedOption = ViewBag.SelectedCanton != null && ViewBag.SelectedCanton == canton.Value ? "selected" : "";
+                                <option @selectedOption value="@canton.Value">@canton.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="dplDistritsContainer">
+                    <label class="control-label col-md-2">Distrito</label>
+                    <div class="col-md-10">
+                        <select name="DistritId" id="dplDistrit" class="form-control">
+                            <option value=0 disabled selected>Seleccione un distrito</option>
+                            @if (ViewBag.DistritId != null)
+                            {
+                                foreach (var distrit in ViewBag.DistritId)
+                                {
+                                    var selectedOption = ViewBag.SelectedDistrit != null && ViewBag.SelectedDistrit == distrit.Value ? "selected" : "";
+                                    <option @selectedOption value="@distrit.Value">@distrit.Text</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6 text-center p-0">
+            <h4>Agregar fotos </h4>
+            <hr />
+            <div class="form-group">
+                <div class="col-md-12 row m-0" id="imagesPreview">
+                    <div class="col-md-12 d-flex justify-content-center p-0">
+                        <label for="pickImage" class="image-label-style" style="width:300px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
+                        <input multiple id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+                    </div>
+                    @if (ViewBag.urls != null)
+                    {
+                        var i = 0;
+                        foreach (var url in ViewBag.urls)
+                        {
+                            <div class="col-md-2 my-2 d-flex" id="@i">
+                                <img class="thumbnail @i" src=@url>
+                                <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true"></i>
+                                <input name="urls[]" class="urls" style="display: none;" id="@i" type="text" value="@url">
+                            </div>
+                            i++;
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 text-center">
+            <h4>Caracteristicas </h4>
+            <hr />
+            <div class="col-md-12" id="selectedFeatures">
+                <div class="form-group">
+                    <div class="col-md-12 mb-3">
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#UbicationFeaturesModal">
+                            Caracteristicas disponibles
+                        </button>
+                    </div>
+
+                </div>
+                <div class="col-md-12 d-flex justify-content-center">
+                    <ul class="list-group " id="featuresContent" style="width:60%;">
+                        @if (ViewBag.SelectedUbicationFeatures != null)
+                        {
+                            foreach (var feature in ViewBag.UbicationFeaturesId)
+                            {
+                                foreach (var selectedFeature in ViewBag.SelectedUbicationFeatures)
+                                {
+                                    if (Int32.Parse(feature.Value) == selectedFeature)
+                                    {
+                                        <li class="list-group-item-success list-group-item" id=@feature.Value>@feature.Text</li>
+                                    }
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item list-group-item-danger"> <label>No has seleccionado ninguna caracteristica</label></li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-12 ">
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            <div class="container-fluid row">
+                <div class="col-md-6 d-flex justify-content-end">
+                    <input type="submit" value="Crear" class="btn btn-success" />
+                </div>
+                <div class="col-md-6">
+                    <a href="/Ubications" class="btn btn-outline-secondary">Regresar</a>
+                </div>
             </div>
         </div>
+    </div>
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="UbicationFeaturesModal" tabindex="-1" role="dialog" aria-labelledby="UbicationFeaturesLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="UbicationFeatureslLabel">Lista de caracteristicas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var feature in ViewBag.UbicationFeaturesId)
+                        {
+                            var lblId = feature.Value;
+                            var name = Json.Encode(@feature.Text);
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DistritId, "DistritId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("DistritId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DistritId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            if (ViewBag.SelectedUbicationFeatures != null)
+                            {
+                                string state = "";
+                                string className = "ubication-feature-lbl";
+                                foreach (var selectedFeature in ViewBag.SelectedUbicationFeatures)
+                                {
+                                    state = Int32.Parse(lblId) == selectedFeature ? "checked" : state;
+                                    className = Int32.Parse(lblId) == selectedFeature ? "ubication-feature-lbl-selected" : className;
+                                    if (state == "checked")
+                                    {
+                                        break;
+                                    }
+                                }
+                                <li class="list-group-item @className" id="lbl-@lblId">
+                                    <div class="custom-control">
+                                        <label for="chk-@lblId" onclick="clickedLabel(@feature.Value, @name)">@feature.Text</label>
+                                        <input @state name="ubicationFeatures[]" id="chk-@lblId" type="checkbox" style="display:none" value="@lblId" />
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="list-group-item ubication-feature-lbl" id="lbl-@lblId">
+                                    <div class="custom-control">
+                                        <label for="chk-@lblId" onclick="clickedLabel(@feature.Value, @name)">@feature.Text</label>
+                                        <input name="ubicationFeatures[]" id="chk-@lblId" type="checkbox" style="display:none" value="@lblId" />
+                                    </div>
+                                </li>
+                            }
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+
+                        }
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success">Guardar cambios</button>
+                </div>
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        var Features = new Array();
+        var SelectedFeatures = document.getElementsByClassName('list-group-item-success');
+        if (SelectedFeatures.length > 0) {
+            for (var i = 0; i < SelectedFeatures.length; i++) {
+                Features.push(SelectedFeatures[i].textContent);
+            }
+        }
+
+        function FillDistrits(CantonId) {
+            $("#dplDistrit").html("");
+            $.post("GetDistrits/Ubications", { CantonId: CantonId })
+                .done(function (data) {
+                    $("#dplDistrit").html(data);
+                })
+                .fail(function (data) {
+                    alert("no Sirve")
+                });
+        }
+
+        function clickedLabel(id, name) {
+
+            var lblId = "lbl-" + id;
+            var chkId = "chk-" + id;
+
+            if (document.getElementById(chkId).checked) {
+
+                document.getElementById(lblId).classList.add('ubication-feature-lbl');
+                document.getElementById(lblId).classList.remove('ubication-feature-lbl-selected');
+            } else {
+
+                document.getElementById(lblId).classList.remove('ubication-feature-lbl');
+                document.getElementById(lblId).classList.add('ubication-feature-lbl-selected');
+            }
+
+            fillFeatures(name)
+        }
+
+        function fillFeatures(name) {
+
+            if (!Features.includes(name)) {
+                Features.push(name);
+            }
+            else {
+
+                var i = Features.indexOf(name);
+                Features.splice(i, 1);
+            }
+
+            drawSelectedOptions(name);
+        }
+
+        function drawSelectedOptions() {
+
+            var content = "";
+
+            if (Features.length == 0) {
+                content += " <li class=\"list-group-item list-group-item-danger\"> <label>No has seleccionado ninguna caracteristica</label></li>";
+            }
+
+            for (var i = 0; i < Features.length; i++) {
+                content += "<li class=\"list-group-item-success list-group-item\" id= \"" + Features[i] + "\" >" + Features[i] + "</li>"
+            }
+
+            document.getElementById("featuresContent").innerHTML = content;
+        }
+
+        function showPreview(event) {
+
+            var input = event.target;
+
+            for (var i = 0; i < input.files.length; i++) {
+                var thumbnail_id = input.files[i].name;
+                createThumbnail(input, i, thumbnail_id);
+            }
+            input.value = "";
+        }
+
+        function createThumbnail(input, iterator, thumbnail_id) {
+
+            var existing = document.getElementById(thumbnail_id)
+            if (existing != null) {
+                alert(`La foto: ${thumbnail_id} ya esta incluida`);
+                return;
+            }
+
+            var imageContainer = document.createElement('div');
+            var thumbnail = document.createElement('img');
+
+
+            thumbnail.classList.add('thumbnail', thumbnail_id);
+            thumbnail.setAttribute('src', URL.createObjectURL(input.files[iterator]))
+            var closeButton = createCloseButton(thumbnail_id);
+            imageContainer.classList.add('col-md-2', 'my-2', 'd-flex');
+            imageContainer.setAttribute('name', input.files[iterator].name);
+            imageContainer.setAttribute('id', thumbnail_id);
+            imageContainer.appendChild(thumbnail);
+            imageContainer.appendChild(closeButton);
+            document.getElementById('imagesPreview').appendChild(imageContainer);
+            getBase64Image(input.files[iterator], thumbnail_id);
+
+        }
+
+        function createCloseButton(thumbnail_id) {
+            var closeButton = document.createElement('i');
+            closeButton.setAttribute('id', thumbnail_id);
+            closeButton.classList.add('fas', 'fa-times-circle', 'close-button-style', thumbnail_id);
+            return closeButton
+        }
+
+
+        document.body.addEventListener('click', function (e) {
+            if (e.target.classList.contains('close-button-style')) {
+                var id = e.target.id;
+                e.target.remove();
+                document.getElementById(id).remove();
+            }
+        });
+
+
+
+
+
+
+
+        function getBase64Image(input, id) {
+
+
+            var reader = new FileReader();
+            reader.onload = function () {
+                var dataURL = reader.result;
+                dataURL.replace(/^data:image\/png;base64,/, "");
+                var base64String = document.createElement('input');
+                base64String.setAttribute('name', 'urls[]');
+                base64String.setAttribute('style', 'display: none;');
+                base64String.setAttribute('type', 'text');
+                base64String.value = dataURL;
+                document.getElementById(id).appendChild(base64String);
+                verifyExistingFile(dataURL);
+            };
+            reader.readAsDataURL(input);
+
+        }
+
+        function verifyExistingFile(dataURL) {
+            var elements = document.getElementsByClassName('urls');
+            for (var i = 0; i < elements.length; i++) {
+                if (elements[i].value == dataURL) {
+                    document.getElementById(elements[i].id).remove();
+                }
+            }
+        }
+
+    </script>
+
 }
