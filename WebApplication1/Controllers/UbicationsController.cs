@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Activities.Statements;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -47,47 +48,69 @@ namespace WebApplication1.Controllers
 
 
 
+
+
             if (ubication.Name != null && ubication.DistritId > 0 && urls.Length > 0 && ubicationFeatures.Length > 0)
             {
-                db.Ubications.Add(ubication);
-                db.SaveChanges();
-
-                List<UbicationPicture> Pictures = new List<UbicationPicture>();
-                List<UbicationFeatureUbication> Features = new List<UbicationFeatureUbication>();
-
-                foreach (var url in urls)
+                using (var transaction = db.Database.BeginTransaction())
                 {
-                    UbicationPicture picture = new UbicationPicture();
-                    string base64 = url;// load base 64 code to this variable from js 
-                    Byte[] bitmapData = new Byte[base64.Length];
-                    bitmapData = Convert.FromBase64String(base64);
-                    picture.PictureArray = bitmapData;
-                    picture.UbicationId = ubication.UbicationId;
-                    Pictures.Add(picture);
+                    try
+                    {
+                        db.Ubications.Add(ubication);
+                        db.SaveChanges();
+
+                        List<UbicationPicture> Pictures = new List<UbicationPicture>();
+                        List<UbicationFeatureUbication> Features = new List<UbicationFeatureUbication>();
+
+                        foreach (var url in urls)
+                        {
+                            UbicationPicture picture = new UbicationPicture();
+                            picture.PictureB64 = url;
+                            picture.UbicationId = ubication.UbicationId;
+                            Pictures.Add(picture);
+                        }
+
+                        foreach (var feature in ubicationFeatures)
+                        {
+                            UbicationFeatureUbication ubicationFeature = new UbicationFeatureUbication();
+                            ubicationFeature.UbicationFeatureId = feature;
+                            ubicationFeature.UbicationId = ubication.UbicationId;
+                            Features.Add(ubicationFeature);
+                        }
+
+                        db.UbicationPictures.AddRange(Pictures);
+                        db.UbicationFeaturesUbication.AddRange(Features);
+                        db.SaveChanges();
+
+                        transaction.Commit();
+                        return RedirectToAction("Index");
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        ViewBag.Error = "ERROR" + ex.Message;
+                        ViewBag.urls = urls;
+                        ViewBag.CantonId = new SelectList(db.Cantons.ToList(), "CantonId", "Name");
+                        var distrits = from d in db.Distrits
+                                       where d.CantonId.ToString() == CantonId
+                                       select d;
+                        ViewBag.DistritId = new SelectList(distrits.ToList(), "DistritId", "Name");
+                        ViewBag.SelectedCanton = CantonId;
+                        ViewBag.SelectedDistrit = ubication.DistritId.ToString();
+                        ViewBag.UbicationFeaturesId = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
+                        ViewBag.SelectedUbicationFeatures = ubicationFeatures;
+                        return View(ubication);
+                    }
                 }
-
-                foreach (var feature in ubicationFeatures)
-                {
-                    UbicationFeatureUbication ubicationFeature = new UbicationFeatureUbication();
-                    ubicationFeature.UbicationFeatureId = feature;
-                    ubicationFeature.UbicationId = ubication.UbicationId;
-                    Features.Add(ubicationFeature);
-                }
-
-                db.UbicationPictures.AddRange(Pictures);
-                db.UbicationFeaturesUbication.AddRange(Features);
-                db.SaveChanges();
-
-
-                return RedirectToAction("Index");
             }
 
             ViewBag.urls = urls;
-            ViewBag.CantonId = new SelectList(db.Cantons.ToList(), "CantonId", "Name"); 
+            ViewBag.CantonId = new SelectList(db.Cantons.ToList(), "CantonId", "Name");
             var distritList = from d in db.Distrits
                               where d.CantonId.ToString() == CantonId
                               select d;
-            ViewBag.DistritId = new SelectList(distritList.ToList(),"DistritId","Name");
+            ViewBag.DistritId = new SelectList(distritList.ToList(), "DistritId", "Name");
             ViewBag.SelectedCanton = CantonId;
             ViewBag.SelectedDistrit = ubication.DistritId.ToString();
             ViewBag.UbicationFeaturesId = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
@@ -167,13 +190,6 @@ namespace WebApplication1.Controllers
             return data;
         }
 
-
-        public static string FixBase64ForImage(string image)
-        {
-            string converted = image.Replace('-', '+');
-            converted = converted.Replace('_', '/');
-            return converted;
-        }
 
         protected override void Dispose(bool disposing)
         {

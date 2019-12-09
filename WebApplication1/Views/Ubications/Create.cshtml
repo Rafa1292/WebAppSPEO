@@ -7,9 +7,13 @@
 <div class="justify-content-center d-flex">
     <h3 class="url-label" style="margin-left:-28px">Ubicaciones</h3>
 </div>
+<span class="text-danger field-validation-error justify-content-center d-flex" id="CantonError">
+    <span>@ViewBag.Error</span>
+</span>
+
 <hr />
 
-@using (Html.BeginForm("Create", "Ubications", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "Ubications", FormMethod.Post, new { enctype = "multipart/form-data", @id = "Form" }))
 {
     @Html.AntiForgeryToken()
 
@@ -31,8 +35,8 @@
 
                 <div class="form-group">
                     <label class="control-label col-md-2">Canton</label>
-                    <div class="col-md-10">
-                        <select name="CantonId" id="Canton" class="form-control" onchange="FillDistrits(this.value)">
+                    <div class="col-md-10" id="CantonIdValidation">
+                        <select name="CantonId" id="CantonId" class="form-control" onchange="FillDistrits(this.value)">
                             <option selected disabled>Seleccione un canton</option>
                             @foreach (var canton in ViewBag.CantonId)
                             {
@@ -40,13 +44,14 @@
                                 <option @selectedOption value="@canton.Value">@canton.Text</option>
                             }
                         </select>
+                        <span class="text-danger field-validation-error" id="CantonError"></span>
                     </div>
                 </div>
 
                 <div class="form-group" id="dplDistritsContainer">
                     <label class="control-label col-md-2">Distrito</label>
                     <div class="col-md-10">
-                        <select name="DistritId" id="dplDistrit" class="form-control">
+                        <select name="DistritId" id="DistritId" class="form-control" onchange="distritValidation()">
                             <option value=0 disabled selected>Seleccione un distrito</option>
                             @if (ViewBag.DistritId != null)
                             {
@@ -58,6 +63,7 @@
 
                             }
                         </select>
+                        <span class="text-danger field-validation-error" id="DistritError"></span>
                     </div>
                 </div>
             </div>
@@ -72,6 +78,10 @@
                     <div class="col-md-12 d-flex justify-content-center p-0">
                         <label for="pickImage" class="image-label-style" style="width:300px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
                         <input multiple id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+                    </div>
+                    <div class="col-md-12">
+                        <span class="text-danger field-validation-error" id="ImageError">
+                        </span>
                     </div>
                     @if (ViewBag.urls != null)
                     {
@@ -101,6 +111,10 @@
                             Caracteristicas disponibles
                         </button>
                     </div>
+                    <div class="col-md-12">
+                        <span class="text-danger field-validation-error" id="FeatureError">
+                        </span>
+                    </div>
 
                 </div>
                 <div class="col-md-12 d-flex justify-content-center">
@@ -119,10 +133,6 @@
 
                             }
                         }
-                        else
-                        {
-                            <li class="list-group-item list-group-item-danger"> <label>No has seleccionado ninguna caracteristica</label></li>
-                        }
 
                     </ul>
                 </div>
@@ -135,7 +145,7 @@
         <div class="form-group">
             <div class="container-fluid row">
                 <div class="col-md-6 d-flex justify-content-end">
-                    <input type="submit" value="Crear" class="btn btn-success" />
+                    <input type="button" value="Crear" onclick="formValidation()" class="btn btn-success" />
                 </div>
                 <div class="col-md-6">
                     <a href="/Ubications" class="btn btn-outline-secondary">Regresar</a>
@@ -220,10 +230,11 @@
         }
 
         function FillDistrits(CantonId) {
-            $("#dplDistrit").html("");
+            $("#DistritId").html("");
             $.post("GetDistrits/Ubications", { CantonId: CantonId })
                 .done(function (data) {
-                    $("#dplDistrit").html(data);
+                    $("#DistritId").html(data);
+                    cantonValidation();
                 })
                 .fail(function (data) {
                     alert("no Sirve")
@@ -275,6 +286,7 @@
             }
 
             document.getElementById("featuresContent").innerHTML = content;
+            FeatureValidation();
         }
 
         function showPreview(event) {
@@ -320,7 +332,6 @@
             return closeButton
         }
 
-
         document.body.addEventListener('click', function (e) {
             if (e.target.classList.contains('close-button-style')) {
                 var id = e.target.id;
@@ -328,12 +339,6 @@
                 document.getElementById(id).remove();
             }
         });
-
-
-
-
-
-
 
         function getBase64Image(input, id) {
 
@@ -361,8 +366,68 @@
                     document.getElementById(elements[i].id).remove();
                 }
             }
+            ImageValidation();
         }
 
+        function formValidation() {
+
+            var cantons = cantonValidation();
+            var distrits = distritValidation();
+            var images = ImageValidation();
+            var features = FeatureValidation();
+
+            if (cantons && distrits && images && features) {
+                document.getElementById("Form").submit();
+            }
+        }
+
+        function cantonValidation() {
+            var canton = document.getElementById('CantonId');
+            if (!canton.selectedIndex > 0) {
+                document.getElementById('CantonError').innerHTML =
+                    '<span>Debes agregar un canton</span>';
+                return false;
+            } else {
+                document.getElementById('CantonError').innerHTML = "";
+                return true;
+            }
+        }
+
+        function distritValidation() {
+            var distrit = document.getElementById('DistritId');
+            if (!distrit.selectedIndex > 0) {
+                document.getElementById('DistritError').innerHTML =
+                    '<span>Debes agregar un distrito</span>';
+                return false;
+            } else {
+                document.getElementById('DistritError').innerHTML = "";
+                return true;
+            }
+        }
+
+        function ImageValidation() {
+            var images = document.getElementsByName('urls[]')
+            if (!images.length > 0) {
+                document.getElementById('ImageError').innerHTML =
+                    '<span>Debes agregar almenos una foto</span>';
+                return false;
+            } else {
+                document.getElementById('ImageError').innerHTML = "";
+                return true;
+            }
+        }
+
+        function FeatureValidation() {
+            if (Features.length > 0) {
+                document.getElementById('FeatureError').innerHTML = "";
+                return true;
+            } else {
+                document.getElementById('FeatureError').innerHTML =
+                    '<span>Debes agregar almenos una caracteristica</span>';
+                return false;
+
+            }
+        }
     </script>
 
 }
