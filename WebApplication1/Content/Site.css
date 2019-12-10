@@ -90,6 +90,7 @@ textarea {
     box-shadow: 3px 3px 2px rgba(0,0,0,.175);
 }
 
+
 .close-button-style {
     color: red;
     font-size: 18px;
@@ -101,3 +102,14 @@ textarea {
     width: 13px;
     border-radius: 100px;
 }
+
+.figure-selected-style {
+    border: 5px solid rgba(40, 167, 69, 1);
+}
+
+
+
+    .figure-style:hover {
+        border: 5px solid rgba(40, 167, 69, .2);
+
+    }

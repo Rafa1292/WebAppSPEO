@@ -7,7 +7,7 @@
 <div class="justify-content-center d-flex">
     <h3 class="url-label" style="margin-left:-28px">Ubicaciones</h3>
 </div>
-<span class="text-danger field-validation-error justify-content-center d-flex" id="CantonError">
+<span class="text-danger field-validation-error justify-content-center d-flex">
     <span>@ViewBag.Error</span>
 </span>
 
@@ -82,16 +82,28 @@
                     <div class="col-md-12">
                         <span class="text-danger field-validation-error" id="ImageError">
                         </span>
+                        <span class="text-danger field-validation-error" id="OutstandingImageError">
+                        </span>
                     </div>
                     @if (ViewBag.urls != null)
                     {
-                        var i = 0;
+                        <div class="col-md-2 my-2 d-flex" id="0">
+                            <figure class="figure-style">
+                                <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src=@ViewBag.Selectedurl>
+                            </figure>
+                            <i id="0" class="fas fa-times-circle close-button-style 0" aria-hidden="true"></i>
+                            <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="@ViewBag.Selectedurl">
+                        </div>
+
+                        var i = 1;
                         foreach (var url in ViewBag.urls)
                         {
                             <div class="col-md-2 my-2 d-flex" id="@i">
-                                <img class="thumbnail @i" src=@url>
+                                <figure class="figure-style">
+                                    <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src=@url>
+                                </figure>
                                 <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true"></i>
-                                <input name="urls[]" class="urls" style="display: none;" id="@i" type="text" value="@url">
+                                <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@url">
                             </div>
                             i++;
                         }
@@ -310,16 +322,27 @@
 
             var imageContainer = document.createElement('div');
             var thumbnail = document.createElement('img');
-
+            var figure = document.createElement('figure');
+            //var figcaption = document.createElement('figcaption');
+            figure.classList.add("figure", "figure-style");
+            //figcaption.classList.add("figcaption", "figure-style");
+            //figcaption.innerHTML= "Imagen de portada";
 
             thumbnail.classList.add('thumbnail', thumbnail_id);
             thumbnail.setAttribute('src', URL.createObjectURL(input.files[iterator]))
+            thumbnail.setAttribute('id', input.files[iterator].name);
+            thumbnail.setAttribute('onclick', "SelectOutstandingPicture(this.id)");
             var closeButton = createCloseButton(thumbnail_id);
+            //var outstandingButton = createOutstandingButton(thumbnail_id);
+
             imageContainer.classList.add('col-md-2', 'my-2', 'd-flex');
             imageContainer.setAttribute('name', input.files[iterator].name);
             imageContainer.setAttribute('id', thumbnail_id);
-            imageContainer.appendChild(thumbnail);
+            figure.appendChild(thumbnail);
+            //figure.appendChild(figcaption);
+            imageContainer.appendChild(figure);
             imageContainer.appendChild(closeButton);
+            //imageContainer.appendChild(outstandingButton);
             document.getElementById('imagesPreview').appendChild(imageContainer);
             getBase64Image(input.files[iterator], thumbnail_id);
 
@@ -329,7 +352,14 @@
             var closeButton = document.createElement('i');
             closeButton.setAttribute('id', thumbnail_id);
             closeButton.classList.add('fas', 'fa-times-circle', 'close-button-style', thumbnail_id);
-            return closeButton
+            return closeButton;
+        }
+
+        function createOutstandingButton(thumbnail_id) {
+            var OutstandingButton = document.createElement('i');
+            OutstandingButton.setAttribute('id', thumbnail_id);
+            OutstandingButton.classList.add('fas', 'fa-star', 'outstanding-button-style', thumbnail_id);
+            return OutstandingButton;
         }
 
         document.body.addEventListener('click', function (e) {
@@ -348,6 +378,8 @@
                 var dataURL = reader.result;
                 dataURL.replace(/^data:image\/png;base64,/, "");
                 var base64String = document.createElement('input');
+                base64String.setAttribute('id', input.name);
+                base64String.setAttribute('class', "inputs");
                 base64String.setAttribute('name', 'urls[]');
                 base64String.setAttribute('style', 'display: none;');
                 base64String.setAttribute('type', 'text');
@@ -373,10 +405,14 @@
 
             var cantons = cantonValidation();
             var distrits = distritValidation();
-            var images = ImageValidation();
             var features = FeatureValidation();
+            var images = ImageValidation();
 
-            if (cantons && distrits && images && features) {
+            if (images) {
+                var outstandingPicture = outstandingPictureValidation();
+
+            }
+            if (cantons && distrits && images && features && outstandingPicture) {
                 document.getElementById("Form").submit();
             }
         }
@@ -427,6 +463,46 @@
                 return false;
 
             }
+
+
+        }
+
+        function outstandingPictureValidation() {
+            var images = document.getElementsByName('outstandingPicture')
+            if (!images.length > 0) {
+                document.getElementById('OutstandingImageError').innerHTML =
+                    '<span>Debes seleccionar una foto de portada. <br /> Para ello presiona sobre la imagen que quieres que aparezca como portada.</span>';
+                return false;
+            } else {
+                document.getElementById('OutstandingImageError').innerHTML = "";
+                return true;
+            }
+
+
+        }
+
+        function SelectOutstandingPicture(id) {
+            var inputs = document.getElementsByClassName('inputs');
+            var images = document.getElementsByClassName('thumbnail');
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].id == id) {
+                    inputs[i].name = "outstandingPicture";
+                }
+                else {
+                    inputs[i].name = "urls[]";
+                }
+            }
+
+            for (var i = 0; i < images.length; i++) {
+                if (images[i].id == id) {
+                    images[i].classList.add("figure-selected-style");
+                }
+                else {
+                    images[i].classList.remove("figure-selected-style");
+                }
+            }
+
         }
     </script>
 
