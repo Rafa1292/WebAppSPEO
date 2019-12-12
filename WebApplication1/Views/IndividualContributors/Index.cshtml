@@ -42,15 +42,16 @@
 </div>
 <hr />
 
-    @foreach (var item in Model)
-    {
+@foreach (var item in Model)
+{
     <div class="container row d-flex mb-3 text-center">
-        <div class="col-md-2 ">
-           @{
-            var base64 = Convert.ToBase64String(item.PictureArray);
-            var imgSrc = String.Format("data:image/png;base64,{0}", base64);
 
-            <img class="rounded-circle" src="@imgSrc" style="width:90px; height: 90px;">
+        <div class="col-md-2 ">
+            @{
+                var base64 = Convert.ToBase64String(item.PictureArray);
+                var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+
+                <img class="rounded-circle" src="@imgSrc" style="width:90px; height: 90px;">
             }
 
         </div>
@@ -71,5 +72,5 @@
             @Html.ActionLink("Borrar", "Delete", new { id = item.IndividualContributorId }, new { @class = "btn btn-outline-danger delete-button" })
         </div>
     </div>
-    }
+}
 

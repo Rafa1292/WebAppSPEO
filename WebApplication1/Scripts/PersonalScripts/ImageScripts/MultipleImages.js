@@ -201,22 +201,7 @@ function verifyExistingFile(dataURL) {
 
 
 
-/* Consulta si en la estructura  hay un valor seleccionado diferente de 0
- * que es el valor seleccionado por defecto, en caso dde no haber seleccionado una opcion valida
- * muestra un error indicandole al usuario que debe seleccionar una.
-*/
 
-function cantonValidation() {
-    var canton = document.getElementById('CantonId');
-    if (!canton.selectedIndex > 0) {
-        document.getElementById('CantonError').innerHTML =
-            '<span>Debes agregar un canton</span>';
-        return false;
-    } else {
-        document.getElementById('CantonError').innerHTML = "";
-        return true;
-    }
-}
 
 /*
  *Obtiene los elementos ya existentes y compara los nombres de la imagen, en caso de encontrar alguna coincidencia

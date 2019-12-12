@@ -33,18 +33,16 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IndividualContributor individualContributor)
+        public ActionResult Create(IndividualContributor individualContributor, string url)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && url != null)
             {
-                HttpPostedFileBase ImageWeb = Request.Files[0];
-                WebImage image = new WebImage(ImageWeb.InputStream);
-                individualContributor.PictureArray = image.GetBytes();
+                individualContributor.PictureArray = Convert.FromBase64String(url);
                 db.IndividualContributors.Add(individualContributor);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Url = url;
             return View(individualContributor);
         }
 
@@ -68,13 +66,12 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IndividualContributorId,Name,PhoneNumber,Identification,Mail")] IndividualContributor individualContributor)
+        public ActionResult Edit([Bind(Include = "IndividualContributorId,Name,PhoneNumber,Identification,Mail")] IndividualContributor individualContributor, string url)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && url != null)
             {
-                HttpPostedFileBase ImageWeb = Request.Files[0];
-                WebImage image = new WebImage(ImageWeb.InputStream);
-                individualContributor.PictureArray = image.GetBytes();
+
+                individualContributor.PictureArray = Convert.FromBase64String(url);
                 db.Entry(individualContributor).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

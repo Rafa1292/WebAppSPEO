@@ -265,7 +265,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\PersonalScripts\ImageScripts\Images.js" />
+    <Content Include="Scripts\PersonalScripts\ImageScripts\MultipleImages.js" />
+    <Content Include="Scripts\PersonalScripts\ImageScripts\SingleImage.js" />
     <Content Include="Scripts\PersonalScripts\UbicationsScripts\Distrits.js" />
     <Content Include="Scripts\PersonalScripts\UbicationsScripts\Features.js" />
     <Content Include="Scripts\popper-utils.js" />

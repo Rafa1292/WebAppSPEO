@@ -8,7 +8,7 @@
     <h3 class="url-label">Colaboradores</h3>
 </div>
 
-@using (Html.BeginForm("Create", "IndividualContributors", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "IndividualContributors", FormMethod.Post, new { enctype = "multipart/form-data", @id = "Form"}))
 {
     @Html.AntiForgeryToken()
 
@@ -21,13 +21,23 @@
 
         <div class="form-group">
             <label class="control-label col-md-2">Foto</label>
-            <div class="col-md-10 row">
-                <div class="col-md-2">
-                    <label for="pickImage" class="image-label-style"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
-                    <input id="pickImage" type="file" name="imageload" multiple style="display: none" onchange="showPreview(this)" />
-                </div>
+            <div class="col-md-12 row">
                 <div class="col-md-1">
-                    <img  id="previewImage" alt="imagen" class="image-preview-style" style="display:none;"/>
+                    <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
+                    <input id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+                </div>
+                <div class="col-md-1 d-flex" id="imagePreview">
+                    @if (ViewBag.Url != null)
+                    {
+                        <img class="thumbnail foto.jpg" src="data:image/jpeg;base64,@ViewBag.Url" id="foto.jpg">
+                        <i id="foto.jpg" class="fas fa-times-circle close-button-style foto.jpg" aria-hidden="true"></i>
+                        <input name="url" class="input" style="display: none;" id="foto.jpg" type="text" value="@ViewBag.Url">
+
+                    }
+                </div>
+                <div class="col-md-12">
+                    <span class="text-danger field-validation-error" id="ImageError">
+                    </span>
                 </div>
             </div>
         </div>
@@ -66,7 +76,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Crear" class="btn btn-success" />
+                <input type="button" onclick="formValidation()" value="Crear" class="btn btn-success" />
                 <a href="/IndividualContributors" class="btn btn-outline-secondary">Regresar</a>
             </div>
         </div>
@@ -77,19 +87,14 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/PersonalScripts/ImageScripts/SingleImage.js"></script>
+
     <script>
+        function formValidation() {
 
-
-        function showPreview(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#previewImage').attr('src', e.target.result); 
-                    $('#previewImage').css("display", "block");
-                }
-                reader.readAsDataURL(input.files[0]);
+            if (ImageValidation()) {
+                document.getElementById("Form").submit();
             }
-
         }
     </script>
 }
