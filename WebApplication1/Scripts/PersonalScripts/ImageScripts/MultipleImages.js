@@ -79,6 +79,7 @@ function showPreview(event) {
  */
 function createThumbnail(input, iterator, thumbnail_id) {
 
+    //si el usuario carga la misma imagen durante la misma sesion este bloque impide la carga de imagenes con mismo nombre.
     var existing = document.getElementById(thumbnail_id)
     if (existing != null) {
         alert(`La foto: ${thumbnail_id} ya esta incluida`);
@@ -88,18 +89,25 @@ function createThumbnail(input, iterator, thumbnail_id) {
     var imageContainer = document.createElement('div');
     var thumbnail = document.createElement('img');
     var figure = document.createElement('figure');
+    /*
+     * se agrega la clase figure para que se comporte como tal,
+     * y figure style para darle los atributos creados para interactuar
+     * con el usuario
+     */
+
     figure.classList.add("figure", "figure-style");
 
 
-    thumbnail.classList.add('thumbnail', thumbnail_id);
-    thumbnail.setAttribute('src', URL.createObjectURL(input.files[iterator]))
-    thumbnail.setAttribute('id', input.files[iterator].name);
-    thumbnail.setAttribute('onclick', "SelectOutstandingPicture(this.id)");
+    thumbnail.classList.add('thumbnail');// clase agregada para dar estilos
+    thumbnail.setAttribute('src', URL.createObjectURL(input.files[iterator]))//blob de la imagen
+    thumbnail.setAttribute('id', input.files[iterator].name);//Define el id con el nombre de la imagen, utilizado para evitar duplicados de imagen.
+    thumbnail.setAttribute('onclick', "SelectOutstandingPicture(this.id)");//onclick, para definir imagen de portada
+
     var closeButton = createCloseButton(thumbnail_id);
 
-    imageContainer.classList.add('col-md-2', 'my-2', 'd-flex');
-    imageContainer.setAttribute('name', input.files[iterator].name);
-    imageContainer.setAttribute('id', thumbnail_id);
+    imageContainer.classList.add('col-md-2', 'my-2', 'd-flex');// definen estilos de contenedor
+    imageContainer.setAttribute('name', input.files[iterator].name);// nombre de imagen utilizado para obtener todas las imagenes a la hora de validar.
+    imageContainer.setAttribute('id', thumbnail_id);//id utilizado para identificar el contenedor en caso de que se elimine.
     figure.appendChild(thumbnail);
     imageContainer.appendChild(figure);
     imageContainer.appendChild(closeButton);
@@ -167,12 +175,12 @@ function getBase64Image(input, id) {
         var base64String = document.createElement('input');
         base64String.setAttribute('id', input.name);
         base64String.setAttribute('class', "inputs");
-        base64String.setAttribute('name', 'urls[]');
+        base64String.setAttribute('name', 'urls[]');//se usa para enviar info al controlador
         base64String.setAttribute('style', 'display: none;');
         base64String.setAttribute('type', 'text');
         base64String.value = dataURL;
         document.getElementById(id).appendChild(base64String);
-        verifyExistingFile(dataURL);
+        verifyExistingFile(dataURL, id, input.name);
     };
     reader.readAsDataURL(input);
 
@@ -188,10 +196,13 @@ function getBase64Image(input, id) {
  * a estas se les identifica mediante un consecutivo por lo que es posible que la misma imagen tenga nombres diferentes
  * y se genere un duplicado de una imagen, para evitar esto hacemos este 2do paso donde comparamos contenido.
  */
-function verifyExistingFile(dataURL) {
-    var elements = document.getElementsByClassName('urls');
+function verifyExistingFile(dataURL, id,currentImageId) {
+    var elements = document.getElementsByClassName('inputs');
     for (var i = 0; i < elements.length; i++) {
-        if (elements[i].value == dataURL) {
+        if (elements[i].value == dataURL && elements[i].id != id) {
+            if (elements[i].name == 'outstandingPicture') {
+                SelectOutstandingPicture(currentImageId);
+            }
             document.getElementById(elements[i].id).remove();
         }
     }
