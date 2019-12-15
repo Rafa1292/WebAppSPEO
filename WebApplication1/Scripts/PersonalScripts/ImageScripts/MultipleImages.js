@@ -223,7 +223,7 @@ function ImageValidation() {
     var images = document.getElementsByName('urls[]')
     if (!images.length > 0) {
         document.getElementById('ImageError').innerHTML =
-            '<span>Debes agregar almenos una foto</span>';
+            '<span>Debes agregar almenos dos foto</span>';
         return false;
     } else {
         document.getElementById('ImageError').innerHTML = "";

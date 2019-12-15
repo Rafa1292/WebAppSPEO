@@ -156,7 +156,7 @@ namespace WebApplication1.Controllers
                         //Procedemos a comparar
                         if (!(outstandingPicture == currentOutstandingPictureBase64))
                         {
-
+                            //Metodo que establece datos segun  nueva foto de portada. Mas info en el metodo.
                             SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, outstandingPicture, ubication.UbicationId);
                         }
 
@@ -165,10 +165,61 @@ namespace WebApplication1.Controllers
                          * una vez separadas agregamos las fotos que no existian.
                         */
                         AddNewPictures(urls, currentPicturesList, ubication.UbicationId);
+
+                        //<-----------------Eliminar fotos----------------->//
+                        /*Para eliminar  fotos vamos a comparar el contenido de la lista nueva contra las fotos en la lista antigua
+                         * si no existen en la  lista nueva se procede a la eliminacion
+                        */
                         DeletePictures(urls, currentPicturesList, outstandingPicture);
                         //---------------End pictures section---------------//
 
+                        //---------------Features section---------------//
 
+                        IQueryable<UbicationFeatureUbication> currentFeatures = from f in db.UbicationFeaturesUbication
+                                                                       where f.UbicationId == ubication.UbicationId
+                                                                       select f;
+                        List<UbicationFeatureUbication> currentFeaturesList = currentFeatures.ToList();
+
+                        foreach (var currentFeature in currentFeaturesList)
+                        {
+                            var NoExists = true;
+                            foreach (var feature in ubicationFeatures)
+                            {
+                                if (currentFeature.UbicationFeatureId == feature)
+                                {
+                                    NoExists = false;
+                                }
+                            }
+
+                            if (NoExists)
+                            {
+                                db.UbicationFeaturesUbication.Remove(currentFeature);
+                            }
+                        }
+
+                        List<UbicationFeatureUbication> ubicationFeaturesToAdd = new List<UbicationFeatureUbication>();
+
+                        foreach (var feature in ubicationFeatures)
+                        {
+                            var Exists = false;
+                            foreach (var currentFeature in currentFeaturesList)
+                            {
+                                if (currentFeature.UbicationFeatureId == feature)
+                                {
+                                    Exists = true;
+                                }
+                            }
+
+                            if (!Exists)
+                            {
+                                UbicationFeatureUbication ubicationFeatureUbication = new UbicationFeatureUbication();
+                                ubicationFeatureUbication.UbicationFeatureId = feature;
+                                ubicationFeatureUbication.UbicationId = ubication.UbicationId;
+                                ubicationFeaturesToAdd.Add(ubicationFeatureUbication);
+                            }
+                        }
+                        db.UbicationFeaturesUbication.AddRange(ubicationFeaturesToAdd);
+                        db.SaveChanges();
                         transaction.Commit();
 
                     }
@@ -210,6 +261,7 @@ namespace WebApplication1.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        
         [HttpPost]
         public string GetDistrits(int CantonId)
         {
@@ -318,7 +370,6 @@ namespace WebApplication1.Controllers
                 picture.UbicationId = id;
                 db.UbicationPictures.Add(picture);
             }
-            db.SaveChanges();
         }
 
         private void AddNewPictures(string[] urls, List<UbicationPicture> currentPicturesList, int id)
@@ -347,16 +398,17 @@ namespace WebApplication1.Controllers
             }
             //Finalizado el ciclo de verificacion procedemos a añadir las nuevas imagenes
             db.UbicationPictures.AddRange(picturesToAdd);
-            db.SaveChanges();
         }
 
         private void DeletePictures(string[] urls, List<UbicationPicture> currentPicturesList, string outstandingPicture)
         {
-            //Creamos lista que almacenara fotos nuevas para añadirlas a la base de datos
-            List<UbicationPicture> picturesToAdd = new List<UbicationPicture>();
+            //recorremos la lista antigua 
             foreach (var currentPicture in currentPicturesList)
             {
+                //variable que nos indicara si el elemento existe
                 var noExists = true;
+                //recorremos lista nueva comparando el elemento en ciclo de la lista antigua contra los elementos
+                //de la lista nueva.
                 foreach (var url in urls)
                 {
                     string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
@@ -365,6 +417,7 @@ namespace WebApplication1.Controllers
                         noExists = false;
                     }
                 }
+                //si el elemento no existe lo borramos
                 if (noExists)
                 {
                     db.UbicationPictures.Remove(currentPicture);

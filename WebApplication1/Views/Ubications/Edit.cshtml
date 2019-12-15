@@ -272,6 +272,24 @@
                 return true;
             }
         }
+
+        function FillDistrits(CantonId) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDistrits")',
+                data: { CantonId: CantonId },
+                cache: false
+            })
+                .then(function (data) {
+                    $("#DistritId").html(data);
+                    cantonValidation();
+                })
+                .fail(function (data) {
+                    alert('No');
+                })
+            return false;
+        }
     </script>
 
 }

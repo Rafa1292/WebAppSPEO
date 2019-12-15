@@ -11,15 +11,21 @@
 
 
 function FillDistrits(CantonId) {
-    $("#DistritId").html("");
-    $.post("GetDistrits/Ubications", { CantonId: CantonId })
-        .done(function (data) {
+
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("GetDistrits")',
+        data: { CantonId: CantonId },
+        cache: false
+    })
+        .then(function (data) {
             $("#DistritId").html(data);
             cantonValidation();
         })
         .fail(function (data) {
-            alert("no Sirve")
-        });
+            alert('No');
+        })
+    return false;
 }
 
 /* Consulta si en la estructura anterior hay un valor seleccionado diferente de 0
