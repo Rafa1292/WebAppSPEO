@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Ubication
+﻿@model WebApplication1.Models.UbicationCategory
 
 @{
     ViewBag.Title = "Details";
@@ -7,17 +7,9 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Ubication</h4>
+    <h4>UbicationCategory</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Distrit.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Distrit.Name)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -29,6 +21,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.UbicationId }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UbicationCategoryId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

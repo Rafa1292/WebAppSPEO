@@ -22,8 +22,8 @@ namespace WebApplication1.Controllers
         // GET: Ubications
         public ActionResult Index()
         {
-            var ubications = db.Ubications.Include(u => u.Distrit);
-            return View(ubications.ToList());
+            reloadViewBags();
+            return View(db.Ubications.ToList());
         }
 
 
@@ -31,6 +31,7 @@ namespace WebApplication1.Controllers
         // GET: Ubications/Create
         public ActionResult Create()
         {
+            ViewBag.UbicationCategoryId = db.UbicationCategory.ToList();
             ViewBag.UbicationFeaturesId = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
             ViewBag.CantonId = new SelectList(db.Cantons, "CantonId", "Name");
 
@@ -42,7 +43,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UbicationId,Name,DistritId")] Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
+        public ActionResult Create(Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
         {
 
             if (ubication.Name != null && ubication.DistritId > 0 && urls.Length > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
@@ -123,7 +124,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UbicationId,Name,DistritId")] Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
+        public ActionResult Edit([Bind(Include = "UbicationId,Name,DistritId,UbicationCategoryId")] Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
         {
             if (ubication.Name != null && ubication.DistritId > 0 && urls.Length > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
             {
@@ -176,8 +177,8 @@ namespace WebApplication1.Controllers
                         //---------------Features section---------------//
 
                         IQueryable<UbicationFeatureUbication> currentFeatures = from f in db.UbicationFeaturesUbication
-                                                                       where f.UbicationId == ubication.UbicationId
-                                                                       select f;
+                                                                                where f.UbicationId == ubication.UbicationId
+                                                                                select f;
                         List<UbicationFeatureUbication> currentFeaturesList = currentFeatures.ToList();
 
                         foreach (var currentFeature in currentFeaturesList)
@@ -261,8 +262,7 @@ namespace WebApplication1.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        
-        [HttpPost]
+
         public string GetDistrits(int CantonId)
         {
             List<Distrit> FilterList = db.Distrits.Where(x => x.CantonId == CantonId).ToList();
@@ -276,9 +276,32 @@ namespace WebApplication1.Controllers
             return data;
         }
 
+        public string FillFeaturesModal(int UbicationId)
+        {
+            IQueryable<UbicationFeatureUbication> ubicationFeatureUbications = from f in db.UbicationFeaturesUbication
+                                                                               where f.UbicationId == UbicationId
+                                                                               select f;
+            List<UbicationFeatureUbication> ubicationFeatureUbicationsList = ubicationFeatureUbications.ToList();
+            List<UbicationFeature> ubicationFeature = db.UbicationFeatures.ToList();
+
+            string content = "";
+            foreach (var Feature in ubicationFeature)
+            {
+                if (ubicationFeatureUbicationsList.Any(uf => uf.UbicationFeatureId == Feature.UbicationFeatureId))
+                {
+                    content += "<li class=\"list-group-item\">" + Feature.Description + "</li>";
+                }
+            }
+
+            return content;
+
+        }
+
         // Recarga viewbags en caso de error 
         private void reloadViewBags(List<string> urls, List<int> ubicationFeatures, string outstandingPicture, string CantonId, Ubication ubication)
         {
+            ViewBag.UbicationCategoryId = db.UbicationCategory.ToList();
+            ViewBag.SelectedCategory = ubication.UbicationCategoryId.ToString();
             ViewBag.SelectedCanton = CantonId;
             ViewBag.Selectedurl = outstandingPicture;
             ViewBag.urls = urls;
@@ -424,8 +447,22 @@ namespace WebApplication1.Controllers
                 }
 
             }
+        }
 
-            db.SaveChanges();
+        // Recarga viewbags en caso de error 
+        private void reloadViewBags()
+        {
+            IQueryable<UbicationPicture> OutstandingPictures = from p in db.UbicationPictures
+                                                               where p.OutstandingPicture == true
+                                                               select p;
+
+
+            ViewBag.Selectedurl = OutstandingPictures.ToList();
+            ViewBag.UbicationCategoryId = db.UbicationCategory.ToList();
+            ViewBag.DistritId = db.Distrits.ToList();
+            ViewBag.CantonId = db.Cantons.ToList();
+            ViewBag.UbicationFeaturesId = db.UbicationFeatures.ToList();
+            ViewBag.UbicationFeaturesUbication = db.UbicationFeaturesUbication.ToList();
         }
         protected override void Dispose(bool disposing)
         {

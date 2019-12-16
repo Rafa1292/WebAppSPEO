@@ -94,8 +94,8 @@ textarea {
 .close-button-style {
     color: red;
     font-size: 18px;
-    margin-left: -8px;
-    margin-top: -8px;
+    margin-left: -13px;
+    margin-top: -4px;
     z-index: 1000;
     background-color: white;
     height: 14px;
@@ -107,9 +107,34 @@ textarea {
     border: 5px solid rgba(40, 167, 69, 1);
 }
 
+.figure-style {
+    border: 5px solid rgba(40, 167, 69, 0);
+}
+
 
 
     .figure-style:hover {
-        border: 5px solid rgba(40, 167, 69, .2);
+        border: 5px solid rgba(40, 167, 69, .3);
 
     }
+
+.card-style {
+    border: 1px solid rgba(0,0,0,.125);
+    padding-bottom: 24px;
+    flex-wrap: wrap;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 30px;
+}
+
+.card-header-style {
+    border-top-right-radius: .25rem;
+    border-top-left-radius: .25rem;
+    padding: 5px;
+    background-color: rgba(1,1,1,0.6);
+    color: white;
+    margin-bottom: 24px;
+    height: 38px;
+}
+
+

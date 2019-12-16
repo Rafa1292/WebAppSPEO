@@ -25,7 +25,7 @@ namespace WebApplication1.Models
         public int HouseId { get; set; }
         public virtual House House { get; set; }
         public virtual Ubication Ubication { get; set; }
-        public int UbicationId { get; set; }
+        public int? UbicationId { get; set; }
         public virtual IndividualContributor IndividualContributor { get; set; }
         public int IndividualContributorId { get; set; }
         public ICollection<ArticleClient> ArticlesClient { get; set; }

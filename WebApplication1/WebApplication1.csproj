@@ -192,6 +192,7 @@
     <Compile Include="Controllers\IndividualContributorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TerrainFeaturesController.cs" />
+    <Compile Include="Controllers\UbicationCategoriesController.cs" />
     <Compile Include="Controllers\UbicationFeaturesController.cs" />
     <Compile Include="Controllers\UbicationsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -215,6 +216,7 @@
     <Compile Include="Models\TerrainFeature.cs" />
     <Compile Include="Models\TerrainFeatureTerrain.cs" />
     <Compile Include="Models\Ubication.cs" />
+    <Compile Include="Models\UbicationCategory.cs" />
     <Compile Include="Models\UbicationFeature.cs" />
     <Compile Include="Models\UbicationFeatureUbication.cs" />
     <Compile Include="Models\UbicationPicture.cs" />
@@ -350,9 +352,13 @@
     <Content Include="Views\IndividualContributors\Index.cshtml" />
     <Content Include="Views\Ubications\Create.cshtml" />
     <Content Include="Views\Ubications\Delete.cshtml" />
-    <Content Include="Views\Ubications\Details.cshtml" />
     <Content Include="Views\Ubications\Edit.cshtml" />
     <Content Include="Views\Ubications\Index.cshtml" />
+    <Content Include="Views\UbicationCategories\Create.cshtml" />
+    <Content Include="Views\UbicationCategories\Delete.cshtml" />
+    <Content Include="Views\UbicationCategories\Details.cshtml" />
+    <Content Include="Views\UbicationCategories\Edit.cshtml" />
+    <Content Include="Views\UbicationCategories\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

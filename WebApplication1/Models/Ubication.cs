@@ -20,5 +20,8 @@ namespace WebApplication1.Models
         public ICollection<UbicationFeatureUbication> UbicationFeaturesUbication { get; set; }
         public int DistritId { get; set; }
         public virtual Distrit Distrit { get; set; }
+        public int UbicationCategoryId { get; set; }
+        public virtual UbicationCategory UbicationCategory { get; set; }
+
     }
 }

@@ -39,6 +39,6 @@ namespace WebApplication1.Models
 
         public System.Data.Entity.DbSet<WebApplication1.Models.UbicationFeatureUbication> UbicationFeaturesUbication { get; set; }
 
-
+        public System.Data.Entity.DbSet<WebApplication1.Models.UbicationCategory> UbicationCategory { get; set; }
     }
 }
