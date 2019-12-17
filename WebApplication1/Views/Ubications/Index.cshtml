@@ -20,7 +20,7 @@
         <div class="col-md-2 card-style  shadow rounded d-flex text-center">
             <div class="col-md-12 card-header-style">
                 <strong>@Html.DisplayFor(modelItem => item.UbicationCategory.Name)</strong>
-                @Html.DisplayFor(modelItem => item.Name)
+                <label>@item.Name</label>
             </div>
             <div class="col-md-12 " style="height:140px">
                 @foreach (var outstandingPicture in ViewBag.Selectedurl)
@@ -56,50 +56,52 @@
                 }
             </div>
             <div class="col-md-12 mb-3 icAlignStyle text-left " style="height: 80px;">
-                @{ 
+                @{
                     var id = item.UbicationId;
                 }
-                <button type="button" class="btn btn-info" data-toggle="modal" onclick="fillFeaturesModal(@id)">
+                <button type="button" class="btn btn-info" data-toggle="modal" onclick="fillFeaturesModal(@id, 'Caracteristicas incluidas')">
                     Caracteristicas incluidas
                 </button>
 
             </div>
             <div class="col-md-12 icAlignStyle">
-                @Html.ActionLink("Editar", "Edit", new { id = item.UbicationId }, new { @class = "btn btn-outline-info" })
-                @Html.ActionLink("Borrar", "Delete", new { id = item.UbicationId }, new { @class = "btn btn-outline-danger delete-button" })
+                @Html.ActionLink("Editar", "Edit", new { id = item.UbicationId }, new { @class = "btn btn-outline-secondary" })
+                  @*@Html.ActionLink("Borrar", "Delete", new { id = item.UbicationId }, new { @class = "btn btn-outline-danger delete-button" })*@
+            </div>
+            <div class="col-md-12">
+                <span><a href="/Ubications/Delete/@id"><i onclick="deleteItemModal(@id)" class="fas fa-trash-alt trash-button"></i></a></span>
+
             </div>
         </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="UbicationFeaturesModal" tabindex="-1" role="dialog" aria-labelledby="UbicationFeaturesLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="UbicationFeatureslLabel">Caracteristicas incluidas</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="list-group list-group-flush" id="ModalFeaturesList">
-
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Listo!</button>
-                    </div>
+    }
+    <!-- Modal -->
+    <div class="modal fade" id="UbicationFeaturesModal" tabindex="-1" role="dialog" aria-labelledby="UbicationFeaturesLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="UbicationFeatureslLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush" id="ModalFeaturesList">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" data-dismiss="modal">Listo!</button>
                 </div>
             </div>
         </div>
-
-    }
+    </div>
 </div>
 
 <script>
-    function fillFeaturesModal(UbicationId) {
+    function fillFeaturesModal(UbicationId, title) {
+        var modalHeader = document.getElementById("UbicationFeatureslLabel");
         var modalList = document.getElementById("ModalFeaturesList");
         modalList.innerHTML = "";
-
+        modalHeader.innerHTML = ""
 
         $.ajax({
             type: "POST",
@@ -109,6 +111,7 @@
         })
             .then(function (data) {
                 modalList.innerHTML = data;
+                modalHeader.innerHTML = title;
                 $("#UbicationFeaturesModal").modal();
             })
             .fail(function (data) {
@@ -116,5 +119,8 @@
             })
         return false;
     }
+
+
+
 
 </script>

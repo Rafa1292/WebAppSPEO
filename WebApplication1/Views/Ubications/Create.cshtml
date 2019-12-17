@@ -212,7 +212,7 @@
                                 }
                                 <li class="list-group-item @className" id="lbl-@lblId">
                                     <div class="custom-control">
-                                        <label for="chk-@lblId" onclick="clickedLabel(@feature.Value, @name)">@feature.Text</label>
+                                        <label class="features-label" for="chk-@lblId" onclick="clickedLabel(@feature.Value, @name)">@feature.Text</label>
                                         <input @state name="ubicationFeatures[]" id="chk-@lblId" type="checkbox" style="display:none" value="@lblId" />
                                     </div>
                                 </li>
@@ -221,7 +221,7 @@
                             {
                                 <li class="list-group-item ubication-feature-lbl" id="lbl-@lblId">
                                     <div class="custom-control">
-                                        <label for="chk-@lblId" onclick="clickedLabel(@feature.Value, @name)">@feature.Text</label>
+                                        <label class="features-label" for="chk-@lblId" onclick="clickedLabel(@feature.Value, @name)">@feature.Text</label>
                                         <input name="ubicationFeatures[]" id="chk-@lblId" type="checkbox" style="display:none" value="@lblId" />
                                     </div>
                                 </li>

@@ -8,11 +8,6 @@ namespace WebApplication1.Models
         [Key]
         public int HouseId { get; set; }
 
-        [Display(Name = "Descripcion")]
-        [StringLength(200, ErrorMessage = "Maximo 200 caracteres")]
-        [Required(ErrorMessage = "Debes agregar una descripcion")]
-        public string Description { get; set; }
-
         [Required(ErrorMessage = "Debes agregar una Medida de frente")]
         [Display(Name = "Medida de frente")]
         public int ForeheadMeasure { get; set; }

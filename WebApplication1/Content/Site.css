@@ -23,6 +23,11 @@ textarea {
     max-width: 280px;
 }
 
+.features-label {
+    width: 423px;
+    height: 28px;
+    cursor: pointer;
+}
 .delete-button {
     margin-left: 3px;
 }
@@ -124,7 +129,7 @@ textarea {
     flex-wrap: wrap;
     padding-left: 0;
     padding-right: 0;
-    margin: 30px;
+    margin: 24px;
 }
 
 .card-header-style {
@@ -135,6 +140,14 @@ textarea {
     color: white;
     margin-bottom: 24px;
     height: 38px;
+}
+
+.trash-button {
+    margin-left: 200px;
+    margin-bottom: -15px;
+    display: flex;
+    font-size: 20px;
+    color: red;
 }
 
 

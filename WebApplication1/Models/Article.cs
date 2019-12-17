@@ -9,23 +9,23 @@ namespace WebApplication1.Models
 {
     public class Article
     {
-        [Key, ForeignKey("House")]
+        [Key]
         public int ArticleId { get; set; }
 
         [Display(Name = "Descripcion")]
         [StringLength(200,ErrorMessage = "Maximo 200 caracteres")]
         [Required(ErrorMessage = "Debes agregar una descripcion")]
         public string Description { get; set; }
+        public bool State { get; set; }
+        public string Code { get; set; }
 
-        [Display(Name = "Descripcion")]
+        [Display(Name = "Precio")]
         [Required(ErrorMessage = "Debes agregar un precio")]
         public decimal Price { get; set; }
         public virtual Terrain Terrain { get; set; }
         public int TerrainId { get; set; }
-        public int HouseId { get; set; }
-        public virtual House House { get; set; }
         public virtual Ubication Ubication { get; set; }
-        public int? UbicationId { get; set; }
+        public int UbicationId { get; set; }
         public virtual IndividualContributor IndividualContributor { get; set; }
         public int IndividualContributorId { get; set; }
         public ICollection<ArticleClient> ArticlesClient { get; set; }

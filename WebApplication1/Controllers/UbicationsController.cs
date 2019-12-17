@@ -249,6 +249,7 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
+            reloadViewBags();
             return View(ubication);
         }
 
