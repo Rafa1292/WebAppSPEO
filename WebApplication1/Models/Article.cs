@@ -16,10 +16,18 @@ namespace WebApplication1.Models
         [StringLength(200,ErrorMessage = "Maximo 200 caracteres")]
         [Required(ErrorMessage = "Debes agregar una descripcion")]
         public string Description { get; set; }
+
+        [Display(Name = "Estado")]
+        [Required(ErrorMessage = "Debes agregar un codigo")]
         public bool State { get; set; }
+
+        [Display(Name = "Codigo de articulo")]
         public string Code { get; set; }
 
+        public string Currency { get; set; }
+
         [Display(Name = "Precio")]
+        [DataType(DataType.Currency)]
         [Required(ErrorMessage = "Debes agregar un precio")]
         public decimal Price { get; set; }
         public virtual Terrain Terrain { get; set; }

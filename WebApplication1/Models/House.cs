@@ -10,11 +10,11 @@ namespace WebApplication1.Models
 
         [Required(ErrorMessage = "Debes agregar una Medida de frente")]
         [Display(Name = "Medida de frente")]
-        public int ForeheadMeasure { get; set; }
+        public int HouseForeheadMeasure { get; set; }
 
         [Required(ErrorMessage = "Debes agregar una Medida de fondo")]
         [Display(Name = "Medida de fondo")]
-        public int BackgroundMeasure { get; set; }
+        public int HouseBackgroundMeasure { get; set; }
 
         [Required(ErrorMessage = "Debes agregar la cantidad de dormitorios")]
         [Display(Name = "dormitorios")]

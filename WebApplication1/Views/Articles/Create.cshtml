@@ -1,0 +1,247 @@
+﻿@model WebApplication1.Models.Article
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="justify-content-center d-flex">
+    <h3 class="url-label" style="margin-left:-28px">Articulos</h3>
+</div>
+<span class="text-danger field-validation-error justify-content-center d-flex">
+    <span>@ViewBag.Error</span>
+</span>
+
+<div class="container row d-flex">
+
+    <div class=" d-flex  article-validate-button">
+        <div><strong>Articulo</strong></div>
+    </div>
+    <div class=" d-flex article-validate-button">
+        <div><strong>Terreno</strong></div>
+    </div>
+    <div class=" d-flex  article-validate-button">
+        <div><strong>Fotos</strong></div>
+    </div>
+    <div class=" article-validate-button" id="articleValidateButtonHouse" style="display: none">
+        <div><strong>Casa</strong></div>
+    </div>
+    <div class=" article-validate-button" id="articleValidateButtonHouseAux" style="display: none">
+        <div><strong>Casa #2</strong></div>
+    </div>
+    <div class=" d-flex article-validate-button" id="containerButton" onclick="showHouseForm()" style="width: 48px; background: #28a745;">
+        <div><i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i></div>
+    </div>
+</div>
+<hr />
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="col-md-12 shadow mb-3 p-0 flex-wrap d-flex">
+        <div class="col-md-12 article-container-header mb-3  d-flex ">
+            <h3 class="">Informacion del articulo</h3>
+        </div>
+        <div class="form-group col-md-3">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-12">
+                <textarea id="Description" name="Description" rows="3" class="text-area"></textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-3">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-12 ">
+                <div class="input-group-prepend">
+                    <select class="input-group-text" id="Currency" name="Currency">
+                        <option value="$">$</option>
+                        <option value="¢">¢</option>
+                    </select>
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;" } })
+                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="form-group col-md-3">
+            @Html.LabelFor(model => model.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-12">
+                @Html.DropDownList("UbicationId", null, "Seleccione una ubicacion", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.UbicationId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-3">
+            @Html.LabelFor(model => model.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-6" })
+            <div class="col-md-12">
+                @Html.DropDownList("IndividualContributorId", null, "Seleccione un colaborador", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IndividualContributorId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    @Html.Partial("CreateTerrainFormView");
+    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 " id="houseForm" style="display: none;">
+        @Html.Partial("CreateHouseFormView")
+    </div>
+    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3" id="houseFormAux" style="display: none;">
+        @Html.Partial("CreateHouseFormAux");
+    </div>
+
+    <div class="col-md-12 shadow mb-3 p-0 flex-wrap d-flex">
+        <div class="col-md-12 article-container-header mb-3  d-flex ">
+            <h3 class="">Agregar fotos </h3>
+        </div>
+        <div class="col-md-8 justify-content-center container mb-3 flex-wrap d-flex" id="imagesPreview">
+            <div class="col-md-12 d-flex justify-content-center p-0">
+                <label for="pickImage" class="image-label-style" style="width:300px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
+                <input multiple id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+            </div>
+            <div class="col-md-12">
+                <span class="text-danger field-validation-error" id="ImageError">
+                </span>
+                <span class="text-danger field-validation-error" id="OutstandingImageError">
+                </span>
+            </div>
+            @if (ViewBag.urls != null)
+            {
+                <div class="col-md-2 my-2 d-flex" id="0">
+                    <figure class="figure-style">
+                        <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src=@ViewBag.Selectedurl>
+                    </figure>
+                    <i id="0" class="fas fa-times-circle close-button-style 0" aria-hidden="true"></i>
+                    <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="(@ViewBag.Selectedurl">
+                </div>
+
+                var i = 1;
+                foreach (var url in ViewBag.urls)
+                {
+                    <div class="col-md-2 my-2 d-flex" id="@i">
+                        <figure class="figure-style">
+                            <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src=@url>
+                        </figure>
+                        <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true"></i>
+                        <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@url">
+                    </div>
+                    i++;
+                }
+            }
+
+        </div>
+    </div>
+    <div class="col-md-12  mb-3 mt-3 flex-wrap d-flex">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-outline-primary" onclick="showHouseForm()">
+                Agregar casa
+            </button>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-md-12 ">
+        <hr />
+        <div class="form-group">
+            <div class="container-fluid row">
+                <div class="col-md-6 d-flex justify-content-end">
+                    <input type="submit" value="Crear" onclick="" class="btn btn-success" id="houseFormButton" />
+                </div>
+                <div class="col-md-6">
+                    <a href="/Articles" class="btn btn-outline-secondary">Regresar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/PersonalScripts/ImageScripts/MultipleImages.js"></script>
+    <script>
+        var CreateHouseForm = false;
+        var CreateHouseFormAux = false;
+
+        function showHouseForm() {
+
+            if (!CreateHouseForm) {
+                var form = document.getElementById("houseForm");
+                form.style.display = "flex";
+                var btnInfo = document.getElementById("articleValidateButtonHouse")
+                btnInfo.style.display = "flex";
+                CreateHouseForm = true;
+            }
+            else {
+                var form = document.getElementById("houseFormAux");
+                form.style.display = "flex";
+                var btnInfo = document.getElementById("articleValidateButtonHouseAux")
+                btnInfo.style.display = "flex";
+                CreateHouseFormAux = true;
+            }
+            toggleHouseFormBtn();
+        }
+
+        function deleteHouseForm(formDeleteBtn) {
+
+            if (formDeleteBtn) {
+                var form = document.getElementById("houseForm");
+                form.style.display = "none";
+                var btnInfo = document.getElementById("articleValidateButtonHouse")
+                btnInfo.style.display = "none";
+                CreateHouseForm = false;
+            } else {
+                var form = document.getElementById("houseFormAux");
+                form.style.display = "none";
+                var btnInfo = document.getElementById("articleValidateButtonHouseAux")
+                btnInfo.style.display = "none";
+                CreateHouseFormAux = false;
+            }
+            toggleHouseFormBtn();
+
+        }
+
+        function toggleHouseFormBtn() {
+
+            var containerButton = document.getElementById("containerButton")
+
+            if (CreateHouseForm && CreateHouseFormAux) {
+                containerButton.style.display = "none";
+                containerButton.classList.remove("d-flex");
+            }
+            else {
+                containerButton.classList.add("d-flex");
+            }
+        }
+
+        function hideHouseBodyForm() {
+            var form = document.getElementsByName("HouseFormBody");
+            for (var i = 0; i < form.length; i++) {
+                form[i].style.display = "none";
+            }
+            var minusButton = document.getElementById("minusButton");
+            minusButton.style.display = "none";
+            var plusButton = document.getElementById("plusButton");
+            plusButton.style.display = "flex";
+
+        }
+
+        function showHouseBodyForm() {
+            var form = document.getElementsByName("HouseFormBody");
+            for (var i = 0; i < form.length; i++) {
+                form[i].style.display = "flex";
+            }
+            var plusButton = document.getElementById("plusButton");
+            plusButton.style.display = "none";
+            var minusButton = document.getElementById("minusButton");
+            minusButton.style.display = "flex";
+        }
+
+
+
+
+    </script>
+}

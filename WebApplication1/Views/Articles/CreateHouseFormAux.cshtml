@@ -1,0 +1,72 @@
+﻿@model WebApplication1.Models.HouseAux
+
+
+
+<div class="col-md-12 article-container-header d-flex ">
+    <h3 class="">Informacion de casa adicional</h3>
+</div>
+
+<div class="col-md-12 row mt-3 mb-3">
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.HouseForeheadMeasureAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.HouseForeheadMeasureAux, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.HouseBackgroundMeasureAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.HouseBackgroundMeasureAux, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.BedroomsAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.BedroomsAux, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.BathroomsAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.BathroomsAux, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.GarageAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.GarageAux, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.LevelsAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.LevelsAux, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3 align-items-xl-end d-flex">
+        <div class="col-md-12 ">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#UbicationFeaturesModal">
+                Caracteristicas de <br />casa
+            </button>
+        </div>
+        <span class="text-danger field-validation-error" id="FeatureError">
+        </span>
+    </div>
+
+    <div class="col-md-12 d-flex justify-content-lg-end mb-3">
+        <span><i onclick="deleteHouseForm(false)" class="fas fa-trash-alt trash-button"></i></span>
+    </div>
+</div>
+
+
+

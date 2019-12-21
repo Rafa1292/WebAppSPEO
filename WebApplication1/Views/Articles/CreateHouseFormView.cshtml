@@ -1,0 +1,76 @@
+﻿@model WebApplication1.Models.House
+
+
+
+
+<div class="col-md-12 article-container-header d-flex ">
+    <h3 class="">Informacion de casa</h3>
+    <span class="minus-bottom-form">
+        <i onclick="showHouseBodyForm()" class="fas fa-plus " style="display: none;" id="plusButton"></i>
+        <i onclick="hideHouseBodyForm()" class="fas fa-minus " id="minusButton"></i>
+    </span>
+</div>
+
+<div class="col-md-12 row mt-3 mb-3">
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.HouseForeheadMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.HouseForeheadMeasure, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.HouseBackgroundMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.HouseBackgroundMeasure, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.Bedrooms, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.Bedrooms, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.Bathrooms, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.Bathrooms, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.Garage, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.Garage, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3">
+        @Html.LabelFor(model => model.Levels, htmlAttributes: new { @class = "control-label col-md-12" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.Levels, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group col-md-3 align-items-xl-end d-flex">
+        <div class="col-md-12 ">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#UbicationFeaturesModal">
+                Caracteristicas de <br />casa
+            </button>
+        </div>
+        <span class="text-danger field-validation-error" id="FeatureError">
+        </span>
+    </div>
+
+    <div class="col-md-12 d-flex justify-content-lg-end mb-3">
+        <span><i onclick="deleteHouseForm(true)" class="fas fa-trash-alt trash-button"></i></span>
+    </div>
+
+</div>
+
+

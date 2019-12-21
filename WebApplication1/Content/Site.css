@@ -150,4 +150,48 @@ textarea {
     color: red;
 }
 
+.text-area {
+    border: 1px solid #ced4da;
+    max-width: 328px;
+    min-width: 230px;
+    border-radius: .25rem;
+}
 
+.article-container-header {
+    background-color: rgba(10,10,10,.2);
+    color: white;
+}
+
+.houseform-container-body {
+display:flex;
+
+
+}
+
+.minus-bottom-form {
+    margin-left: 1150px;
+    display: flex;
+    margin-top: 8px;
+    font-size: 25px;
+    color: white;
+}
+
+.plus-bottom-form {
+    margin-left: 1150px;
+    display: flex;
+    margin-top: 8px;
+    font-size: 25px;
+    color: white;
+}
+
+.article-validate-button {
+    background-color: rgba(0,123,255,.7);
+    /* margin-left: 0 !important; */
+    min-width: 84px;
+    margin-left: 1%;
+    border-radius: 50px;
+    color: white;
+    border: 2px solid #ced4da;
+    justify-content: center;
+
+}
