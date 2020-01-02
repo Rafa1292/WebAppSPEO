@@ -207,6 +207,7 @@
     <Compile Include="Models\Canton.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Distrit.cs" />
+    <Compile Include="Models\Feature.cs" />
     <Compile Include="Models\House.cs" />
     <Compile Include="Models\HouseAux.cs" />
     <Compile Include="Models\HouseFeature.cs" />

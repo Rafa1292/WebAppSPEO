@@ -52,6 +52,7 @@ textarea {
     justify-content: center;
     align-items: center;
     border-color: gray;
+    margin-top: 13px;
 }
 
 .list-style {
@@ -143,11 +144,10 @@ textarea {
 }
 
 .trash-button {
-    margin-left: 200px;
-    margin-bottom: -15px;
     display: flex;
     font-size: 20px;
     color: red;
+    margin: 15px;
 }
 
 .text-area {
@@ -160,6 +160,7 @@ textarea {
 .article-container-header {
     background-color: rgba(10,10,10,.2);
     color: white;
+    align-items: center;
 }
 
 .houseform-container-body {
@@ -168,30 +169,22 @@ display:flex;
 
 }
 
-.minus-bottom-form {
-    margin-left: 1150px;
-    display: flex;
-    margin-top: 8px;
+.show-hide-bottom-form {
+ 
     font-size: 25px;
     color: white;
 }
 
-.plus-bottom-form {
-    margin-left: 1150px;
-    display: flex;
-    margin-top: 8px;
-    font-size: 25px;
-    color: white;
-}
+
 
 .article-validate-button {
     background-color: rgba(0,123,255,.7);
-    /* margin-left: 0 !important; */
     min-width: 84px;
     margin-left: 1%;
-    border-radius: 50px;
     color: white;
-    border: 2px solid #ced4da;
     justify-content: center;
-
+    align-items: center;
+    margin-top: 5px;
+    min-height: 38px;
 }
+

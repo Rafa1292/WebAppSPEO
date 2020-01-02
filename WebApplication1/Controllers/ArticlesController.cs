@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using System.Web.Script.Serialization;
+
 
 namespace WebApplication1.Controllers
 {
@@ -36,20 +38,113 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ArticleId,Description,State,Code,Price,TerrainId,UbicationId,IndividualContributorId,Currency")]
-        Article article, Terrain terrain, House house, HouseAux houseAux, string[] urls, int[] houseFeatures, int[] houseFeaturesAux, string outstandingPicture)
+        public ActionResult Create([Bind(Include = "Description,State,Code,Price,TerrainId,UbicationId,IndividualContributorId,Currency")]
+        Article article, Terrain terrain, House house, HouseAux houseAux, string[] urls, int[] HouseFeatures, int[] HouseAuxFeatures, int[] terrainFeatures, string outstandingPicture)
         {
-            if (ModelState.IsValid)
+            if (article != null && terrain != null && urls.Length > 0 && terrainFeatures.Length > 0 && outstandingPicture != null)
             {
-                db.Articles.Add(article);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        db.Terrains.Add(terrain);
+                        db.SaveChanges();
+
+                        article.Code = "A";
+                        article.State = false;
+                        article.TerrainId = terrain.TerrainId;                        
+                        db.Articles.Add(article);
+
+                        db.SaveChanges();
+
+
+                        List<ArticlePicture> Pictures = new List<ArticlePicture>();
+                        List<TerrainFeatureTerrain> Features = new List<TerrainFeatureTerrain>();
+                        ArticlePicture picture = new ArticlePicture();
+                        picture.OutstandingPicture = true;
+                        picture.PictureArray = Convert.FromBase64String(outstandingPicture);
+                        picture.ArticleId = article.Id;
+                        Pictures.Add(picture);
+                        foreach (var url in urls)
+                        {
+                            picture = new ArticlePicture();
+                            picture.OutstandingPicture = false;
+                            picture.PictureArray = Convert.FromBase64String(url);
+                            picture.ArticleId = article.Id;
+                            Pictures.Add(picture);
+                        }
+
+                        foreach (var feature in terrainFeatures)
+                        {
+                            TerrainFeatureTerrain terrainFeature = new TerrainFeatureTerrain();
+                            terrainFeature.TerrainFeatureId = feature;
+                            terrainFeature.TerrainId = article.Id;
+                            Features.Add(terrainFeature);
+                        }
+
+                        db.ArticlePictures.AddRange(Pictures);
+                        db.TerrainFeaturesTerrain.AddRange(Features);
+                        if (house.Levels != 0)
+                        {
+                            AddHouse(house, HouseFeatures, article.Id);
+                        }
+                        if (houseAux.LevelsAux != 0)
+                        {
+                            House aux = new House();
+                            aux.Bathrooms = houseAux.BathroomsAux;
+                            aux.Bedrooms = houseAux.BedroomsAux;
+                            aux.Garage = houseAux.GarageAux;
+                            aux.HouseBackgroundMeasure = houseAux.HouseBackgroundMeasureAux;
+                            aux.HouseForeheadMeasure = houseAux.HouseForeheadMeasureAux;
+                            aux.Levels = houseAux.LevelsAux;
+                            AddHouse(aux, HouseAuxFeatures, article.Id);
+
+                        }
+                        db.SaveChanges();
+                        transaction.Commit();
+
+
+
+
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
+                        ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
+                        ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
+                        ViewBag.error = ex.Message;
+
+                    }
+
+                }
             }
 
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name", article.IndividualContributorId);
-            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography", article.TerrainId);
-            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name", article.UbicationId);
-            return View(article);
+            return View();
+        }
+
+        public void AddHouse( House house, int[] features, int articleId)
+        {
+            house.ArticleId = articleId;
+            db.Houses.Add(house);
+            AddFeatures(features, house.HouseId);
+
+
+
+        }
+
+        public void AddFeatures(int[] features, int houseId)
+        {
+            HouseFeatureHouse houseFeatureHouse = new HouseFeatureHouse();
+            foreach (var feature in features)
+            {
+                houseFeatureHouse = new HouseFeatureHouse();
+                houseFeatureHouse.HouseFeatureId = feature;
+                houseFeatureHouse.HouseId = houseId;
+                db.HouseFeatureHouse.Add(houseFeatureHouse);
+            }
+            
         }
 
         // GET: Articles/Edit/5
@@ -115,9 +210,55 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Index");
         }
 
-        public void GetFeatures()
+        public string GetFeatures(string model)
         {
+            List<Feature> features = new List<Feature>();
 
+            switch (model)
+            {
+                case "Terrain":
+                    List<TerrainFeature> terrainFeatures = db.TerrainFeatures.ToList();
+                    Feature terrainFeature = new Feature();
+                    foreach (var feature in terrainFeatures)
+                    {
+                        terrainFeature = new Feature();
+                        terrainFeature.FeatureId = feature.TerrainFeatureId;
+                        terrainFeature.Description = feature.Description;
+                        terrainFeature.Model = "Terrain";
+                        features.Add(terrainFeature);
+                    }
+                    break;
+                case "House":
+
+                    List<HouseFeature> houseFeatures = db.HouseFeatures.ToList();
+                    Feature houseFeature = new Feature();
+                    foreach (var feature in houseFeatures)
+                    {
+                        houseFeature = new Feature();
+                        houseFeature.FeatureId = feature.HouseFeatureId;
+                        houseFeature.Description = feature.Description;
+                        houseFeature.Model = "House";
+                        features.Add(houseFeature);
+                    }
+                    break;
+                case "HouseAux":
+
+                    List<HouseFeature> houseAuxFeatures = db.HouseFeatures.ToList();
+                    Feature houseAuxFeature = new Feature();
+                    foreach (var feature in houseAuxFeatures)
+                    {
+                        houseAuxFeature = new Feature();
+                        houseAuxFeature.FeatureId = feature.HouseFeatureId;
+                        houseAuxFeature.Description = feature.Description;
+                        houseAuxFeature.Model = "HouseAux";
+                        features.Add(houseAuxFeature);
+                    }
+                    break;
+
+            }
+            var jsonSerialiser = new JavaScriptSerializer();
+            var json = jsonSerialiser.Serialize(features);
+            return json;
         }
 
         protected override void Dispose(bool disposing)

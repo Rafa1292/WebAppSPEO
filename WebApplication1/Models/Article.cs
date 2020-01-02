@@ -9,12 +9,10 @@ namespace WebApplication1.Models
 {
     public class Article
     {
-        [Key]
-        public int ArticleId { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Descripcion")]
         [StringLength(200,ErrorMessage = "Maximo 200 caracteres")]
-        [Required(ErrorMessage = "Debes agregar una descripcion")]
         public string Description { get; set; }
 
         [Display(Name = "Estado")]

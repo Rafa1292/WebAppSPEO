@@ -11,6 +11,7 @@ namespace WebApplication1.Models
         [Key]
         public int ArticlePictureId { get; set; }
         public int ArticleId { get; set; }
-        public virtual Article Article { get; set; }
+        public byte[] PictureArray { get; set; }
+        public bool OutstandingPicture { get; set; }
     }
 }

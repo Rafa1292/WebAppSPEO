@@ -31,13 +31,19 @@ namespace WebApplication1.Models
 
         public System.Data.Entity.DbSet<WebApplication1.Models.HouseFeature> HouseFeatures { get; set; }
 
+        public System.Data.Entity.DbSet<WebApplication1.Models.HouseFeatureHouse> HouseFeatureHouse { get; set; }
+
         public System.Data.Entity.DbSet<WebApplication1.Models.UbicationFeature> UbicationFeatures { get; set; }
 
         public System.Data.Entity.DbSet<WebApplication1.Models.Ubication> Ubications { get; set; }
 
         public System.Data.Entity.DbSet<WebApplication1.Models.UbicationPicture> UbicationPictures { get; set; }
 
+        public System.Data.Entity.DbSet<WebApplication1.Models.ArticlePicture> ArticlePictures { get; set; }
+
         public System.Data.Entity.DbSet<WebApplication1.Models.UbicationFeatureUbication> UbicationFeaturesUbication { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.TerrainFeatureTerrain> TerrainFeaturesTerrain { get; set; }
 
         public System.Data.Entity.DbSet<WebApplication1.Models.UbicationCategory> UbicationCategory { get; set; }
 

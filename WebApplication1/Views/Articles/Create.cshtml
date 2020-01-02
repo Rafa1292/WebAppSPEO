@@ -5,141 +5,137 @@
 }
 
 <div class="justify-content-center d-flex">
-    <h3 class="url-label" style="margin-left:-28px">Articulos</h3>
+    <h3 class="url-label">Articulos</h3>
 </div>
 <span class="text-danger field-validation-error justify-content-center d-flex">
-    <span>@ViewBag.Error</span>
+    <span>@ViewBag.error</span>
 </span>
 
-<div class="container row d-flex">
+<div class="container-fluid flex-wrap d-flex">
 
-    <div class=" d-flex  article-validate-button">
+    <div class=" d-flex rounded article-validate-button">
         <div><strong>Articulo</strong></div>
     </div>
-    <div class=" d-flex article-validate-button">
+    <div class=" d-flex rounded article-validate-button">
         <div><strong>Terreno</strong></div>
     </div>
-    <div class=" d-flex  article-validate-button">
+    <div class=" d-flex rounded article-validate-button">
         <div><strong>Fotos</strong></div>
     </div>
-    <div class=" article-validate-button" id="articleValidateButtonHouse" style="display: none">
+    <div class="rounded article-validate-button" id="articleValidateButtonHouse" style="display: none">
         <div><strong>Casa</strong></div>
     </div>
-    <div class=" article-validate-button" id="articleValidateButtonHouseAux" style="display: none">
+    <div class="rounded article-validate-button" id="articleValidateButtonHouseAux" style="display: none">
         <div><strong>Casa #2</strong></div>
     </div>
-    <div class=" d-flex article-validate-button" id="containerButton" onclick="showHouseForm()" style="width: 48px; background: #28a745;">
-        <div><i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i></div>
+    <div style="margin-left: 1%;">
+        <button class="btn-outline-success btn rounded" id="containerButton" onclick="showHouseForm()" style="min-width:84px; min-height: 38px; margin-top: 5px;">
+            <i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i>
+        </button>
     </div>
+
+    @*<div class=" d-flex article-validate-button" id="containerButton" onclick="showHouseForm()" style="width: 48px; background: #28a745;">
+            <div><i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i></div>
+        </div>*@
 </div>
 <hr />
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Articles", FormMethod.Post, new { @id = "Form" }))
 {
     @Html.AntiForgeryToken()
 
 
-    <div class="col-md-12 shadow mb-3 p-0 flex-wrap d-flex">
-        <div class="col-md-12 article-container-header mb-3  d-flex ">
+    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3">
+        <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
             <h3 class="">Informacion del articulo</h3>
+            <span class="show-hide-bottom-form">
+                <i onclick="showHouseBodyForm('article')" class="fas fa-plus " style="display: none;" id="articlePlusButton"></i>
+                <i onclick="hideHouseBodyForm('article')" class="fas fa-minus " id="articleMinusButton"></i>
+            </span>
         </div>
-        <div class="form-group col-md-3">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-6" })
-            <div class="col-md-12">
-                <textarea id="Description" name="Description" rows="3" class="text-area"></textarea>
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <div class=" col-md-12 row mt-3 mb-3" name="articleFormBody">
 
-        <div class="form-group col-md-3">
-            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-6" })
-            <div class="col-md-12 ">
-                <div class="input-group-prepend">
-                    <select class="input-group-text" id="Currency" name="Currency">
-                        <option value="$">$</option>
-                        <option value="¢">¢</option>
-                    </select>
-                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;" } })
-                    @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+            <div class="form-group col-md-3">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-6" })
+                <div class="col-md-12">
+                    <textarea id="Description" name="Description" rows="3" class="text-area" ></textarea>
                 </div>
-
             </div>
-        </div>
 
-
-        <div class="form-group col-md-3">
-            @Html.LabelFor(model => model.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
-            <div class="col-md-12">
-                @Html.DropDownList("UbicationId", null, "Seleccione una ubicacion", htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UbicationId, "", new { @class = "text-danger" })
+            <div class="form-group col-md-3">
+                @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-6" })
+                <div class="col-md-12 ">
+                    <div class="input-group-prepend">
+                        <select class="input-group-text" id="Currency" name="Currency">
+                            <option value="$">$</option>
+                            <option value="¢">¢</option>
+                        </select>
+                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, 0, `Debes incluir un precio valido`)" } })
+                    </div>
+                </div>
+                <span id="errorPrice" class="text-danger col-md-12"></span>
             </div>
-        </div>
 
-        <div class="form-group col-md-3">
-            @Html.LabelFor(model => model.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-6" })
-            <div class="col-md-12">
-                @Html.DropDownList("IndividualContributorId", null, "Seleccione un colaborador", htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.IndividualContributorId, "", new { @class = "text-danger" })
+
+            <div class="form-group col-md-3">
+                @Html.LabelFor(model => model.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
+                <div class="col-md-12">
+                    @Html.DropDownList("UbicationId", null, "Seleccione una ubicacion", htmlAttributes: new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes seleccionar una opcion valida`)" })
+                </div>
+                <span id="errorUbicationId" class="text-danger col-md-12"></span>
+            </div>
+
+            <div class="form-group col-md-3">
+                @Html.LabelFor(model => model.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-6" })
+                <div class="col-md-12">
+                    @Html.DropDownList("IndividualContributorId", null, "Seleccione un colaborador", htmlAttributes: new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes seleccionar una opcion valida`)" })
+                </div>
+                <span id="errorIndividualContributorId" class="text-danger col-md-12"></span>
             </div>
         </div>
     </div>
-    @Html.Partial("CreateTerrainFormView");
+
+
+    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 ">
+        @Html.Partial("CreateTerrainFormView")
+    </div>
+
+
     <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 " id="houseForm" style="display: none;">
         @Html.Partial("CreateHouseFormView")
     </div>
+
     <div class="col-md-12 shadow  p-0 flex-wrap  mb-3" id="houseFormAux" style="display: none;">
-        @Html.Partial("CreateHouseFormAux");
+        @Html.Partial("CreateHouseFormAux")
     </div>
 
-    <div class="col-md-12 shadow mb-3 p-0 flex-wrap d-flex">
-        <div class="col-md-12 article-container-header mb-3  d-flex ">
-            <h3 class="">Agregar fotos </h3>
-        </div>
-        <div class="col-md-8 justify-content-center container mb-3 flex-wrap d-flex" id="imagesPreview">
-            <div class="col-md-12 d-flex justify-content-center p-0">
-                <label for="pickImage" class="image-label-style" style="width:300px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
-                <input multiple id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
-            </div>
-            <div class="col-md-12">
-                <span class="text-danger field-validation-error" id="ImageError">
-                </span>
-                <span class="text-danger field-validation-error" id="OutstandingImageError">
+    <div class="form-group">
+
+        <div class="col-md-12 shadow  p-0 flex-wrap  mb-3">
+            <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
+                <h3 class="">Agregar fotos </h3>
+                <span class="show-hide-bottom-form">
+                    <i onclick="showHouseBodyForm('picture')" class="fas fa-plus " style="display: none;" id="picturePlusButton"></i>
+                    <i onclick="hideHouseBodyForm('picture')" class="fas fa-minus " id="picture MinusButton"></i>
                 </span>
             </div>
-            @if (ViewBag.urls != null)
-            {
-                <div class="col-md-2 my-2 d-flex" id="0">
-                    <figure class="figure-style">
-                        <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src=@ViewBag.Selectedurl>
-                    </figure>
-                    <i id="0" class="fas fa-times-circle close-button-style 0" aria-hidden="true"></i>
-                    <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="(@ViewBag.Selectedurl">
+            <div class="col-md-8 justify-content-center container mb-3 flex-wrap" style="display:flex" name="pictureFormBody" id="imagesPreview">
+                <div class="col-md-12">
+                    <div class="text-danger field-validation-error text-center" id="ImageError">
+                    </div>
+                    <div class="text-danger field-validation-error text-center" id="OutstandingImageError">
+                    </div>
                 </div>
 
-                var i = 1;
-                foreach (var url in ViewBag.urls)
-                {
-                    <div class="col-md-2 my-2 d-flex" id="@i">
-                        <figure class="figure-style">
-                            <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src=@url>
-                        </figure>
-                        <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true"></i>
-                        <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@url">
-                    </div>
-                    i++;
-                }
-            }
+                <div class="col-xs-2 d-flex mb-2 " style="padding-left: 5px">
+                    <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
+                    <input multiple id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+                </div>
+            </div>
+        </div>
+    </div>
 
-        </div>
-    </div>
-    <div class="col-md-12  mb-3 mt-3 flex-wrap d-flex">
-        <div class="col-md-12">
-            <button type="button" class="btn btn-outline-primary" onclick="showHouseForm()">
-                Agregar casa
-            </button>
-        </div>
-    </div>
 
 
 
@@ -147,12 +143,35 @@
     <div class="col-md-12 ">
         <hr />
         <div class="form-group">
+
             <div class="container-fluid row">
                 <div class="col-md-6 d-flex justify-content-end">
-                    <input type="submit" value="Crear" onclick="" class="btn btn-success" id="houseFormButton" />
+                    <input type="button" value="Crear" onclick="ValidateForm()" class="btn btn-success" id="houseFormButton" />
                 </div>
                 <div class="col-md-6">
                     <a href="/Articles" class="btn btn-outline-secondary">Regresar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="UbicationFeaturesModal" tabindex="-1" role="dialog" aria-labelledby="UbicationFeaturesLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="FeatureslLabel">Lista de caracteristicas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush" id="featuresList">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" data-dismiss="modal">Listo!</button>
                 </div>
             </div>
         </div>
@@ -192,16 +211,28 @@
                 form.style.display = "none";
                 var btnInfo = document.getElementById("articleValidateButtonHouse")
                 btnInfo.style.display = "none";
+                document.getElementById("HouseFeaturesList").innerHTML = "";
+                houseFeatures = new Array();
                 CreateHouseForm = false;
+                cleanForm("House");
             } else {
                 var form = document.getElementById("houseFormAux");
                 form.style.display = "none";
                 var btnInfo = document.getElementById("articleValidateButtonHouseAux")
                 btnInfo.style.display = "none";
+                document.getElementById("HouseAuxFeaturesList").innerHTML = "";
+                houseAuxFeatures = new Array();
                 CreateHouseFormAux = false;
+                cleanForm("HouseAux");
             }
             toggleHouseFormBtn();
+        }
 
+        function cleanForm(id) {
+            var elements = document.getElementsByClassName(`${id}Element`);
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].value = "";
+            }
         }
 
         function toggleHouseFormBtn() {
@@ -210,38 +241,245 @@
 
             if (CreateHouseForm && CreateHouseFormAux) {
                 containerButton.style.display = "none";
-                containerButton.classList.remove("d-flex");
+                containerButton.classList.remove("d-block");
             }
             else {
-                containerButton.classList.add("d-flex");
+                containerButton.classList.add("d-block");
             }
         }
 
-        function hideHouseBodyForm() {
-            var form = document.getElementsByName("HouseFormBody");
+        function hideHouseBodyForm(id) {
+            var form = document.getElementsByName(`${id}FormBody`);
             for (var i = 0; i < form.length; i++) {
                 form[i].style.display = "none";
             }
-            var minusButton = document.getElementById("minusButton");
+            var minusButton = document.getElementById(`${id}MinusButton`);
             minusButton.style.display = "none";
-            var plusButton = document.getElementById("plusButton");
-            plusButton.style.display = "flex";
+            var plusButton = document.getElementById(`${id}PlusButton`);
+            plusButton.style.display = "inline-block";
 
         }
 
-        function showHouseBodyForm() {
-            var form = document.getElementsByName("HouseFormBody");
+        function showHouseBodyForm(id) {
+            var form = document.getElementsByName(`${id}FormBody`);
             for (var i = 0; i < form.length; i++) {
                 form[i].style.display = "flex";
             }
-            var plusButton = document.getElementById("plusButton");
+            var plusButton = document.getElementById(`${id}PlusButton`);
             plusButton.style.display = "none";
-            var minusButton = document.getElementById("minusButton");
-            minusButton.style.display = "flex";
+            var minusButton = document.getElementById(`${id}MinusButton`);
+            minusButton.style.display = "inline-block";
+        }
+
+        function getFeatures( model) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetFeatures","Articles")',
+                data: { model: model },
+                cache: false
+            })
+                .then(function (data) {
+                    var arr_from_json = JSON.parse(data);
+                    showFeatures(arr_from_json)
+                })
+                .fail(function (data) {
+                    alert('No hay caracteristicas que mostrar!');
+                })
+               return false;
+        }
+
+        function showFeatures(featureJsonArray) {
+
+            var array = selectArray(featureJsonArray[0].Model);
+
+            var content = "";
+            for (var i = 0; i < featureJsonArray.length; i++) {
+                var itemClass = array.includes(featureJsonArray[i].FeatureId) ? "ubication-feature-lbl-selected" : "ubication-feature-lbl";
+                content +=
+                    `<li class='list-group-item ${itemClass}' id='lbl-${featureJsonArray[i].FeatureId}'>
+                        <div class='custom-control'>
+                            <label class='features-label' for='chk-${featureJsonArray[i].FeatureId}'
+                            onclick="clickedLabel(${featureJsonArray[i].FeatureId}, '${featureJsonArray[i].Description}','${featureJsonArray[i].Model}')">${featureJsonArray[i].Description}</label>
+                        </div>
+                    </li>`
+            }
+            document.getElementById("featuresList").innerHTML = content;
+        }
+
+        var houseFeatures = new Array();
+        var houseAuxFeatures = new Array();
+        var terrainFeatures = new Array();
+
+        function clickedLabel(id, name, model) {
+            toggleLabel(id, model, name);
+            validateFeatures(model);
+        }
+
+        function toggleLabel(id, model,name ) {
+            var array = selectArray(model);
+            var exist = editArray(id, array);
+            var element = `lbl-${id}`;
+            if (exist) {
+                document.getElementById(element).classList.add('ubication-feature-lbl');
+                document.getElementById(element).classList.remove('ubication-feature-lbl-selected');
+                excludeFeatures(id, model);
+
+            }
+            else {
+                document.getElementById(element).classList.remove('ubication-feature-lbl');
+                document.getElementById(element).classList.add('ubication-feature-lbl-selected');
+                includeFeatures(id, model, name);
+            }
+
+        }
+
+        function selectArray( model) {
+            switch (model) {
+                case "Terrain":
+                    return terrainFeatures;
+                    break;
+               case "House":
+                    return  houseFeatures;
+                    break;
+               case "HouseAux":
+                     return houseAuxFeatures;
+                    break;
+            }
+        }
+
+        function editArray(id, arrayModel) {
+            if (arrayModel.includes(id)) {
+                arrayModel.splice(arrayModel.indexOf(id), 1);
+                return true;
+            }
+            else {
+                arrayModel.push(id);
+                return false;
+            }
+        }
+
+        function includeFeatures(id, model, name) {
+            var content = "";
+            elementId = `${model}FeaturesList`
+            var element = document.getElementById(elementId);
+            var container = document.createElement('div');
+            container.setAttribute("class", `list-group-item col-md-2 m-3 ${model} list-group-item-success`);
+            container.setAttribute("id", `${model}${id}`);
+            container.innerText = name;
+            var input = document.createElement('input');
+            input.setAttribute("name", `${model}Features[]`);
+            input.setAttribute("style", "display: none");
+            input.setAttribute("value", id);
+            container.append(input);
+            element.append(container);
+
+        }
+
+        function excludeFeatures(id, model) {
+            var elements = document.getElementsByClassName(model)
+            for (var i = 0; i < elements.length; i++) {
+                if (elements[i].id == `${model}${id}`) {
+                    var deleteId = elements[i].id;
+                    document.getElementById(deleteId).remove();
+                }
+            }
+        }
+
+        function ValidateForm() {
+            var articleForm = validateArticleForm()
+            var terrainForm = validateTerrainForm()
+            var houseForm = CreateHouseForm ? validateHouseForm("") : true;
+            var houseAuxForm = CreateHouseFormAux ? validateHouseForm("Aux") : true;
+            var pictureForm = ImageValidation()
+            if (pictureForm) {
+                var outstandingPictureForm = outstandingPictureValidation()
+
+            }
+
+            if (terrainForm) {
+                document.getElementById("Form").submit();
+            }
         }
 
 
 
+        function validateArticleForm() {
+            var price = validateItem("Price", 0 , "");
+            var ubication = validateItem("UbicationId", 0 , "");
+            var enlisted = validateItem("IndividualContributorId", 0, "");
 
+            var validate =  price && ubication && enlisted ? true : false;
+
+            return validate;
+        }
+
+        function validateTerrainForm() {
+            var foreheadMeasure = validateItem("ForeheadMeasure", 0, "");
+            var backgroundMeasure = validateItem("BackgroundMeasure", 0 , "");
+            var topography = validateItem("Topography", null , "");
+            var model = validateFeatures("Terrain");
+            var validate = foreheadMeasure && backgroundMeasure && topography && model ? true : false;
+
+            return validate;
+        }
+
+        function validateHouseForm(id) {
+            var foreheadMeasure = validateItem(`HouseForeheadMeasure${id}`, 0, "");
+            var backgroundMeasure = validateItem(`HouseBackgroundMeasure${id}`, 0, "");
+            var bedrooms = validateItem(`Bedrooms${id}`, 0, "");
+            var bathrooms = validateItem(`Bathrooms${id}`, 0, "");
+            var levels = validateItem(`Levels${id}`, 0, "");
+            var model = validateFeatures(`House${id}`);
+            var validate = foreheadMeasure && backgroundMeasure && bedrooms && bathrooms && levels && model ? true : false;
+
+            return validate;
+        }
+
+        function validateFeatures(model) {
+
+            var message = "Debes seleccionar almenos 1 caracteristica";
+            var spanId = `error${model}`;
+            var array = selectArray(model);
+            var comparer = array.length > 0 ? true: false;
+            if (comparer) {
+                cleanErrorSpan(spanId);
+                return true;
+            }
+            else {
+                if (message == "") {
+                    return;
+                }
+                errorMessageValidation(spanId, message)
+                return false;
+            }
+        }
+
+        function validateItem(id, dataType, message) {
+            message = message == "" ? "Campo requerido" : message;
+            var element = document.getElementById(id);
+            var spanId = `error${id}`;
+
+            var comparer = dataType == 0 ? (element.value > 0) : (element.value != "" && isNaN(element.value));
+            if (comparer) {
+                cleanErrorSpan(spanId);
+                return true;
+            }
+            else {
+                errorMessageValidation(spanId, message)
+                return false;
+            }
+        }
+
+        function errorMessageValidation(spanId, message) {
+            var element = document.getElementById(spanId)
+                element.innerHTML = "";
+                element.innerHTML = message;
+        }
+
+        function cleanErrorSpan(spanId) {
+            var element = document.getElementById(spanId)
+            element.innerHTML = "";
+        }
     </script>
 }

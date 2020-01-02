@@ -46,6 +46,8 @@ namespace WebApplication1.Controllers
         public ActionResult Create(Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
         {
 
+
+
             if (ubication.Name != null && ubication.DistritId > 0 && urls.Length > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
             {
                 using (var transaction = db.Database.BeginTransaction())
