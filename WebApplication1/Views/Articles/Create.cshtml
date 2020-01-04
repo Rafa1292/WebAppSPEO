@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Article
+﻿@model WebApplication1.ViewModel.ArticleViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -59,37 +59,62 @@
             <div class="form-group col-md-3">
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12">
-                    <textarea id="Description" name="Description" rows="3" class="text-area" ></textarea>
+                    @{
+                        var value = "";
+                        if (Model != null)
+                        {
+                            value = Model.Description;
+                        }
+                    }
+                    <textarea id="Description" name="Description" rows="3" class="text-area"> @value</textarea>
                 </div>
             </div>
 
             <div class="form-group col-md-3">
-                @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-6" })
+                @Html.LabelFor(model => model.Article.Price, htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12 ">
                     <div class="input-group-prepend">
                         <select class="input-group-text" id="Currency" name="Currency">
-                            <option value="$">$</option>
-                            <option value="¢">¢</option>
+                            @{
+                                var dollarState = ViewBag.Currency == "$" ? "selected" : "";
+                                var colonState = ViewBag.Currency == "¢" ? "selected" : "";
+                            }
+                            <option @dollarState value="$">$</option>
+                            <option @colonState value="¢">¢</option>
                         </select>
-                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, 0, `Debes incluir un precio valido`)" } })
+                        @Html.EditorFor(model => model.Article.Price, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, 0, `Debes incluir un precio valido`)" } })
                     </div>
                 </div>
-                <span id="errorPrice" class="text-danger col-md-12"></span>
+                <span id="errorArticle_Price" class="text-danger col-md-12"></span>
             </div>
 
 
             <div class="form-group col-md-3">
-                @Html.LabelFor(model => model.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
+                @Html.LabelFor(model => model.Article.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12">
-                    @Html.DropDownList("UbicationId", null, "Seleccione una ubicacion", htmlAttributes: new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes seleccionar una opcion valida`)" })
+                    <select name="UbicationId" id="UbicationId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
+                        <option selected disabled>Seleccione una ubicacion</option>
+                        @foreach (var ubication in ViewBag.UbicationId)
+                        {
+                            var selectedOption = ViewBag.SelectedUbication != null && ViewBag.SelectedUbication == Int32.Parse(ubication.Value) ? "selected" : "";
+                            <option @selectedOption value="@ubication.Value">@ubication.Text</option>
+                        }
+                    </select>
                 </div>
                 <span id="errorUbicationId" class="text-danger col-md-12"></span>
             </div>
 
             <div class="form-group col-md-3">
-                @Html.LabelFor(model => model.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-6" })
+                @Html.LabelFor(model => model.Article.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12">
-                    @Html.DropDownList("IndividualContributorId", null, "Seleccione un colaborador", htmlAttributes: new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes seleccionar una opcion valida`)" })
+                    <select name="IndividualContributorId" id="IndividualContributorId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
+                        <option selected disabled>Seleccione una ubicacion</option>
+                        @foreach (var colaborator in ViewBag.IndividualContributorId)
+                        {
+                            var selectedOption = ViewBag.SelectedColaborator != null && ViewBag.SelectedColaborator == Int32.Parse(colaborator.Value) ? "selected" : "";
+                            <option @selectedOption value="@colaborator.Value">@colaborator.Text</option>
+                        }
+                    </select>
                 </div>
                 <span id="errorIndividualContributorId" class="text-danger col-md-12"></span>
             </div>
@@ -132,6 +157,30 @@
                     <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
                     <input multiple id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
                 </div>
+
+                @if (ViewBag.urls != null)
+                {
+                    <div class="col-xs-2 my-2 d-flex" id="0">
+                        <figure class="figure-style">
+                            <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src="data:image/jpeg;base64,@ViewBag.Selectedurl">
+                        </figure>
+                        <i id="0" class="fas fa-times-circle close-button-style 0" aria-hidden="true"></i>
+                        <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="@ViewBag.Selectedurl">
+                    </div>
+
+                    var i = 1;
+                    foreach (var url in ViewBag.urls)
+                    {
+                        <div class="col-xs-2 my-2 d-flex" id="@i">
+                            <figure class="figure-style">
+                                <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src="data:image/jpeg;base64,@url">
+                            </figure>
+                            <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true"></i>
+                            <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@url">
+                        </div>
+                        i++;
+                    }
+                }
             </div>
         </div>
     </div>
@@ -397,7 +446,7 @@
 
             }
 
-            if (terrainForm) {
+            if (terrainForm && articleForm && houseForm && houseAuxForm && outstandingPictureForm) {
                 document.getElementById("Form").submit();
             }
         }
@@ -405,7 +454,7 @@
 
 
         function validateArticleForm() {
-            var price = validateItem("Price", 0 , "");
+            var price = validateItem("Article_Price", 0 , "");
             var ubication = validateItem("UbicationId", 0 , "");
             var enlisted = validateItem("IndividualContributorId", 0, "");
 
@@ -415,9 +464,9 @@
         }
 
         function validateTerrainForm() {
-            var foreheadMeasure = validateItem("ForeheadMeasure", 0, "");
-            var backgroundMeasure = validateItem("BackgroundMeasure", 0 , "");
-            var topography = validateItem("Topography", null , "");
+            var foreheadMeasure = validateItem("Terrain_ForeheadMeasure", 0, "");
+            var backgroundMeasure = validateItem("Terrain_BackgroundMeasure", 0 , "");
+            var topography = validateItem("Terrain_Topography", null , "");
             var model = validateFeatures("Terrain");
             var validate = foreheadMeasure && backgroundMeasure && topography && model ? true : false;
 
@@ -425,11 +474,11 @@
         }
 
         function validateHouseForm(id) {
-            var foreheadMeasure = validateItem(`HouseForeheadMeasure${id}`, 0, "");
-            var backgroundMeasure = validateItem(`HouseBackgroundMeasure${id}`, 0, "");
-            var bedrooms = validateItem(`Bedrooms${id}`, 0, "");
-            var bathrooms = validateItem(`Bathrooms${id}`, 0, "");
-            var levels = validateItem(`Levels${id}`, 0, "");
+            var foreheadMeasure = validateItem(`House${id}_HouseForeheadMeasure${id}`, 0, "");
+            var backgroundMeasure = validateItem(`House${id}_HouseBackgroundMeasure${id}`, 0, "");
+            var bedrooms = validateItem(`House${id}_Bedrooms${id}`, 0, "");
+            var bathrooms = validateItem(`House${id}_Bathrooms${id}`, 0, "");
+            var levels = validateItem(`House${id}_Levels${id}`, 0, "");
             var model = validateFeatures(`House${id}`);
             var validate = foreheadMeasure && backgroundMeasure && bedrooms && bathrooms && levels && model ? true : false;
 
@@ -481,5 +530,24 @@
             var element = document.getElementById(spanId)
             element.innerHTML = "";
         }
+
+        var selectedTerrainFeatures = document.getElementsByName("TerrainFeatures[]");
+        loadFeaturesViewBag(selectedTerrainFeatures, "Terrain");
+
+        var selectedHouseFeatures = document.getElementsByName("HouseFeatures[]");
+        loadFeaturesViewBag(selectedHouseFeatures, "House");
+
+        var selectedHouseAuxFeatures = document.getElementsByName("HouseAuxFeatures[]");
+        loadFeaturesViewBag(selectedHouseAuxFeatures, "HouseAux");
+
+        function loadFeaturesViewBag(SelectedFeatures, model) {
+            if (SelectedFeatures != null && SelectedFeatures.length > 0) {
+                 var array = selectArray(model);
+                 for (var i = 0; i < SelectedFeatures.length; i++) {
+                        editArray(parseInt(SelectedFeatures[i].value), array);
+                 }
+            }
+        }
+
     </script>
 }

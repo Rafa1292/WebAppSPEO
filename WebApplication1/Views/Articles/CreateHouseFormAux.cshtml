@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.HouseAux
+﻿@model WebApplication1.ViewModel.ArticleViewModel
 
 
 
@@ -12,57 +12,57 @@
 <div class="col-md-12 row mt-3 mb-3" name="houseAuxFormBody">
 
     <div class="form-group col-md-3">
-        @Html.LabelFor(model => model.HouseForeheadMeasureAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        @Html.LabelFor(model => model.HouseAux.HouseForeheadMeasureAux, htmlAttributes: new { @class = "control-label col-md-12" })
         <div class="col-md-12">
-            @Html.EditorFor(model => model.HouseForeheadMeasureAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de frente valida`)" } })
+            @Html.EditorFor(model => model.HouseAux.HouseForeheadMeasureAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de frente valida`)" } })
         </div>
-        <span id="errorHouseForeheadMeasureAux" class="text-danger col-md-12"></span>
+        <span id="errorHouseAux_HouseForeheadMeasureAux" class="text-danger col-md-12"></span>
 
     </div>
 
     <div class="form-group col-md-3">
-        @Html.LabelFor(model => model.HouseBackgroundMeasureAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        @Html.LabelFor(model => model.HouseAux.HouseBackgroundMeasureAux, htmlAttributes: new { @class = "control-label col-md-12" })
         <div class="col-md-12">
-            @Html.EditorFor(model => model.HouseBackgroundMeasureAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de fondo valida`)" } })
+            @Html.EditorFor(model => model.HouseAux.HouseBackgroundMeasureAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de fondo valida`)" } })
         </div>
-        <span id="errorHouseBackgroundMeasureAux" class="text-danger col-md-12"></span>
+        <span id="errorHouseAux_HouseBackgroundMeasureAux" class="text-danger col-md-12"></span>
 
     </div>
 
     <div class="form-group col-md-3">
-        @Html.LabelFor(model => model.BedroomsAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        @Html.LabelFor(model => model.HouseAux.BedroomsAux, htmlAttributes: new { @class = "control-label col-md-12" })
         <div class="col-md-12">
-            @Html.EditorFor(model => model.BedroomsAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir un numero de cuartos valido`)" } })
+            @Html.EditorFor(model => model.HouseAux.BedroomsAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir un numero de cuartos valido`)" } })
         </div>
-        <span id="errorBedroomsAux" class="text-danger col-md-12"></span>
+        <span id="errorHouseAux_BedroomsAux" class="text-danger col-md-12"></span>
 
     </div>
 
     <div class="form-group col-md-3">
-        @Html.LabelFor(model => model.BathroomsAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        @Html.LabelFor(model => model.HouseAux.BathroomsAux, htmlAttributes: new { @class = "control-label col-md-12" })
         <div class="col-md-12">
-            @Html.EditorFor(model => model.BathroomsAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir un numero de baños valido`)" } })
+            @Html.EditorFor(model => model.HouseAux.BathroomsAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir un numero de baños valido`)" } })
         </div>
-        <span id="errorBathroomsAux" class="text-danger col-md-12"></span>
+        <span id="errorHouseAux_BathroomsAux" class="text-danger col-md-12"></span>
 
     </div>
 
 
 
     <div class="form-group col-md-3">
-        @Html.LabelFor(model => model.GarageAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        @Html.LabelFor(model => model.HouseAux.GarageAux, htmlAttributes: new { @class = "control-label col-md-12" })
         <div class="col-md-12">
-            @Html.EditorFor(model => model.GarageAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement" } })
+            @Html.EditorFor(model => model.HouseAux.GarageAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement" } })
         </div>
-        <span id="errorGarageAux" class="text-danger col-md-12"></span>
+        <span id="errorHouseAux_GarageAux" class="text-danger col-md-12"></span>
     </div>
 
     <div class="form-group col-md-3">
-        @Html.LabelFor(model => model.LevelsAux, htmlAttributes: new { @class = "control-label col-md-12" })
+        @Html.LabelFor(model => model.HouseAux.LevelsAux, htmlAttributes: new { @class = "control-label col-md-12" })
         <div class="col-md-12">
-            @Html.EditorFor(model => model.LevelsAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir un numero de niveles valido`)" } })
+            @Html.EditorFor(model => model.HouseAux.LevelsAux, new { htmlAttributes = new { @class = "form-control HouseAuxElement", @onchange = "validateItem(this.id, 0, `Debes incluir un numero de niveles valido`)" } })
         </div>
-        <span id="errorLevelsAux" class="text-danger col-md-12"></span>
+        <span id="errorHouseAux_LevelsAux" class="text-danger col-md-12"></span>
 
     </div>
 
@@ -86,6 +86,16 @@
             <hr />
         </div>
         <span id="errorHouseAux" class="text-danger col-md-12"></span>
+        @if (ViewBag.houseAuxFeaturesSelected != null)
+        {
+            foreach (var feature in ViewBag.houseAuxFeaturesSelected)
+            {
+                <div class="list-group-item col-md-2 m-3 @feature.Model list-group-item-success" id='@feature.Model@feature.FeatureId'>
+                    @feature.Description
+                    <input name="HouseAuxFeatures[]" style="display: none" value="@feature.FeatureId">
+                </div>
+            }
+        }
     </div>
 
 

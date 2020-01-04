@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.Terrain
+﻿@model WebApplication1.ViewModel.ArticleViewModel
 
 <div class="col-md-12 article-container-header d-flex justify-content-between">
     <h3 class="">Informacion del terreno</h3>
@@ -11,33 +11,33 @@
 <div>
     <div class=" col-md-12 row mt-3 mb-3" name="terrainFormBody">
         <div class="form-group col-md-3">
-            @Html.LabelFor(model => model.ForeheadMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.LabelFor(model => model.Terrain.ForeheadMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
             <div class="col-md-12">
                 <div class="input-group-prepend">
-                    @Html.EditorFor(model => model.ForeheadMeasure, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de frente valida`)" } })
+                    @Html.EditorFor(model => model.Terrain.ForeheadMeasure, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de frente valida`)" } })
                     <label class="input-group-text">Mts²</label>
                 </div>
             </div>
-            <span id="errorForeheadMeasure" class="text-danger col-md-12"></span>
+            <span id="errorTerrain_ForeheadMeasure" class="text-danger col-md-12"></span>
         </div>
 
         <div class="form-group col-md-3">
-            @Html.LabelFor(model => model.BackgroundMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.LabelFor(model => model.Terrain.BackgroundMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
             <div class="col-md-12">
                 <div class="input-group-prepend">
-                    @Html.EditorFor(model => model.BackgroundMeasure, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de fondo valida`)" } })
+                    @Html.EditorFor(model => model.Terrain.BackgroundMeasure, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de fondo valida`)" } })
                     <label class="input-group-text">Mts²</label>
                 </div>
             </div>
-            <span id="errorBackgroundMeasure" class="text-danger col-md-12"></span>
+            <span id="errorTerrain_BackgroundMeasure" class="text-danger col-md-12"></span>
         </div>
 
         <div class="form-group col-md-3">
-            @Html.LabelFor(model => model.Topography, htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.LabelFor(model => model.Terrain.Topography, htmlAttributes: new { @class = "control-label col-md-6" })
             <div class="col-md-12">
-                @Html.EditorFor(model => model.Topography, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, null, `Debes incluir una topografia valida`)" } })
+                @Html.EditorFor(model => model.Terrain.Topography, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, null, `Debes incluir una topografia valida`)" } })
             </div>
-            <span id="errorTopography" class="text-danger col-md-12"></span>
+            <span id="errorTerrain_Topography" class="text-danger col-md-12"></span>
         </div>
 
         <div class="form-group col-md-3 d-flex align-items-center ">
@@ -50,10 +50,22 @@
         </div>
         <div class="col-md-12 row text-center mb-3" id="TerrainFeaturesList">
             <div class="col-md-12">
-            <hr />
+                <hr />
             </div>
-                <span id="errorTerrain" class="text-danger col-md-12"></span>
+            <span id="errorTerrain" class="text-danger col-md-12"></span>
+            @if (ViewBag.terrainFeaturesSelected != null)
+            {
+                foreach (var feature in ViewBag.terrainFeaturesSelected)
+                {
+                    <div class="list-group-item col-md-2 m-3 @feature.Model list-group-item-success" id='@feature.Model@feature.FeatureId'>
+                        @feature.Description
+                        <input name="TerrainFeatures[]" style="display: none" value="@feature.FeatureId">
+                    </div>
+                }
+            }
         </div>
     </div>
 </div>
+
+
 

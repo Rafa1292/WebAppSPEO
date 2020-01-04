@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
 using System.Web.Script.Serialization;
-
+using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -38,11 +38,20 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Description,State,Code,Price,TerrainId,UbicationId,IndividualContributorId,Currency")]
-        Article article, Terrain terrain, House house, HouseAux houseAux, string[] urls, int[] HouseFeatures, int[] HouseAuxFeatures, int[] terrainFeatures, string outstandingPicture)
+        public ActionResult Create(ArticleViewModel articleViewModel )
         {
-            if (article != null && terrain != null && urls.Length > 0 && terrainFeatures.Length > 0 && outstandingPicture != null)
+            if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0 && articleViewModel.TerrainFeatures.Length > 0 && articleViewModel.OutstandingPicture != null)
             {
+                Article article = articleViewModel.Article;
+                Terrain terrain = articleViewModel.Terrain;
+                string outstandingPicture = articleViewModel.OutstandingPicture;
+                string[] urls = articleViewModel.Urls;
+                House house = articleViewModel.House;
+                HouseAux houseAux = articleViewModel.HouseAux;
+                int[] terrainFeatures = articleViewModel.TerrainFeatures;
+                int[] HouseFeatures = articleViewModel.HouseFeatures;
+                int[] HouseAuxFeatures = articleViewModel.HouseAuxFeatures;
+
                 using (var transaction = db.Database.BeginTransaction())
                 {
                     try
@@ -50,13 +59,22 @@ namespace WebApplication1.Controllers
                         db.Terrains.Add(terrain);
                         db.SaveChanges();
 
-                        article.Code = "A";
+                        article.Currency = articleViewModel.Currency;
+                        article.Description = articleViewModel.Description;
+                        article.IndividualContributorId = articleViewModel.IndividualContributorId;
+                        article.UbicationId = articleViewModel.UbicationId;
+                        article.Code = "A" + terrain.TerrainId;
                         article.State = false;
                         article.TerrainId = terrain.TerrainId;                        
                         db.Articles.Add(article);
 
                         db.SaveChanges();
-
+                        var a = 0;
+                        var i = 2;
+                        if (a < 5)
+                        {
+                            i /= a;
+                        }
 
                         List<ArticlePicture> Pictures = new List<ArticlePicture>();
                         List<TerrainFeatureTerrain> Features = new List<TerrainFeatureTerrain>();
@@ -102,32 +120,34 @@ namespace WebApplication1.Controllers
                         }
                         db.SaveChanges();
                         transaction.Commit();
-
-
-
-
                         return RedirectToAction("Index");
                     }
+
                     catch (Exception ex)
                     {
                         transaction.Rollback();
+                        ViewbagFeatures(terrainFeatures, HouseFeatures, HouseAuxFeatures);
+                        ViewBag.Currency = articleViewModel.Currency;
+                        ViewBag.SelectedUbication = articleViewModel.UbicationId;
+                        ViewBag.SelectedColaborator = articleViewModel.IndividualContributorId;
+                        ViewBag.Selectedurl = outstandingPicture;
+                        ViewBag.urls = urls;
                         ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
                         ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
                         ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
                         ViewBag.error = ex.Message;
-
+                        return View(articleViewModel);
                     }
-
                 }
             }
-
-            return View();
+            return View(articleViewModel);
         }
 
         public void AddHouse( House house, int[] features, int articleId)
         {
             house.ArticleId = articleId;
             db.Houses.Add(house);
+            db.SaveChanges();
             AddFeatures(features, house.HouseId);
 
 
@@ -208,6 +228,33 @@ namespace WebApplication1.Controllers
             db.Articles.Remove(article);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public void ViewbagFeatures(int[] terrainSelected, int[] houseSelected, int[] houseAuxSelected)
+        {
+            var jsonSerialiser = new JavaScriptSerializer();
+            var terrainFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("Terrain"));
+            var houseFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("House"));
+            var houseAuxFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("HouseAux"));
+
+            ViewBag.terrainFeaturesSelected =  FeatureFilter(terrainFeatures, terrainSelected);
+            ViewBag.houseFeaturesSelected =  houseSelected != null && houseSelected.Length > 0 ? FeatureFilter(houseFeatures, houseSelected) : null;
+            ViewBag.houseAuxFeaturesSelected = houseAuxSelected != null && houseAuxSelected.Length > 0 ? FeatureFilter(houseAuxFeatures, houseAuxSelected) : null;
+        }
+
+        public List<Feature> FeatureFilter(List<Feature> featuresList, int[] featuresSelected)
+        {
+            List<Feature> filterFeatures = new List<Feature>();
+
+            foreach (var feature in featuresList)
+            {
+                if (Array.Exists(featuresSelected, f => f == feature.FeatureId))
+                {
+                    filterFeatures.Add(feature);
+                }
+            }
+
+            return filterFeatures;
         }
 
         public string GetFeatures(string model)
