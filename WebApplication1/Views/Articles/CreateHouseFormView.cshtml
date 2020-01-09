@@ -3,16 +3,20 @@
 
 
 
-<div class="col-md-12 article-container-header d-flex justify-content-between">
-    <h3 class="">Informacion de casa</h3>
-    <div class="show-hide-bottom-form">
+    <div class="col-md-12 article-container-header d-flex justify-content-between">
+        <h3 class="">Informacion de casa</h3>
+        <div class="show-hide-bottom-form">
 
-        <span>
-            <i onclick="showHouseBodyForm('house')" class="fas fa-plus " style="display: none;" id="housePlusButton"></i>
-            <i onclick="hideHouseBodyForm('house')" class="fas fa-minus " id="houseMinusButton"></i>
-        </span>
+            <span>
+                <i onclick="showHouseBodyForm('house')" class="fas fa-plus " style="display: none;" id="housePlusButton"></i>
+                <i onclick="hideHouseBodyForm('house')" class="fas fa-minus " id="houseMinusButton"></i>
+            </span>
+        </div>
+        @Html.HiddenFor(model => model.House.HouseId)
+        @Html.HiddenFor(model => model.House.ArticleId)
+
+
     </div>
-</div>
 
 <div class="col-md-12  row mt-3 mb-3" name="houseFormBody">
     <div class="form-group col-md-3">

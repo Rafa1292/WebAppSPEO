@@ -22,14 +22,14 @@
     <div class=" d-flex rounded article-validate-button">
         <div><strong>Fotos</strong></div>
     </div>
-    <div class="rounded article-validate-button" id="articleValidateButtonHouse" style="display: none">
+    <div class="rounded article-validate-button" id="articleValidateButtonHouse" style="display: @ViewBag.houseForm">
         <div><strong>Casa</strong></div>
     </div>
-    <div class="rounded article-validate-button" id="articleValidateButtonHouseAux" style="display: none">
+    <div class="rounded article-validate-button" id="articleValidateButtonHouseAux" style="display: @ViewBag.houseAuxForm">
         <div><strong>Casa #2</strong></div>
     </div>
     <div style="margin-left: 1%;">
-        <button class="btn-outline-success btn rounded" id="containerButton" onclick="showHouseForm()" style="min-width:84px; min-height: 38px; margin-top: 5px;">
+        <button class="btn-outline-success btn rounded" id="containerButton" onclick="showHouseForm()" style="min-width:84px; min-height: 38px; margin-top: 5px; display: @ViewBag.houseFormBtn;">
             <i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i>
         </button>
     </div>
@@ -127,11 +127,11 @@
     </div>
 
 
-    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 " id="houseForm" style="display: none;">
+    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 " id="houseForm" style="display:@ViewBag.houseForm;">
         @Html.Partial("CreateHouseFormView")
     </div>
 
-    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3" id="houseFormAux" style="display: none;">
+    <div class="col-md-12 shadow  p-0 flex-wrap  mb-3" id="houseFormAux" style="display: @ViewBag.houseAuxForm;">
         @Html.Partial("CreateHouseFormAux")
     </div>
 
@@ -142,7 +142,7 @@
                 <h3 class="">Agregar fotos </h3>
                 <span class="show-hide-bottom-form">
                     <i onclick="showHouseBodyForm('picture')" class="fas fa-plus " style="display: none;" id="picturePlusButton"></i>
-                    <i onclick="hideHouseBodyForm('picture')" class="fas fa-minus " id="picture MinusButton"></i>
+                    <i onclick="hideHouseBodyForm('picture')" class="fas fa-minus " id="pictureMinusButton"></i>
                 </span>
             </div>
             <div class="col-md-8 justify-content-center container mb-3 flex-wrap" style="display:flex" name="pictureFormBody" id="imagesPreview">
@@ -230,96 +230,10 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/PersonalScripts/ImageScripts/MultipleImages.js"></script>
+    <script src="~/Scripts/PersonalScripts/ArticlesScripts/featuresScripts.js"></script>
+    <script src="~/Scripts/PersonalScripts/ArticlesScripts/formsScripts.js"></script>
+    <script src="~/Scripts/PersonalScripts/ArticlesScripts/validationScripts.js"></script>
     <script>
-        var CreateHouseForm = false;
-        var CreateHouseFormAux = false;
-
-        function showHouseForm() {
-
-            if (!CreateHouseForm) {
-                var form = document.getElementById("houseForm");
-                form.style.display = "flex";
-                var btnInfo = document.getElementById("articleValidateButtonHouse")
-                btnInfo.style.display = "flex";
-                CreateHouseForm = true;
-            }
-            else {
-                var form = document.getElementById("houseFormAux");
-                form.style.display = "flex";
-                var btnInfo = document.getElementById("articleValidateButtonHouseAux")
-                btnInfo.style.display = "flex";
-                CreateHouseFormAux = true;
-            }
-            toggleHouseFormBtn();
-        }
-
-        function deleteHouseForm(formDeleteBtn) {
-
-            if (formDeleteBtn) {
-                var form = document.getElementById("houseForm");
-                form.style.display = "none";
-                var btnInfo = document.getElementById("articleValidateButtonHouse")
-                btnInfo.style.display = "none";
-                document.getElementById("HouseFeaturesList").innerHTML = "";
-                houseFeatures = new Array();
-                CreateHouseForm = false;
-                cleanForm("House");
-            } else {
-                var form = document.getElementById("houseFormAux");
-                form.style.display = "none";
-                var btnInfo = document.getElementById("articleValidateButtonHouseAux")
-                btnInfo.style.display = "none";
-                document.getElementById("HouseAuxFeaturesList").innerHTML = "";
-                houseAuxFeatures = new Array();
-                CreateHouseFormAux = false;
-                cleanForm("HouseAux");
-            }
-            toggleHouseFormBtn();
-        }
-
-        function cleanForm(id) {
-            var elements = document.getElementsByClassName(`${id}Element`);
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].value = "";
-            }
-        }
-
-        function toggleHouseFormBtn() {
-
-            var containerButton = document.getElementById("containerButton")
-
-            if (CreateHouseForm && CreateHouseFormAux) {
-                containerButton.style.display = "none";
-                containerButton.classList.remove("d-block");
-            }
-            else {
-                containerButton.classList.add("d-block");
-            }
-        }
-
-        function hideHouseBodyForm(id) {
-            var form = document.getElementsByName(`${id}FormBody`);
-            for (var i = 0; i < form.length; i++) {
-                form[i].style.display = "none";
-            }
-            var minusButton = document.getElementById(`${id}MinusButton`);
-            minusButton.style.display = "none";
-            var plusButton = document.getElementById(`${id}PlusButton`);
-            plusButton.style.display = "inline-block";
-
-        }
-
-        function showHouseBodyForm(id) {
-            var form = document.getElementsByName(`${id}FormBody`);
-            for (var i = 0; i < form.length; i++) {
-                form[i].style.display = "flex";
-            }
-            var plusButton = document.getElementById(`${id}PlusButton`);
-            plusButton.style.display = "none";
-            var minusButton = document.getElementById(`${id}MinusButton`);
-            minusButton.style.display = "inline-block";
-        }
-
         function getFeatures( model) {
 
             $.ajax({
@@ -337,217 +251,5 @@
                 })
                return false;
         }
-
-        function showFeatures(featureJsonArray) {
-
-            var array = selectArray(featureJsonArray[0].Model);
-
-            var content = "";
-            for (var i = 0; i < featureJsonArray.length; i++) {
-                var itemClass = array.includes(featureJsonArray[i].FeatureId) ? "ubication-feature-lbl-selected" : "ubication-feature-lbl";
-                content +=
-                    `<li class='list-group-item ${itemClass}' id='lbl-${featureJsonArray[i].FeatureId}'>
-                        <div class='custom-control'>
-                            <label class='features-label' for='chk-${featureJsonArray[i].FeatureId}'
-                            onclick="clickedLabel(${featureJsonArray[i].FeatureId}, '${featureJsonArray[i].Description}','${featureJsonArray[i].Model}')">${featureJsonArray[i].Description}</label>
-                        </div>
-                    </li>`
-            }
-            document.getElementById("featuresList").innerHTML = content;
-        }
-
-        var houseFeatures = new Array();
-        var houseAuxFeatures = new Array();
-        var terrainFeatures = new Array();
-
-        function clickedLabel(id, name, model) {
-            toggleLabel(id, model, name);
-            validateFeatures(model);
-        }
-
-        function toggleLabel(id, model,name ) {
-            var array = selectArray(model);
-            var exist = editArray(id, array);
-            var element = `lbl-${id}`;
-            if (exist) {
-                document.getElementById(element).classList.add('ubication-feature-lbl');
-                document.getElementById(element).classList.remove('ubication-feature-lbl-selected');
-                excludeFeatures(id, model);
-
-            }
-            else {
-                document.getElementById(element).classList.remove('ubication-feature-lbl');
-                document.getElementById(element).classList.add('ubication-feature-lbl-selected');
-                includeFeatures(id, model, name);
-            }
-
-        }
-
-        function selectArray( model) {
-            switch (model) {
-                case "Terrain":
-                    return terrainFeatures;
-                    break;
-               case "House":
-                    return  houseFeatures;
-                    break;
-               case "HouseAux":
-                     return houseAuxFeatures;
-                    break;
-            }
-        }
-
-        function editArray(id, arrayModel) {
-            if (arrayModel.includes(id)) {
-                arrayModel.splice(arrayModel.indexOf(id), 1);
-                return true;
-            }
-            else {
-                arrayModel.push(id);
-                return false;
-            }
-        }
-
-        function includeFeatures(id, model, name) {
-            var content = "";
-            elementId = `${model}FeaturesList`
-            var element = document.getElementById(elementId);
-            var container = document.createElement('div');
-            container.setAttribute("class", `list-group-item col-md-2 m-3 ${model} list-group-item-success`);
-            container.setAttribute("id", `${model}${id}`);
-            container.innerText = name;
-            var input = document.createElement('input');
-            input.setAttribute("name", `${model}Features[]`);
-            input.setAttribute("style", "display: none");
-            input.setAttribute("value", id);
-            container.append(input);
-            element.append(container);
-
-        }
-
-        function excludeFeatures(id, model) {
-            var elements = document.getElementsByClassName(model)
-            for (var i = 0; i < elements.length; i++) {
-                if (elements[i].id == `${model}${id}`) {
-                    var deleteId = elements[i].id;
-                    document.getElementById(deleteId).remove();
-                }
-            }
-        }
-
-        function ValidateForm() {
-            var articleForm = validateArticleForm()
-            var terrainForm = validateTerrainForm()
-            var houseForm = CreateHouseForm ? validateHouseForm("") : true;
-            var houseAuxForm = CreateHouseFormAux ? validateHouseForm("Aux") : true;
-            var pictureForm = ImageValidation()
-            if (pictureForm) {
-                var outstandingPictureForm = outstandingPictureValidation()
-
-            }
-
-            if (terrainForm && articleForm && houseForm && houseAuxForm && outstandingPictureForm) {
-                document.getElementById("Form").submit();
-            }
-        }
-
-
-
-        function validateArticleForm() {
-            var price = validateItem("Article_Price", 0 , "");
-            var ubication = validateItem("UbicationId", 0 , "");
-            var enlisted = validateItem("IndividualContributorId", 0, "");
-
-            var validate =  price && ubication && enlisted ? true : false;
-
-            return validate;
-        }
-
-        function validateTerrainForm() {
-            var foreheadMeasure = validateItem("Terrain_ForeheadMeasure", 0, "");
-            var backgroundMeasure = validateItem("Terrain_BackgroundMeasure", 0 , "");
-            var topography = validateItem("Terrain_Topography", null , "");
-            var model = validateFeatures("Terrain");
-            var validate = foreheadMeasure && backgroundMeasure && topography && model ? true : false;
-
-            return validate;
-        }
-
-        function validateHouseForm(id) {
-            var foreheadMeasure = validateItem(`House${id}_HouseForeheadMeasure${id}`, 0, "");
-            var backgroundMeasure = validateItem(`House${id}_HouseBackgroundMeasure${id}`, 0, "");
-            var bedrooms = validateItem(`House${id}_Bedrooms${id}`, 0, "");
-            var bathrooms = validateItem(`House${id}_Bathrooms${id}`, 0, "");
-            var levels = validateItem(`House${id}_Levels${id}`, 0, "");
-            var model = validateFeatures(`House${id}`);
-            var validate = foreheadMeasure && backgroundMeasure && bedrooms && bathrooms && levels && model ? true : false;
-
-            return validate;
-        }
-
-        function validateFeatures(model) {
-
-            var message = "Debes seleccionar almenos 1 caracteristica";
-            var spanId = `error${model}`;
-            var array = selectArray(model);
-            var comparer = array.length > 0 ? true: false;
-            if (comparer) {
-                cleanErrorSpan(spanId);
-                return true;
-            }
-            else {
-                if (message == "") {
-                    return;
-                }
-                errorMessageValidation(spanId, message)
-                return false;
-            }
-        }
-
-        function validateItem(id, dataType, message) {
-            message = message == "" ? "Campo requerido" : message;
-            var element = document.getElementById(id);
-            var spanId = `error${id}`;
-
-            var comparer = dataType == 0 ? (element.value > 0) : (element.value != "" && isNaN(element.value));
-            if (comparer) {
-                cleanErrorSpan(spanId);
-                return true;
-            }
-            else {
-                errorMessageValidation(spanId, message)
-                return false;
-            }
-        }
-
-        function errorMessageValidation(spanId, message) {
-            var element = document.getElementById(spanId)
-                element.innerHTML = "";
-                element.innerHTML = message;
-        }
-
-        function cleanErrorSpan(spanId) {
-            var element = document.getElementById(spanId)
-            element.innerHTML = "";
-        }
-
-        var selectedTerrainFeatures = document.getElementsByName("TerrainFeatures[]");
-        loadFeaturesViewBag(selectedTerrainFeatures, "Terrain");
-
-        var selectedHouseFeatures = document.getElementsByName("HouseFeatures[]");
-        loadFeaturesViewBag(selectedHouseFeatures, "House");
-
-        var selectedHouseAuxFeatures = document.getElementsByName("HouseAuxFeatures[]");
-        loadFeaturesViewBag(selectedHouseAuxFeatures, "HouseAux");
-
-        function loadFeaturesViewBag(SelectedFeatures, model) {
-            if (SelectedFeatures != null && SelectedFeatures.length > 0) {
-                 var array = selectArray(model);
-                 for (var i = 0; i < SelectedFeatures.length; i++) {
-                        editArray(parseInt(SelectedFeatures[i].value), array);
-                 }
-            }
-        }
-
     </script>
 }

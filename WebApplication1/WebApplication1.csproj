@@ -271,6 +271,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\PersonalScripts\ArticlesScripts\featuresScripts.js" />
+    <Content Include="Scripts\PersonalScripts\ArticlesScripts\formsScripts.js" />
+    <Content Include="Scripts\PersonalScripts\ArticlesScripts\validationScripts.js" />
     <Content Include="Scripts\PersonalScripts\ImageScripts\MultipleImages.js" />
     <Content Include="Scripts\PersonalScripts\ImageScripts\SingleImage.js" />
     <Content Include="Scripts\PersonalScripts\UbicationsScripts\Distrits.js" />

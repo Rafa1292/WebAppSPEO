@@ -1,12 +1,13 @@
 ﻿@model WebApplication1.ViewModel.ArticleViewModel
 
-<div class="col-md-12 article-container-header d-flex justify-content-between">
-    <h3 class="">Informacion del terreno</h3>
-    <span class="show-hide-bottom-form">
-        <i onclick="showHouseBodyForm('terrain')" class="fas fa-plus " style="display: none;" id="terrainPlusButton"></i>
-        <i onclick="hideHouseBodyForm('terrain')" class="fas fa-minus " id="terrainMinusButton"></i>
-    </span>
-</div>
+    <div class="col-md-12 article-container-header d-flex justify-content-between">
+        <h3 class="">Informacion del terreno</h3>
+        <span class="show-hide-bottom-form">
+            <i onclick="showHouseBodyForm('terrain')" class="fas fa-plus " style="display: none;" id="terrainPlusButton"></i>
+            <i onclick="hideHouseBodyForm('terrain')" class="fas fa-minus " id="terrainMinusButton"></i>
+        </span>
+        @Html.HiddenFor(model => model.Terrain.TerrainId)
+    </div>
 
 <div>
     <div class=" col-md-12 row mt-3 mb-3" name="terrainFormBody">

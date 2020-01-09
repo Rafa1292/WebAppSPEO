@@ -26,8 +26,6 @@ namespace WebApplication1.Controllers
             return View(db.Ubications.ToList());
         }
 
-
-
         // GET: Ubications/Create
         public ActionResult Create()
         {
@@ -102,7 +100,6 @@ namespace WebApplication1.Controllers
             reloadViewBags(urls.ToList(), ubicationFeatures.ToList(), outstandingPicture, CantonId, ubication);
             return View(ubication);
         }
-
 
         // GET: Ubications/Edit/5
         public ActionResult Edit(int? id)

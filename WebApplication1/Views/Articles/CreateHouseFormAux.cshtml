@@ -2,13 +2,15 @@
 
 
 
-<div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
-    <h3 class="">Informacion de casa adicional</h3>
-    <div class="show-hide-bottom-form">
-        <i onclick="showHouseBodyForm('houseAux')" class="fas fa-plus " style="display: none;" id="houseAuxPlusButton"></i>
-        <i onclick="hideHouseBodyForm('houseAux')" class="fas fa-minus " id="houseAuxMinusButton"></i>
+    <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
+        <h3 class="">Informacion de casa adicional</h3>
+        <div class="show-hide-bottom-form">
+            <i onclick="showHouseBodyForm('houseAux')" class="fas fa-plus " style="display: none;" id="houseAuxPlusButton"></i>
+            <i onclick="hideHouseBodyForm('houseAux')" class="fas fa-minus " id="houseAuxMinusButton"></i>
+        </div>
+        @Html.HiddenFor(model => model.HouseAux.Id)
+
     </div>
-</div>
 <div class="col-md-12 row mt-3 mb-3" name="houseAuxFormBody">
 
     <div class="form-group col-md-3">
@@ -77,7 +79,7 @@
         </span>
     </div>
 
-    <div class="col-md-12 d-flex justify-content-end align-items-end">
+    <div class="form-group col-md-3 d-flex align-items-end justify-content-end ">
         <span><i onclick="deleteHouseForm(false)" class="fas fa-trash-alt trash-button"></i></span>
     </div>
 

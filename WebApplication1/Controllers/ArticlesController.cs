@@ -27,6 +27,8 @@ namespace WebApplication1.Controllers
         // GET: Articles/Create
         public ActionResult Create()
         {
+            ViewBag.houseForm = "none";
+            ViewBag.houseAuxForm = "none";
             ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
             ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
             ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
@@ -38,7 +40,7 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ArticleViewModel articleViewModel )
+        public ActionResult Create(ArticleViewModel articleViewModel)
         {
             if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0 && articleViewModel.TerrainFeatures.Length > 0 && articleViewModel.OutstandingPicture != null)
             {
@@ -56,6 +58,7 @@ namespace WebApplication1.Controllers
                 {
                     try
                     {
+
                         db.Terrains.Add(terrain);
                         db.SaveChanges();
 
@@ -65,16 +68,11 @@ namespace WebApplication1.Controllers
                         article.UbicationId = articleViewModel.UbicationId;
                         article.Code = "A" + terrain.TerrainId;
                         article.State = false;
-                        article.TerrainId = terrain.TerrainId;                        
+                        article.TerrainId = terrain.TerrainId;
                         db.Articles.Add(article);
 
                         db.SaveChanges();
-                        var a = 0;
-                        var i = 2;
-                        if (a < 5)
-                        {
-                            i /= a;
-                        }
+
 
                         List<ArticlePicture> Pictures = new List<ArticlePicture>();
                         List<TerrainFeatureTerrain> Features = new List<TerrainFeatureTerrain>();
@@ -126,31 +124,38 @@ namespace WebApplication1.Controllers
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        ViewbagFeatures(terrainFeatures, HouseFeatures, HouseAuxFeatures);
-                        ViewBag.Currency = articleViewModel.Currency;
-                        ViewBag.SelectedUbication = articleViewModel.UbicationId;
-                        ViewBag.SelectedColaborator = articleViewModel.IndividualContributorId;
-                        ViewBag.Selectedurl = outstandingPicture;
-                        ViewBag.urls = urls;
-                        ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
-                        ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
-                        ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
+                        ReloadViewBags(articleViewModel);
                         ViewBag.error = ex.Message;
                         return View(articleViewModel);
                     }
                 }
             }
+            ReloadViewBags(articleViewModel);
             return View(articleViewModel);
         }
 
-        public void AddHouse( House house, int[] features, int articleId)
+        public void ReloadViewBags(ArticleViewModel model)
+        {
+            ViewBag.houseForm = model.House != null ? "flex" : "none";
+            ViewBag.houseAuxForm = model.HouseAux != null ? "flex" : "none";
+            ViewBag.houseFormBtn = model.House != null && model.HouseAux != null ? "none" : "block";
+            ViewbagFeatures(model.TerrainFeatures, model.HouseFeatures, model.HouseAuxFeatures);
+            ViewBag.Currency = model.Currency;
+            ViewBag.SelectedUbication = model.UbicationId;
+            ViewBag.SelectedColaborator = model.IndividualContributorId;
+            ViewBag.Selectedurl = model.OutstandingPicture;
+            ViewBag.urls = model.Urls;
+            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
+            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
+            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
+        }
+
+        public void AddHouse(House house, int[] features, int articleId)
         {
             house.ArticleId = articleId;
             db.Houses.Add(house);
             db.SaveChanges();
             AddFeatures(features, house.HouseId);
-
-
 
         }
 
@@ -164,7 +169,7 @@ namespace WebApplication1.Controllers
                 houseFeatureHouse.HouseId = houseId;
                 db.HouseFeatureHouse.Add(houseFeatureHouse);
             }
-            
+
         }
 
         // GET: Articles/Edit/5
@@ -179,10 +184,162 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name", article.IndividualContributorId);
-            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography", article.TerrainId);
-            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name", article.UbicationId);
-            return View(article);
+
+            ArticleViewModel articleViewModel = GetArticleViewModel(article);
+            ReloadViewBags(articleViewModel);
+            return View(articleViewModel);
+        }
+
+        public ArticleViewModel GetArticleViewModel(Article article)
+        {
+            var pictures = GetPictures(article.Id);
+            string[] urls = pictures.Urls;
+            string outstandingPicture = pictures.OutstandingPicture;
+            var houses = GetHouses(article.Id);
+            House house = houses.House != null ? houses.House : null;
+            HouseAux houseAux = houses.HouseAux != null ? houses.HouseAux : null;
+            ArticleViewModel Features = GetFeatures(article, house, houseAux);
+            int[] terrainFeatures = Features.TerrainFeatures;
+            int[] houseFeatures = Features.HouseFeatures;
+            int[] houseAuxFeatures = Features.HouseAuxFeatures;
+            ArticleViewModel articleViewModel = SetArticleViewModel(article, urls, outstandingPicture, house, houseAux, houseFeatures, houseAuxFeatures, terrainFeatures);
+
+            return articleViewModel;
+        }
+
+        public ArticleViewModel GetFeatures(Article article, House house, HouseAux houseAux)
+        {
+            ArticleViewModel articleViewModel = new ArticleViewModel();
+
+            var terrainFeaturesid = from f in db.TerrainFeaturesTerrain
+                                    where f.TerrainId == article.TerrainId
+                                    select f.TerrainFeatureId;
+            ICollection<int> terrainFeatures = new List<int>();
+            foreach (var feature in terrainFeaturesid)
+            {
+                terrainFeatures.Add(feature);
+            }
+
+            articleViewModel.TerrainFeatures = terrainFeatures.ToArray();
+
+
+            var houseFeaturesid = from h in db.HouseFeatureHouse
+                                  where h.HouseId == house.HouseId
+                                  select h.HouseFeatureId;
+
+            if (house != null)
+            {
+                ICollection<int> houseFeatures = new List<int>();
+                foreach (var feature in houseFeaturesid)
+                {
+                    houseFeatures.Add(feature);
+                }
+                articleViewModel.HouseFeatures = houseFeatures.ToArray();
+            }
+
+            var houseAuxFeaturesid = from h in db.HouseFeatureHouse
+                                     where h.HouseId == houseAux.Id
+                                     select h.HouseFeatureId;
+
+            if (houseAux != null)
+            {
+                ICollection<int> houseAuxFeatures = new List<int>();
+                foreach (var feature in houseAuxFeaturesid)
+                {
+                    houseAuxFeatures.Add(feature);
+                }
+                articleViewModel.HouseAuxFeatures = houseAuxFeatures.ToArray();
+
+            }
+
+
+
+            return articleViewModel;
+        }
+
+        public ArticleViewModel GetHouses(int id)
+        {
+            ArticleViewModel articleViewModel = new ArticleViewModel();
+
+            IQueryable<House> HouseList = from h in db.Houses
+                                          where h.ArticleId == id
+                                          select h;
+
+            House house = null;
+            HouseAux houseAux = null;
+
+            foreach (var houseResult in HouseList)
+            {
+                if (house == null)
+                {
+                    house = houseResult;
+                }
+                else
+                {
+                    houseAux = new HouseAux();
+                    houseAux.Id = houseResult.HouseId;
+                    houseAux.BathroomsAux = houseResult.Bathrooms;
+                    houseAux.BedroomsAux = houseResult.Bedrooms;
+                    houseAux.GarageAux = houseResult.Garage;
+                    houseAux.HouseBackgroundMeasureAux = houseResult.HouseBackgroundMeasure;
+                    houseAux.HouseForeheadMeasureAux = houseResult.HouseForeheadMeasure;
+                    houseAux.LevelsAux = houseResult.Levels;
+
+                }
+            }
+
+            articleViewModel.House = house;
+            articleViewModel.HouseAux = houseAux;
+
+            return articleViewModel;
+        }
+
+        public ArticleViewModel GetPictures(int id)
+        {
+            ArticleViewModel articleViewModel = new ArticleViewModel();
+            IQueryable<ArticlePicture> pictures = from p in db.ArticlePictures
+                                                  where p.ArticleId == id
+                                                  select p;
+
+            ICollection<string> urls = new List<string>();
+            string outstandingPicture = "";
+            foreach (var picture in pictures)
+            {
+                if (picture.OutstandingPicture)
+                {
+                    outstandingPicture = Convert.ToBase64String(picture.PictureArray);
+                }
+                else
+                {
+                    var url = Convert.ToBase64String(picture.PictureArray);
+                    urls.Add(url);
+                }
+            }
+
+            articleViewModel.Urls = urls.ToArray();
+            articleViewModel.OutstandingPicture = outstandingPicture;
+
+            return articleViewModel;
+        }
+
+        public ArticleViewModel SetArticleViewModel(
+            Article article, string[] urls, string outstandingPicture, House house, HouseAux houseAux, int[] houseFeatures, int[] houseAuxFeatures, int[] terrainFeatures)
+        {
+            ArticleViewModel articleViewModel = new ArticleViewModel();
+            articleViewModel.Article = article;
+            articleViewModel.Currency = article.Currency;
+            articleViewModel.Description = article.Description;
+            articleViewModel.Terrain = article.Terrain;
+            articleViewModel.UbicationId = article.UbicationId;
+            articleViewModel.IndividualContributorId = article.IndividualContributorId;
+            articleViewModel.Urls = urls;
+            articleViewModel.OutstandingPicture = outstandingPicture;
+            articleViewModel.House = house;
+            articleViewModel.HouseAux = houseAux;
+            articleViewModel.HouseFeatures = houseFeatures;
+            articleViewModel.HouseAuxFeatures = houseAuxFeatures;
+            articleViewModel.TerrainFeatures = terrainFeatures;
+            return articleViewModel;
         }
 
         // POST: Articles/Edit/5
@@ -190,18 +347,324 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ArticleId,Description,State,Code,Price,TerrainId,UbicationId,IndividualContributorId")] Article article)
+        public ActionResult Edit(ArticleViewModel articleViewModel)
         {
-            if (ModelState.IsValid)
+            Article article = articleViewModel.Article;
+
+            if (articleViewModel.Article != null)
             {
+                article.Currency = articleViewModel.Currency;
+                article.Description = articleViewModel.Description;
+                article.IndividualContributorId = articleViewModel.IndividualContributorId;
+                article.UbicationId = articleViewModel.UbicationId;
                 db.Entry(article).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name", article.IndividualContributorId);
-            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography", article.TerrainId);
-            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name", article.UbicationId);
-            return View(article);
+
+            if (articleViewModel.Terrain != null)
+            {
+                db.Entry(articleViewModel.Terrain).State = EntityState.Modified;
+            }
+
+
+            articleViewModel.House = articleViewModel.House.Levels > 0 ? articleViewModel.House : null;
+            articleViewModel.HouseAux = articleViewModel.HouseAux.LevelsAux > 0 ? articleViewModel.HouseAux : null;
+            List<House> HouseList = new List<House>();
+
+            if (articleViewModel.House != null)
+            {
+                articleViewModel.House.ArticleId = article.Id;
+                HouseList.Add(articleViewModel.House);
+            }
+
+            House house = articleViewModel.HouseAux != null ? new House() : null;
+
+            if (articleViewModel.HouseAux != null)
+            {
+                HouseAux houseAux = articleViewModel.HouseAux;
+                house = houseAux.Id > 0 ? db.Houses.Find(houseAux.Id) : new House();
+                house.ArticleId = article.Id;
+                house.Bathrooms = houseAux.BathroomsAux;
+                house.Bedrooms = houseAux.BedroomsAux;
+                house.Garage = houseAux.GarageAux;
+                house.HouseBackgroundMeasure = houseAux.HouseBackgroundMeasureAux;
+                house.HouseForeheadMeasure = houseAux.HouseForeheadMeasureAux;
+                house.Levels = houseAux.LevelsAux;
+                HouseList.Add(house);
+            }
+
+            CompareHouses(HouseList, article.Id, articleViewModel.House, house, articleViewModel.HouseFeatures, articleViewModel.HouseAuxFeatures);
+            UpdatePictures(articleViewModel.Article.Id, articleViewModel.Urls, articleViewModel.OutstandingPicture);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        public void CompareHouses(List<House> houseList, int id, House frstHouse, House scndHouse, int[] frstFeatures, int[] scndFeatures)
+        {
+            IQueryable<House> PreviewHouses = from h in db.Houses
+                                              where h.ArticleId == id
+                                              select h;
+
+            List<House> housePreviewList = PreviewHouses.ToList();
+
+            if (houseList.Count() > 0)
+            {
+                foreach (House Previewhouse in housePreviewList)
+                {
+                    var result = houseList.Exists(x => x.HouseId == Previewhouse.HouseId);
+                    if (!result)
+                    {
+                        DeleteHouse(Previewhouse);
+                    }
+
+                }
+            }
+
+            if (frstHouse != null)
+            {
+                if (!(housePreviewList.Exists(x => x.HouseId == frstHouse.HouseId)))
+                {
+                    House house = CreateHouse(frstHouse);
+                    foreach (var feature in frstFeatures)
+                    {
+                        CreateFeature(feature, house.HouseId);
+                    }
+                }
+                else
+                {
+                    EditHouse(frstHouse);
+                    EditFeatures(frstHouse, frstFeatures);
+                }
+            }
+
+            if (scndHouse != null)
+            {
+                if (!(housePreviewList.Contains(scndHouse)))
+                {
+                    House house = CreateHouse(scndHouse);
+                    foreach (var feature in scndFeatures)
+                    {
+                        CreateFeature(feature, house.HouseId);
+                    }
+                }
+                else
+                {
+                    EditHouse(scndHouse);
+                    EditFeatures(scndHouse, scndFeatures);
+                }
+            }
+
+        }
+
+        public void EditFeatures(House house, int[] houseFeatures)
+        {
+            //---------------Features section---------------//
+
+            IQueryable<HouseFeatureHouse> currentFeatures = from f in db.HouseFeatureHouse
+                                                            where f.HouseId == house.HouseId
+                                                            select f;
+
+            List<HouseFeatureHouse> currentFeaturesList = currentFeatures.ToList();
+
+            foreach (var currentFeature in currentFeaturesList)
+            {
+                var NoExists = true;
+
+                foreach (var feature in houseFeatures)
+                {
+                    if (currentFeature.HouseFeatureId == feature)
+                    {
+                        NoExists = false;
+                    }
+                }
+
+                if (NoExists)
+                {
+                    db.HouseFeatureHouse.Remove(currentFeature);
+                }
+            }
+
+            foreach (var feature in houseFeatures)
+            {
+                var Exists = false;
+
+                foreach (var currentFeature in currentFeaturesList)
+                {
+                    if (currentFeature.HouseFeatureId == feature)
+                    {
+                        Exists = true;
+                    }
+                }
+
+                if (!Exists)
+                {
+                    CreateFeature(feature, house.HouseId);
+                }
+            }
+        }
+
+        public void CreateFeature(int houseFeature, int houseId)
+        {
+
+            HouseFeatureHouse houseFeaturehouse = new HouseFeatureHouse();
+            houseFeaturehouse.HouseFeatureId = houseFeature;
+            houseFeaturehouse.HouseId = houseId;
+            db.HouseFeatureHouse.Add(houseFeaturehouse);
+        }
+
+        public void EditHouse(House house)
+        {
+            House EntityHouse = db.Houses.Find(house.HouseId);
+            EntityHouse.Bathrooms = house.Bathrooms;
+            EntityHouse.Bedrooms = house.Bedrooms;
+            EntityHouse.Garage = house.Garage;
+            EntityHouse.HouseBackgroundMeasure = house.HouseBackgroundMeasure;
+            EntityHouse.HouseForeheadMeasure = house.HouseForeheadMeasure;
+            EntityHouse.Levels = house.Levels;
+
+            db.Entry(EntityHouse).State = EntityState.Modified;
+        }
+
+        public void DeleteHouse(House house)
+        {
+            db.Houses.Remove(house);
+        }
+
+        public House CreateHouse(House house)
+        {
+            db.Houses.Add(house);
+
+            return house;
+        }
+
+        public void UpdatePictures(int id, string[] urls, string outstandingPicture)
+        {
+            //---------------Pictures section---------------//
+            IQueryable<ArticlePicture> currentPictures = from p in db.ArticlePictures
+                                                         where p.ArticleId == id
+                                                         select p;
+            //Tenemos la lista de fotos actuales y la foto de portada actual en formato de byte.
+            List<ArticlePicture> currentPicturesList = currentPictures.ToList();
+            ArticlePicture currentOutstandingPicture = currentPicturesList.Find(p => p.OutstandingPicture == true);
+
+            //Tenemos la lista de fotos nuevas y la foto de portada nueva en formato b64.
+            List<string> newPicturesList = urls.ToList();
+            //outstandingPicture = outstandingPicture;
+
+            //<-----------------Foto de portada----------------->//
+
+            /*Comparamos foto actual de portada y foto nueva en caso de que sean iguales no hacemos nada
+             *Para poder comparar necesitamos pasar lo que esta en formato byte a b64.*/
+            string currentOutstandingPictureBase64 = Convert.ToBase64String(currentOutstandingPicture.PictureArray);
+
+            //Procedemos a comparar
+            if (!(outstandingPicture == currentOutstandingPictureBase64))
+            {
+                //Metodo que establece datos segun  nueva foto de portada. Mas info en el metodo.
+                SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, outstandingPicture, id);
+            }
+
+            //<-----------------Agregar nuevas fotos----------------->//
+            /*Para agregar nuevas fotos vamos a separar de la lista nueva las fotos que existen en la lista antigua
+             * una vez separadas agregamos las fotos que no existian.
+            */
+            AddNewPictures(urls, currentPicturesList, id);
+
+            //<-----------------Eliminar fotos----------------->//
+            /*Para eliminar  fotos vamos a comparar el contenido de la lista nueva contra las fotos en la lista antigua
+             * si no existen en la  lista nueva se procede a la eliminacion
+            */
+            DeletePictures(urls, currentPicturesList, outstandingPicture);
+            //---------------End pictures section---------------//
+        }
+
+        private void DeletePictures(string[] urls, List<ArticlePicture> currentPicturesList, string outstandingPicture)
+        {
+            //recorremos la lista antigua 
+            foreach (var currentPicture in currentPicturesList)
+            {
+                //variable que nos indicara si el elemento existe
+                var noExists = true;
+                //recorremos lista nueva comparando el elemento en ciclo de la lista antigua contra los elementos
+                //de la lista nueva.
+                foreach (var url in urls)
+                {
+                    string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
+                    if (currentPictureBase64 == url || currentPictureBase64 == outstandingPicture)
+                    {
+                        noExists = false;
+                    }
+                }
+                //si el elemento no existe lo borramos
+                if (noExists)
+                {
+                    db.ArticlePictures.Remove(currentPicture);
+                }
+
+            }
+        }
+
+        private void AddNewPictures(string[] urls, List<ArticlePicture> currentPicturesList, int id)
+        {
+            //Creamos lista que almacenara fotos nuevas para añadirlas a la base de datos
+            List<ArticlePicture> picturesToAdd = new List<ArticlePicture>();
+            foreach (var url in urls)
+            {
+                var exists = false;
+                foreach (var currentPicture in currentPicturesList)
+                {
+                    string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
+                    if (currentPictureBase64 == url)
+                    {
+                        exists = true;
+                    }
+                }
+                if (!exists)
+                {
+                    ArticlePicture picture = new ArticlePicture();
+                    picture.OutstandingPicture = false;
+                    picture.PictureArray = Convert.FromBase64String(url);
+                    picture.ArticleId = id;
+                    picturesToAdd.Add(picture);
+                }
+            }
+            //Finalizado el ciclo de verificacion procedemos a añadir las nuevas imagenes
+            db.ArticlePictures.AddRange(picturesToAdd);
+        }
+
+        private void SetOutstandingPicture(ArticlePicture currentOutstandingPicture, List<ArticlePicture> currentPicturesList, string outstandingPicture, int id)
+        {
+            //Si no son iguales primero cambiamos a false la opcion outstandingPicture de la foto actual, ya que esta no es mas la foto de portada
+            currentOutstandingPicture.OutstandingPicture = false;
+            db.Entry(currentOutstandingPicture).State = EntityState.Modified;
+            //Luego verificamos si la nueva foto de portada existe entre las fotos antiguas
+            //Para ello creamos una variable que nos almacenara la imagen completa si existe.
+            ArticlePicture outstandingPictureExists = null;
+            foreach (var currentPicture in currentPicturesList)
+            {
+                //Debemos pasar currentPicture a b64 para poder comparar
+                string currentPictureInB64 = Convert.ToBase64String(currentPicture.PictureArray);
+                //comparamos
+                if (currentPictureInB64 == outstandingPicture)
+                {
+                    outstandingPictureExists = currentPicture;
+                }
+            }
+            // si la nueva foto de portada existe solo se le cambia el valor outstandingPicture a true
+            if (outstandingPictureExists != null)
+            {
+                outstandingPictureExists.OutstandingPicture = true;
+                db.Entry(outstandingPictureExists).State = EntityState.Modified;
+            }
+            //si la foto no existe debemos crearla y agregarla con el valor outstandingPicture en true.
+            else
+            {
+                ArticlePicture picture = new ArticlePicture();
+                picture.OutstandingPicture = true;
+                picture.PictureArray = Convert.FromBase64String(outstandingPicture);
+                picture.ArticleId = id;
+                db.ArticlePictures.Add(picture);
+            }
         }
 
         // GET: Articles/Delete/5
@@ -237,8 +700,8 @@ namespace WebApplication1.Controllers
             var houseFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("House"));
             var houseAuxFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("HouseAux"));
 
-            ViewBag.terrainFeaturesSelected =  FeatureFilter(terrainFeatures, terrainSelected);
-            ViewBag.houseFeaturesSelected =  houseSelected != null && houseSelected.Length > 0 ? FeatureFilter(houseFeatures, houseSelected) : null;
+            ViewBag.terrainFeaturesSelected = FeatureFilter(terrainFeatures, terrainSelected);
+            ViewBag.houseFeaturesSelected = houseSelected != null && houseSelected.Length > 0 ? FeatureFilter(houseFeatures, houseSelected) : null;
             ViewBag.houseAuxFeaturesSelected = houseAuxSelected != null && houseAuxSelected.Length > 0 ? FeatureFilter(houseAuxFeatures, houseAuxSelected) : null;
         }
 
@@ -257,6 +720,7 @@ namespace WebApplication1.Controllers
             return filterFeatures;
         }
 
+        [HttpPost]
         public string GetFeatures(string model)
         {
             List<Feature> features = new List<Feature>();

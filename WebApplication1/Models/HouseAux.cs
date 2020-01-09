@@ -8,6 +8,8 @@ namespace WebApplication1.Models
 {
     public class HouseAux
     {
+        public int? Id { get; set; }
+
         [Required(ErrorMessage = "Debes agregar una Medida de frente")]
         [Display(Name = "Medida de frente")]
         public int HouseForeheadMeasureAux { get; set; }
