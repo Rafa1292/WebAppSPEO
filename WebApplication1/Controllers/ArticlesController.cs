@@ -19,8 +19,132 @@ namespace WebApplication1.Controllers
         // GET: Articles
         public ActionResult Index()
         {
-            var articles = db.Articles.Include(a => a.IndividualContributor).Include(a => a.Terrain).Include(a => a.Ubication);
-            return View(articles.ToList());
+            var articles = db.Articles.ToList();
+
+            /*   var houses = db.Houses.ToList();
+               var houseFeatures = db.HouseFeatures.ToList();
+               var houseFeatureHouse = db.HouseFeatureHouse.ToList();
+               var terrainFeatures = db.TerrainFeatures.ToList();
+               var terrainFeaturesTerrain = db.TerrainFeaturesTerrain.ToList();
+               var ubicationPictures = db.UbicationPictures.ToList();
+               var articlePictures = db.ArticlePictures.ToList();
+               var outstandingUbicationPictures = from p in ubicationPictures
+                                                  where p.OutstandingPicture == true
+                                                  select p;
+               var outstandingArticlePictures = from p in articlePictures
+                                                where p.OutstandingPicture == true
+                                                select p;*/
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+
+            return View(ArticleViewModelList);
+        }
+
+
+        public ActionResult GetArticles(string type, string param)
+        {
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+
+            switch (type)
+            {
+                case "Ubicacion":
+                    ArticleViewModelList = FilterUbication(param);
+                    break;
+
+                case "Estado":
+                    ArticleViewModelList = FilterState(param);
+                    break;
+
+                case "Asesor":
+                    ArticleViewModelList = FilterContributor(param);
+                    break;
+
+                case "Categoria":
+                    ArticleViewModelList = FilterCategory(param);
+                    break;
+                default:
+                    var articles = db.Articles.ToList();
+                    ArticleViewModelList = GetArticleViewModelList(articles);
+                    break;
+
+            }
+
+
+
+            return PartialView("articleList", ArticleViewModelList);
+        }
+
+        public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
+        {
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+            return ArticleViewModelList;
+
+        }
+
+        public List<ArticleViewModel> FilterUbication(string ubication)
+        {
+
+            var articlesEF = from a in db.Articles
+                             where a.Ubication.Name == ubication
+                             select a;
+            var articles = articlesEF.ToList();
+
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
+        }
+
+        public List<ArticleViewModel> FilterState(string state)
+        {
+            var stateBool = state == "Pendiente" ? false : true;
+            var articlesEF = from a in db.Articles
+                             where a.State == stateBool
+                             select a;
+            var articles = articlesEF.ToList();
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
+        }
+
+        public List<ArticleViewModel> FilterContributor(string IC)
+        {
+            var articlesEF = from a in db.Articles
+                             where a.IndividualContributor.Name == IC
+                             select a;
+
+            var articles = articlesEF.ToList();
+
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
+        }
+
+        public List<ArticleViewModel> FilterCategory(string category)
+        {
+            var articlesEF = from a in db.Articles
+                             where a.Ubication.UbicationCategory.Name == category
+                             select a;
+
+            var articles = articlesEF.ToList();
+
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
         }
 
 
@@ -297,24 +421,14 @@ namespace WebApplication1.Controllers
         public ArticleViewModel GetPictures(int id)
         {
             ArticleViewModel articleViewModel = new ArticleViewModel();
-            IQueryable<ArticlePicture> pictures = from p in db.ArticlePictures
-                                                  where p.ArticleId == id
-                                                  select p;
+            List<ArticlePicture> Pictures = db.ArticlePictures.ToList();
+            IEnumerable<string> urls = from p in Pictures
+                                       where p.ArticleId == id && p.OutstandingPicture == false
+                                       select Convert.ToBase64String(p.PictureArray);
 
-            ICollection<string> urls = new List<string>();
-            string outstandingPicture = "";
-            foreach (var picture in pictures)
-            {
-                if (picture.OutstandingPicture)
-                {
-                    outstandingPicture = Convert.ToBase64String(picture.PictureArray);
-                }
-                else
-                {
-                    var url = Convert.ToBase64String(picture.PictureArray);
-                    urls.Add(url);
-                }
-            }
+            var outstandingPictureModel = Pictures.Find(x => x.OutstandingPicture == true && x.ArticleId == id);
+            string outstandingPicture = Convert.ToBase64String(outstandingPictureModel.PictureArray);
+
 
             articleViewModel.Urls = urls.ToArray();
             articleViewModel.OutstandingPicture = outstandingPicture;
@@ -407,7 +521,7 @@ namespace WebApplication1.Controllers
 
             List<House> housePreviewList = PreviewHouses.ToList();
 
-            if (houseList.Count() > 0)
+            if (housePreviewList.Count() > 0)
             {
                 foreach (House Previewhouse in housePreviewList)
                 {
@@ -771,6 +885,45 @@ namespace WebApplication1.Controllers
             var json = jsonSerialiser.Serialize(features);
             return json;
         }
+
+        public string GetParamsList(string type)
+        {
+
+            List<string> objectList = new List<string>();
+
+            switch (type)
+            {
+                case "Ubicacion":
+                    var ubications = from u in db.Ubications
+                                     select u.Name;
+                    objectList = ubications.ToList();
+                    break;
+                case "Estado":
+                    var state = new List<string>();
+                    state.Add("Aprobada");
+                    state.Add("Pendiente");
+                    objectList = state;
+                    break;
+                case "Asesor":
+                    var contributor = from c in db.IndividualContributors
+                                      select c.Name;
+                    objectList = contributor.ToList();
+                    break;
+                case "Categoria":
+                    var ubicationCategory = from u in db.UbicationCategory
+                                            select u.Name;
+                    objectList = ubicationCategory.ToList();
+                    break;
+            }
+            var content = "<option selected disabled>Seleccione una opcion</option>";
+            foreach (var obj in objectList)
+            {
+                content += "<option value='" + obj + "'>" + obj + "</option>";
+            }
+
+            return content;
+        }
+
 
         protected override void Dispose(bool disposing)
         {

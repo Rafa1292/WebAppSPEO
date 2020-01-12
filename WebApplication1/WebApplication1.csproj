@@ -373,6 +373,7 @@
     <Content Include="Views\Articles\CreateTerrainFormView.cshtml" />
     <Content Include="Views\Articles\CreateHouseFormView.cshtml" />
     <Content Include="Views\Articles\CreateHouseFormAux.cshtml" />
+    <Content Include="Views\Articles\articleList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

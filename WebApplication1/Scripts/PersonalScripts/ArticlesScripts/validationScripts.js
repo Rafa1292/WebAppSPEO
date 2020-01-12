@@ -12,6 +12,9 @@
     if (terrainForm && articleForm && houseForm && houseAuxForm && outstandingPictureForm) {
         document.getElementById("Form").submit();
     }
+    else {
+        alert("Revisa los campos del formulario!!!");
+    }
 }
 
 

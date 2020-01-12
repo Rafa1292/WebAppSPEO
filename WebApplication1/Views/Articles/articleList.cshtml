@@ -1,0 +1,44 @@
+﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
+
+@foreach (var item in Model)
+{
+    <div class="col-md-2 card-style  shadow rounded d-flex text-center">
+        <div class="col-md-12 card-header-style">
+            <strong>@Html.DisplayFor(modelItem => item.Article.Ubication.UbicationCategory.Name)</strong>
+            <label>@item.Article.Ubication.Name</label>
+        </div>
+        <div class="col-md-12 " style="height:140px">
+            @{
+                var imgSrc = String.Format("data:image/png;base64,{0}", item.OutstandingPicture);
+            }
+            <img class="rounded" src="@imgSrc" style="max-width:180px; height: 120px;">
+        </div>
+        <div class="col-md-12 icAlignStyle ">
+            <div class="border-dark border rounded p-2">
+                @item.Article.Code
+            </div>
+        </div>
+        @{
+            var state = item.Article.State ? "Aprobada" : "Pendiente";
+        }
+        <div class="col-md-12 icAlignStyle ">
+            @state
+        </div>
+        <div class="col-md-12 icAlignStyle">
+            <strong>Precio:</strong> @item.Currency@item.Article.Price
+        </div>
+        <div class="col-md-12 icAlignStyle ">
+            <strong>Enlistado por <br /></strong>
+        </div>
+        <div class="col-md-12 icAlignStyle ">
+            @item.Article.IndividualContributor.Name
+        </div>
+        <div class="col-md-12 icAlignStyle">
+            @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary" })
+        </div>
+        <div class="col-md-12">
+            <span><a href="/Articles/Delete/@item.Article.Id"><i class="fas fa-trash-alt trash-button"></i></a></span>
+        </div>
+    </div>
+}
+
