@@ -363,7 +363,6 @@
     <Content Include="Views\Ubications\Index.cshtml" />
     <Content Include="Views\UbicationCategories\Create.cshtml" />
     <Content Include="Views\UbicationCategories\Delete.cshtml" />
-    <Content Include="Views\UbicationCategories\Details.cshtml" />
     <Content Include="Views\UbicationCategories\Edit.cshtml" />
     <Content Include="Views\UbicationCategories\Index.cshtml" />
     <Content Include="Views\Articles\Create.cshtml" />
@@ -374,6 +373,7 @@
     <Content Include="Views\Articles\CreateHouseFormView.cshtml" />
     <Content Include="Views\Articles\CreateHouseFormAux.cshtml" />
     <Content Include="Views\Articles\articleList.cshtml" />
+    <Content Include="Views\Articles\ApproveArticles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

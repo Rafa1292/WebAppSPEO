@@ -45,6 +45,22 @@ namespace WebApplication1.Controllers
             return View(ArticleViewModelList);
         }
 
+        public ActionResult ApproveArticles()
+        {
+            var articlesEF = from a in db.Articles
+                           where !(a.State)
+                           select a;
+            var articles = articlesEF.ToList();
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+
+            return View(ArticleViewModelList);
+        }
 
         public ActionResult GetArticles(string type, string param)
         {

@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="~/Content/Site.css" rel="stylesheet" />
 
-    
-    @*@Styles.Render("~/Content")*@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -26,19 +24,44 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
+                        Ubicaciones
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         @Html.ActionLink("Cantones", "Index", "Cantons", null, new { @class = "dropdown-item" })
                         @Html.ActionLink("Distritos", "Index", "Distrits", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Categorias de ubicacion", "Index", "UbicationCategories", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Caracteristicas de ubicacion", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Personas
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         @Html.ActionLink("Clientes", "Index", "Clients", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Colaboradores", "Index", "IndividualContributors", null, new { @class = "dropdown-item" })
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Articulos
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         @Html.ActionLink("Caracteristicas de terreno", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
                         @Html.ActionLink("Caracteristicas de casa", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Caracteristicas de condominio", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Colaboradores", "Index", "IndividualContributors", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
                         @Html.ActionLink("Articulos", "Index", "Articles", null, new { @class = "dropdown-item" })
-
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Seguridad
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        @Html.ActionLink("Roles", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Usuarios", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Aprobaciones", "Index", "Articles", null, new { @class = "dropdown-item" })
                     </div>
                 </li>
             </ul>
@@ -54,7 +77,7 @@
             <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
         </footer>
     </div>
-    <script src="https://kit.fontawesome.com/702bfd46b2.js"  SameSite="None" Secure></script>
+    <script src="https://kit.fontawesome.com/702bfd46b2.js" crossorigin="anonymous"  SameSite="None" Secure></script>
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

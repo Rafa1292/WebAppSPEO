@@ -188,3 +188,20 @@ display:flex;
     min-height: 38px;
 }
 
+.approve-articles-image {
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+
+}
+
+.shadow {
+    box-shadow: 5px 5px 10px rgba(10, 10, 10, .7)
+}
+
+.backgroundless-list {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    margin-bottom: -1px;
+}
