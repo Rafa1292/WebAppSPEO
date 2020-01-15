@@ -57,6 +57,27 @@ namespace WebApplication1.Controllers
             return View(ArticleViewModelList);
         }
 
+        public ActionResult PropertySold(int id, bool state)
+        {
+            Article article = db.Articles.Find(id);
+            article.SoldState = state;
+            db.Entry(article).State = EntityState.Modified;
+            db.SaveChanges();
+
+            var articles = db.Articles.ToList();
+
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var articleItem in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(articleItem);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+
+            return View("Index", ArticleViewModelList);
+        }
+
+
 
         public ActionResult ApproveArticle(int id)
         {
@@ -87,6 +108,9 @@ namespace WebApplication1.Controllers
 
                 case "Categoria":
                     ArticleViewModelList = FilterCategory(param);
+                    break;
+                case "Disponibilidad":
+                    ArticleViewModelList = Filteravailability(param);
                     break;
                 default:
                     var articles = db.Articles.ToList();
@@ -121,6 +145,19 @@ namespace WebApplication1.Controllers
                              select a;
             var articles = articlesEF.ToList();
 
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
+        }
+
+        public List<ArticleViewModel> Filteravailability(string availability)
+        {
+            var availabilityBool = availability == "Vendida" ? true : false;
+            var articlesEF = from a in db.Articles
+                             where a.SoldState == availabilityBool
+                             select a;
+            var articles = articlesEF.ToList();
 
             List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
 
@@ -213,6 +250,7 @@ namespace WebApplication1.Controllers
                         article.UbicationId = articleViewModel.UbicationId;
                         article.Code = "A" + terrain.TerrainId;
                         article.State = false;
+                        article.SoldState = false;
                         article.TerrainId = terrain.TerrainId;
                         db.Articles.Add(article);
 
@@ -948,6 +986,12 @@ namespace WebApplication1.Controllers
                     var ubicationCategory = from u in db.UbicationCategory
                                             select u.Name;
                     objectList = ubicationCategory.ToList();
+                    break;
+                case "Disponibilidad":
+                    var stateSale = new List<string>();
+                    stateSale.Add("En venta");
+                    stateSale.Add("Vendida");
+                    objectList = stateSale;
                     break;
             }
             var content = "<option selected disabled>Seleccione una opcion</option>";

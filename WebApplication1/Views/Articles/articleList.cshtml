@@ -34,7 +34,17 @@
             @item.Article.IndividualContributor.Name
         </div>
         <div class="col-md-12 icAlignStyle">
-            @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary" })
+            @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary m-1" })
+            @if (item.Article.SoldState)
+            {
+                @Html.ActionLink("Vendida", "PropertySold", new { id = item.Article.Id, state = false }, new { @class = "btn btn-danger m-1" })
+
+            }
+            else
+            {
+                @Html.ActionLink("En venta", "PropertySold", new { id = item.Article.Id, state = true }, new { @class = "btn btn-success m-1" })
+            }
+
         </div>
         <div class="col-md-12">
             <span><a href="/Articles/Delete/@item.Article.Id"><i class="fas fa-trash-alt trash-button"></i></a></span>
