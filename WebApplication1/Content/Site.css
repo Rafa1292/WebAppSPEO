@@ -205,3 +205,22 @@ display:flex;
     padding: .75rem 1.25rem;
     margin-bottom: -1px;
 }
+
+.approve-articles-header-container {
+    background-color: rgba(10,10,10,.2);
+    padding: 15px;
+    color: white;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.approve-articles-container {
+    padding: 0;
+    border: 1px solid rgba(10,10,10,.2);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.border-right-gray {
+    border-right: 1px solid rgba(10,10,10,.2);
+}

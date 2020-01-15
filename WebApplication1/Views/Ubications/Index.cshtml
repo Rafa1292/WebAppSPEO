@@ -17,7 +17,7 @@
 <div class="container-fluid d-flex" style="flex-wrap:wrap">
     @foreach (var item in Model)
     {
-        <div class="col-md-2 card-style  shadow rounded d-flex text-center">
+        <div class="col-md-2 card-style p-0  shadow rounded d-flex text-center">
             <div class="col-md-12 card-header-style">
                 <strong>@Html.DisplayFor(modelItem => item.UbicationCategory.Name)</strong>
                 <label>@item.Name</label>

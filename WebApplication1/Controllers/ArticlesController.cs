@@ -21,19 +21,6 @@ namespace WebApplication1.Controllers
         {
             var articles = db.Articles.ToList();
 
-            /*   var houses = db.Houses.ToList();
-               var houseFeatures = db.HouseFeatures.ToList();
-               var houseFeatureHouse = db.HouseFeatureHouse.ToList();
-               var terrainFeatures = db.TerrainFeatures.ToList();
-               var terrainFeaturesTerrain = db.TerrainFeaturesTerrain.ToList();
-               var ubicationPictures = db.UbicationPictures.ToList();
-               var articlePictures = db.ArticlePictures.ToList();
-               var outstandingUbicationPictures = from p in ubicationPictures
-                                                  where p.OutstandingPicture == true
-                                                  select p;
-               var outstandingArticlePictures = from p in articlePictures
-                                                where p.OutstandingPicture == true
-                                                select p;*/
 
             List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
             foreach (var article in articles)
@@ -45,11 +32,11 @@ namespace WebApplication1.Controllers
             return View(ArticleViewModelList);
         }
 
-        public ActionResult ApproveArticles()
+        public List<ArticleViewModel> ArticlesToApprove()
         {
             var articlesEF = from a in db.Articles
-                           where !(a.State)
-                           select a;
+                             where !(a.State)
+                             select a;
             var articles = articlesEF.ToList();
 
             List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
@@ -58,8 +45,26 @@ namespace WebApplication1.Controllers
                 ArticleViewModel articleViewModel = GetArticleViewModel(article);
                 ArticleViewModelList.Add(articleViewModel);
             }
+            return ArticleViewModelList;
+
+        }
+
+        public ActionResult ApproveArticles()
+        {
+            List<ArticleViewModel> ArticleViewModelList = ArticlesToApprove();
+
 
             return View(ArticleViewModelList);
+        }
+
+
+        public ActionResult ApproveArticle(int id)
+        {
+            Article article = db.Articles.Find(id);
+            article.State = true;
+            db.Entry(article).State = EntityState.Modified;
+            db.SaveChanges();
+            return View("ApproveArticles", ArticlesToApprove());
         }
 
         public ActionResult GetArticles(string type, string param)
@@ -163,7 +168,6 @@ namespace WebApplication1.Controllers
             return ArticleViewModelList;
         }
 
-
         // GET: Articles/Create
         public ActionResult Create()
         {
@@ -182,7 +186,8 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ArticleViewModel articleViewModel)
         {
-            if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0 && articleViewModel.TerrainFeatures.Length > 0 && articleViewModel.OutstandingPicture != null)
+            if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0 
+                && articleViewModel.TerrainFeatures.Length > 0 && articleViewModel.OutstandingPicture != null)
             {
                 Article article = articleViewModel.Article;
                 Terrain terrain = articleViewModel.Terrain;
@@ -481,52 +486,66 @@ namespace WebApplication1.Controllers
         {
             Article article = articleViewModel.Article;
 
-            if (articleViewModel.Article != null)
+            using (var transaction = db.Database.BeginTransaction())
             {
-                article.Currency = articleViewModel.Currency;
-                article.Description = articleViewModel.Description;
-                article.IndividualContributorId = articleViewModel.IndividualContributorId;
-                article.UbicationId = articleViewModel.UbicationId;
-                db.Entry(article).State = EntityState.Modified;
+                try
+                {
+                    if (articleViewModel.Article != null)
+                    {
+                        article.Currency = articleViewModel.Currency;
+                        article.Description = articleViewModel.Description;
+                        article.IndividualContributorId = articleViewModel.IndividualContributorId;
+                        article.UbicationId = articleViewModel.UbicationId;
+                        db.Entry(article).State = EntityState.Modified;
+                    }
+
+                    if (articleViewModel.Terrain != null)
+                    {
+                        db.Entry(articleViewModel.Terrain).State = EntityState.Modified;
+                    }
+
+                    articleViewModel.House = articleViewModel.House.Levels > 0 ? articleViewModel.House : null;
+                    articleViewModel.HouseAux = articleViewModel.HouseAux.LevelsAux > 0 ? articleViewModel.HouseAux : null;
+                    List<House> HouseList = new List<House>();
+
+                    if (articleViewModel.House != null)
+                    {
+                        articleViewModel.House.ArticleId = article.Id;
+                        HouseList.Add(articleViewModel.House);
+                    }
+
+                    House house = articleViewModel.HouseAux != null ? new House() : null;
+
+                    if (articleViewModel.HouseAux != null)
+                    {
+                        HouseAux houseAux = articleViewModel.HouseAux;
+                        house = houseAux.Id > 0 ? db.Houses.Find(houseAux.Id) : new House();
+                        house.ArticleId = article.Id;
+                        house.Bathrooms = houseAux.BathroomsAux;
+                        house.Bedrooms = houseAux.BedroomsAux;
+                        house.Garage = houseAux.GarageAux;
+                        house.HouseBackgroundMeasure = houseAux.HouseBackgroundMeasureAux;
+                        house.HouseForeheadMeasure = houseAux.HouseForeheadMeasureAux;
+                        house.Levels = houseAux.LevelsAux;
+                        HouseList.Add(house);
+                    }
+
+                    CompareHouses(HouseList, article.Id, articleViewModel.House, house, articleViewModel.HouseFeatures, articleViewModel.HouseAuxFeatures);
+                    UpdatePictures(articleViewModel.Article.Id, articleViewModel.Urls, articleViewModel.OutstandingPicture);
+                    db.SaveChanges();
+                    transaction.Commit();
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    ReloadViewBags(articleViewModel);
+                    return View(articleViewModel);
+                }
             }
 
-            if (articleViewModel.Terrain != null)
-            {
-                db.Entry(articleViewModel.Terrain).State = EntityState.Modified;
-            }
 
-
-            articleViewModel.House = articleViewModel.House.Levels > 0 ? articleViewModel.House : null;
-            articleViewModel.HouseAux = articleViewModel.HouseAux.LevelsAux > 0 ? articleViewModel.HouseAux : null;
-            List<House> HouseList = new List<House>();
-
-            if (articleViewModel.House != null)
-            {
-                articleViewModel.House.ArticleId = article.Id;
-                HouseList.Add(articleViewModel.House);
-            }
-
-            House house = articleViewModel.HouseAux != null ? new House() : null;
-
-            if (articleViewModel.HouseAux != null)
-            {
-                HouseAux houseAux = articleViewModel.HouseAux;
-                house = houseAux.Id > 0 ? db.Houses.Find(houseAux.Id) : new House();
-                house.ArticleId = article.Id;
-                house.Bathrooms = houseAux.BathroomsAux;
-                house.Bedrooms = houseAux.BedroomsAux;
-                house.Garage = houseAux.GarageAux;
-                house.HouseBackgroundMeasure = houseAux.HouseBackgroundMeasureAux;
-                house.HouseForeheadMeasure = houseAux.HouseForeheadMeasureAux;
-                house.Levels = houseAux.LevelsAux;
-                HouseList.Add(house);
-            }
-
-            CompareHouses(HouseList, article.Id, articleViewModel.House, house, articleViewModel.HouseFeatures, articleViewModel.HouseAuxFeatures);
-            UpdatePictures(articleViewModel.Article.Id, articleViewModel.Urls, articleViewModel.OutstandingPicture);
-            db.SaveChanges();
-
-            return RedirectToAction("Index");
         }
 
         public void CompareHouses(List<House> houseList, int id, House frstHouse, House scndHouse, int[] frstFeatures, int[] scndFeatures)

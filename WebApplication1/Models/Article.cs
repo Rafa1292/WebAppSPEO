@@ -16,8 +16,9 @@ namespace WebApplication1.Models
         public string Description { get; set; }
 
         [Display(Name = "Estado")]
-        [Required(ErrorMessage = "Debes agregar un codigo")]
         public bool State { get; set; }
+
+        public bool SoldState { get; set; }
 
         [Display(Name = "Codigo de articulo")]
         public string Code { get; set; }

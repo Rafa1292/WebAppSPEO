@@ -5,9 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    @* <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">*@
     <link href="~/Content/Site.css" rel="stylesheet" />
-
+    <link href="~/Content/bootstrap-grid.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -61,7 +63,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         @Html.ActionLink("Roles", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
                         @Html.ActionLink("Usuarios", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Aprobaciones", "Index", "Articles", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("Aprobaciones", "ApproveArticles", "Articles", null, new { @class = "dropdown-item" })
                     </div>
                 </li>
             </ul>
