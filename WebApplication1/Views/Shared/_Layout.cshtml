@@ -7,79 +7,155 @@
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
     @* <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">*@
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
+
     <link href="~/Content/bootstrap-grid.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-reboot.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<body class="body">
+    <div class="bg-dark position-relative" style="z-index:10;">
+        <nav class="navbar navbar-expand-lg navbar-dark nav-style mb-0">
+            <div class="d-flex justify-content-center align-content-center">
+                <div class="bg-light background-brand"></div>
+                <img class="brand" src="~/Images/logo2.png" />
+            </div>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Ubicaciones
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        @Html.ActionLink("Cantones", "Index", "Cantons", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Distritos", "Index", "Distrits", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Categorias de ubicacion", "Index", "UbicationCategories", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Caracteristicas de ubicacion", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Personas
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        @Html.ActionLink("Clientes", "Index", "Clients", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Colaboradores", "Index", "IndividualContributors", null, new { @class = "dropdown-item" })
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Articulos
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        @Html.ActionLink("Caracteristicas de terreno", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Caracteristicas de casa", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Articulos", "Index", "Articles", null, new { @class = "dropdown-item" })
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Seguridad
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        @Html.ActionLink("Roles", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Usuarios", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Aprobaciones", "ApproveArticles", "Articles", null, new { @class = "dropdown-item" })
-                    </div>
-                </li>
-            </ul>
-            <div>
-                @Html.Partial("_LoginPartial")
+            <div class="collapse navbar-collapse  navbar-collapse-style" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link label-brand" href="/">SU PROPIEDAD EN OCCIDENTE <span class="sr-only">(current)</span></a>
+                    </li>
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ubicaciones
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Cantones", "Index", "Cantons", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Distritos", "Index", "Distrits", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Categorias de ubicacion", "Index", "UbicationCategories", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Caracteristicas de ubicacion", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
+
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Personas
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Clientes", "Index", "Clients", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Colaboradores", "Index", "IndividualContributors", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Articulos
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Caracteristicas de terreno", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Caracteristicas de casa", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Articulos", "Index", "Articles", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Seguridad
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Roles", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Usuarios", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Aprobaciones", "ApproveArticles", "Articles", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+
+                </ul>
+                <div>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+    <div class="container-fluid body-content p-0">
+        @RenderBody()
+    </div>
+
+    <div class="footer">
+
+        <div class="container-fluid row text-light">
+            <div class="col-md-3">
+                <div class="col-md-12 ">
+                    <h4> Contactanos</h4>
+                </div>
+                <div class="col-md-12">
+                    <p>
+                        <strong>Email</strong>
+                        <br>
+                        <a class="mail" href="mailto:Quesada.realty@gmail.com">Quesada.realty@gmail.com</a>
+                    </p>
+                </div>
+                <div class="col-md-12 ">
+                    <p>
+                        <strong>Telefono</strong>
+                        <br>
+                        +506-6046-8877<br>
+                        +506-2444-7755
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="col-md-12 ">
+                    <h4> Siguenos en:</h4>
+                </div>
+                <div class="col-md-12 ">
+                    <p>
+                        <img class="" src="images/facebook.svg" style="height: 50px;">
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="col-md-12 ">
+                    <h4> Informacion</h4>
+                </div>
+                <div class="col-md-12 ">
+                    <ul>
+                        <li>Inicio</li>
+                        <li>Vender</li>
+                        <li>Comprar</li>
+                        <li>alquilar</li>
+                        <li>¿Quienes somos?</li>
+                        <li>Blog</li>
+                        <li>Testimonio</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="col-md-12">
+                    <h5>
+                        Diseño y desarrollo por:
+                    </h5>
+                </div>
+                <div class="col-md-12">
+                    <p>
+                        <img src="images/logoNebulosa.png" alt="logo" style="height: 50px; width: 150px;">
+                    </p>
+                </div>
             </div>
         </div>
-    </nav>
-
-    <div class="container-fluid body-content ">
-        @RenderBody()
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
-        </footer>
     </div>
-    <script src="https://kit.fontawesome.com/702bfd46b2.js" crossorigin="anonymous"  SameSite="None" Secure></script>
+
+    <script src="https://kit.fontawesome.com/702bfd46b2.js" crossorigin="anonymous" SameSite="None" Secure></script>
     <script src="~/Scripts/jquery-3.3.1.js"></script>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

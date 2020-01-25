@@ -238,7 +238,15 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\facebook.png" />
+    <Content Include="Images\facebook.svg" />
+    <Content Include="Images\instagram.png" />
+    <Content Include="Images\logo2.png" />
+    <Content Include="Images\logoNebulosa.png" />
     <Content Include="Images\shutterstock_363324191.jpg" />
+    <Content Include="Images\shutterstock_363324191vertical.jpg" />
+    <Content Include="Images\twitter.png" />
+    <Content Include="Images\whatsapp.svg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />

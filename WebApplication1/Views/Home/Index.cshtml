@@ -1,31 +1,255 @@
-﻿@{
+﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
+
+
+@{
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+
+
+<div class="container-fluid home-template">
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<div class="p-4 d-flex flex-wrap justify-content-center container position-relative  text-light" style="margin:50px auto 300px 60px;   max-width: 300px; background-color: rgba(255, 255, 255, .3)">
+    <h6 class="text-light text-center">
+        Queremos acompañarte en este paso tan importante,
+        si nos dejas tu contacto todo sera mas fácil.
+        <br /><br />
+    </h6>
+
+    <form class="text-white">
+        <div class="form-group ">
+            <label for="name">Nombre</label>
+            <input type="email" class="form-control rounded-0" style="opacity: .7;" id="name" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group ">
+            <label for="exampleInputEmail1">Correo</label>
+            <input type="email" class="form-control rounded-0" style="opacity: .7;" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <small id="emailHelp" class="form-text" style="opacity: .6;">No compartiremos tu correo con terceros.</small>
+        </div>
+        <div class="form-group mb-4">
+            <label for="exampleInputEmail1">Telefono</label>
+            <input type="email" class="form-control rounded-0" style="opacity: .7;" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <h5 class="text-light">
+            Te apuntas?
+        </h5>
+        <button type="submit" class="btn btn-success">De acuerdo!</button>
+    </form>
+</div>
+<br />
+<br />
+<div class="d-flex flex-wrap">
+    <div class="col-md-12 text-center text-capitalize index-items-title-container font-weight-bold">
+        <h2 class="index-items-title">
+            Nuestros  productos
+        </h2>
+        <h5 class="index-items-description">Contamos con mas de 500 propiedades en todo occidente!!!</h5>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    <br />
+    <hr />
+    <div class="col-md-12 d-flex justify-content-center mb-4">
+        <div class='ribbon index-items-description font-weight-bold'>
+            <a href='#'><span>Sobresaliente</span></a>
+            <a href='#'><span>Reciente</span></a>
+            <a href='#'><span>Oportunidades</span></a>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <br />
+    <br />
+    <div class="col-md-12 d-flex flex-wrap index-article-container">
+        @{
+            var i = 1;
+
+            foreach (var item in Model)
+            {
+
+                var imgSrc = String.Format("data:image/png;base64,{0}", item.OutstandingPicture);
+
+                <div class="col-md-4 mb-3 justify-content-center d-flex item index-item-container-@i">
+                    <div class="index-item-body">
+
+                        <div class="index-item-thumbnail">
+                            <a class="index-item-link" href="#">
+                                <img class="index-item-img" src="@imgSrc" alt="Alternate Text" />
+
+                                <div class="index-item-hover-img">
+                                    <span class="properties__params">Property type - Cottage</span>
+                                    <span class="properties__params">Contract type - Urgent Sale</span>
+
+                                    <span class="properties__time">Added date: 4 years ago</span>
+                                    <span class="properties__more">View details</span>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="index-item-info">
+
+                            <span class="p-2 m-2 index-item-description">@item.Description</span>
+                            <span class="index-item-house-info">
+                                @if (item.HouseAux != null)
+                                {
+                                    <i class="fas fa-bath"></i> @item.HouseAux.BathroomsAux
+                                    <i class="fas fa-bed"></i> @item.HouseAux.BedroomsAux
+                                    <i class="fas fa-warehouse"></i> @item.HouseAux.GarageAux
+                                    <i class="fab fa-buffer"></i> @item.HouseAux.LevelsAux
+                                }
+                            </span>
+                            <div class="divider"></div>
+                            <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">@item.Currency@item.Article.Price</strong>
+                        </div>
+
+                    </div>
+                    <div class="sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">En venta</span></div>
+                    <div class="sale-label-ribbon"></div>
+                </div>
+
+                i++;
+                if (i == 4)
+                {
+                    i = 1;
+                }
+            }
+
+        }
+    </div>
+    <br />
+    <div style="background-color: #fff;">
+        <div class="conocenos-animation">
+            <div class="pt-5 d-flex justify-content-center ">
+                <img class="rounded" src="~/Images/logo2.png" style="height:200px;" />
+            </div>
+            <hr />
+            <div class="col-md-12">
+                <h2 class="index-items-title m-4">
+                    Conocenos
+                </h2>
+            </div>
+        </div>
+        <div class="col-md-12 d-flex justify-content-center mt-5 p-0  flex-wrap text-center">
+
+            <div class="col-md-12 p-0 d-flex flex-wrap">
+                <div class="col-md-4 index-meeting-header">
+                    <h2 class="index-items-title text-light m-4">
+                        Nuestra historia
+                    </h2>
+                </div>
+                <div class="col-md-8 index-meeting-body">
+                    <p>
+                        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-12 p-0 d-flex flex-wrap">
+
+                <div class="col-md-8 index-meeting-body">
+                    <p>
+                        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+                    </p>
+                </div>
+                <div class="col-md-4 index-meeting-header">
+                    <h2 class="index-items-title text-light m-4">
+                        Experiencia
+                    </h2>
+                </div>
+            </div>
+
+            <div class="col-md-12 p-0 d-flex flex-wrap">
+                <div class="col-md-4 index-meeting-header">
+                    <h2 class="index-items-title text-light m-4">
+                        Proyectos disponibles
+                    </h2>
+                </div>
+                <div class="col-md-8 index-meeting-body">
+                    @foreach (var ubication in ViewBag.Ubications)
+                    {
+
+                        var imgSrc = String.Format("data:image/png;base64,{0}", item.);
+
+                        <div class="col-md-4 mb-3 justify-content-center d-flex item index-item-container-@i">
+                            <div class="index-item-body">
+
+                                <div class="index-item-thumbnail">
+                                    <a class="index-item-link" href="#">
+                                        <img class="index-item-img" src="@imgSrc" alt="Alternate Text" />
+
+                                        <div class="index-item-hover-img">
+                                            <span class="properties__params">Property type - Cottage</span>
+                                            <span class="properties__params">Contract type - Urgent Sale</span>
+
+                                            <span class="properties__time">Added date: 4 years ago</span>
+                                            <span class="properties__more">View details</span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="index-item-info">
+
+                                    <span class="p-2 m-2 index-item-description">@item.Description</span>
+                                    <span class="index-item-house-info">
+                                        @if (item.HouseAux != null)
+                                        {
+                                            <i class="fas fa-bath"></i> @item.HouseAux.BathroomsAux
+                                            <i class="fas fa-bed"></i> @item.HouseAux.BedroomsAux
+                                            <i class="fas fa-warehouse"></i> @item.HouseAux.GarageAux
+                                            <i class="fab fa-buffer"></i> @item.HouseAux.LevelsAux
+                                        }
+                                    </span>
+                                    <div class="divider"></div>
+                                    <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">@item.Currency@item.Article.Price</strong>
+                                </div>
+
+                            </div>
+                            <div class="sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">En venta</span></div>
+                            <div class="sale-label-ribbon"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
+<script>
+
+    function IsInView() {
+        var html = document.getElementsByTagName("html")[0];
+        var articleToShow = document.getElementsByClassName("item");
+        var headToShow = document.getElementsByClassName("conocenos-animation");
+
+
+        document.addEventListener("wheel", function () {
+            var topVent = html.scrollTop;
+            for (var i = 0; i < articleToShow.length; i++) {
+                var topElement = articleToShow[i].offsetHeight;
+
+                if (topVent > topElement + topElement * 0.4) {
+
+                    articleToShow[i].style.transform = "translate(0, 0)";
+                    articleToShow[i].style.opacity = "1";
+
+                }
+
+            }
+            for (var i = 0; i < headToShow.length; i++) {
+                var topElementHead = headToShow[i].offsetHeight;
+
+                if (topVent > topElementHead + 1100) {
+
+                    headToShow[i].style.opacity = "1";
+
+                }
+
+            }
+        })
+    }
+
+
+
+    IsInView()
+
+</script>

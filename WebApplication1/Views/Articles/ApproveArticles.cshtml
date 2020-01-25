@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
 
-<div class="justify-content-center d-flex">
+<div class="justify-content-center p-2 d-flex">
     <h3 class="url-label">Aprobaciones</h3>
 </div>
 <hr />
@@ -8,7 +8,7 @@
 <div class="d-flex flex-wrap container-fluid p-2">
     @foreach (var item in Model)
     {
-        <div class="col-md-12 d-flex p-3 rounded flex-wrap m-3 align-items-lg-start text-center">
+        <div class="col-md-12 d-flex p-3 rounded flex-wrap mb-3 align-items-lg-start text-center">
             <div class="col-md-12 text-center approve-articles-header-container">
                 <strong> @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name</strong>
                 <span class="p-1 rounded border ">
