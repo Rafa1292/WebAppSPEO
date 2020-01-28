@@ -81,7 +81,7 @@ textarea {
     }
 
 .ubication-feature-lbl-selected {
-    background-color: darkgreen;
+    background-color: darkgreen !important;
     color: white;
 }
 
@@ -399,10 +399,10 @@ a:link {
 }
 
 .sale-label-body {
-    width: 100px;
+    width: 120px;
     height: 30px;
     background-color: #dc3545;
-    margin-left: -92px;
+    margin-left: -112px;
     z-index: 12;
     margin-top: 10px;
     box-shadow: -4px 9px 7px -4px;
@@ -591,3 +591,15 @@ a:link {
     .dropdown-item:hover {
         background-color: rgba( 255, 255, 255, .1) !important;
     }
+
+.Venta {
+    background-color: rgba(40, 167, 69, .4) !important;
+}
+
+.Sobresaliente {
+    background-color: rgba(255, 193, 7,.6) !important;
+}
+
+.Oportunidad {
+    background-color: rgba(23, 162, 184, .4) !important;
+}

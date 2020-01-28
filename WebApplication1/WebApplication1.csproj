@@ -51,6 +51,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Schema.3.0.11\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Data" />
@@ -207,6 +210,7 @@
     <Compile Include="Models\Canton.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Distrit.cs" />
+    <Compile Include="Models\EArticleKind.cs" />
     <Compile Include="Models\Feature.cs" />
     <Compile Include="Models\House.cs" />
     <Compile Include="Models\HouseAux.cs" />

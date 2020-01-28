@@ -9,6 +9,10 @@ using System.Web.Mvc;
 using WebApplication1.Models;
 using System.Web.Script.Serialization;
 using WebApplication1.ViewModel;
+using System.Web.Mvc.Html;
+using System.Web.Helpers;
+using System.Dynamic;
+using Newtonsoft.Json;
 
 namespace WebApplication1.Controllers
 {
@@ -28,8 +32,88 @@ namespace WebApplication1.Controllers
                 ArticleViewModel articleViewModel = GetArticleViewModel(article);
                 ArticleViewModelList.Add(articleViewModel);
             }
+            ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
 
             return View(ArticleViewModelList);
+        }
+
+        public string clasify(int articleId, int kindValue)
+        {
+            Article article = db.Articles.Find(articleId);
+
+            var oportunityListEF = from a in db.Articles
+                                            where a.ArticleKind == EArticleKind.Oportunidad
+                                            select a;
+            var outstandingListEF = from a in db.Articles
+                                   where a.ArticleKind == EArticleKind.Sobresaliente
+                                   select a;
+            var oportunityList = oportunityListEF.ToList();
+            var outstandingList = outstandingListEF.ToList();
+            var previewKind = GetEnumValue(article);
+            var status = false;
+            dynamic result = new ExpandoObject();
+            string newClass = "";
+            switch (kindValue)
+            {
+                case 0:
+                    article.ArticleKind = EArticleKind.Venta;
+                    status = true;
+                    newClass = "Venta";
+                    break;
+                case 1:
+                    if (!(outstandingList.Count() >= 9))
+                    {
+                        article.ArticleKind = EArticleKind.Sobresaliente;
+                        status = true;
+                        newClass = "Sobresaliente";
+
+                    }
+                    break;
+                case 2:
+                    if (!(oportunityList.Count() >= 9))
+                    {
+                        article.ArticleKind = EArticleKind.Oportunidad;
+                        status = true;
+                        newClass = "Oportunidad";
+                    }
+                    break;
+            }
+
+            result.Status = status;
+            result.PreviewKind = previewKind;
+            result.NewClass = newClass;
+            var jsonSerialiser = new JavaScriptSerializer();
+            var json = jsonSerialiser.Serialize(result);
+
+            if (status)
+            {
+                db.Entry(article).State = EntityState.Modified;
+                db.SaveChanges();
+                return json;
+            }
+            else
+            {
+                return json;
+            }
+        }
+
+        public int GetEnumValue(Article article)
+        {
+            EArticleKind eArticleKind = article.ArticleKind;
+            var id = 0;
+
+
+            switch (eArticleKind)
+            {
+                case EArticleKind.Sobresaliente:
+                    id = 1;
+                    break;
+                case EArticleKind.Oportunidad:
+                    id = 2;
+                    break;
+
+            }
+            return id;
         }
 
         public List<ArticleViewModel> ArticlesToApprove()
@@ -252,6 +336,8 @@ namespace WebApplication1.Controllers
                         article.State = false;
                         article.SoldState = false;
                         article.TerrainId = terrain.TerrainId;
+                        article.CreationDate = DateTime.Now;
+                        article.ArticleKind = EArticleKind.Venta;
                         db.Articles.Add(article);
 
                         db.SaveChanges();
@@ -367,7 +453,6 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-
             ArticleViewModel articleViewModel = GetArticleViewModel(article);
             ReloadViewBags(articleViewModel);
             return View(articleViewModel);

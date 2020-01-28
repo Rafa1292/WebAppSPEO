@@ -28,8 +28,34 @@ namespace WebApplication1.Controllers
                 ArticleViewModelList.Add(articleViewModel);
             }
 
+            ViewBag.UbicationPicture = db.UbicationPictures.ToList();
             ViewBag.Ubications = db.Ubications.ToList();
-            return View(ArticleViewModelList);
+
+            var ListOutstandingEF = from a in ArticleViewModelList
+                                    where a.Article.ArticleKind == EArticleKind.Sobresaliente
+                                    select a;
+
+            var ListOportunityEF = from a in ArticleViewModelList
+                                    where a.Article.ArticleKind == EArticleKind.Oportunidad
+                                    select a;
+
+            var ArticleViewModelListOrder = ArticleViewModelList.OrderBy(a => a.Article.CreationDate).ToList();
+
+            List<ArticleViewModel> ArticleViewModelMixedList = new List<ArticleViewModel>();
+
+            var i = 0;
+            foreach (var article in ArticleViewModelListOrder)
+            {
+                if (i <= 8)
+                {
+                    ArticleViewModelMixedList.Add(article);
+                }
+            }
+
+            ArticleViewModelMixedList.AddRange(ListOutstandingEF.ToList());
+            ArticleViewModelMixedList.AddRange(ListOportunityEF.ToList());
+
+            return View(ArticleViewModelMixedList);
         }
 
         public ArticleViewModel GetArticleViewModel(Article article)
@@ -50,7 +76,7 @@ namespace WebApplication1.Controllers
         }
 
         public ArticleViewModel SetArticleViewModel(
-    Article article, string[] urls, string outstandingPicture, House house, HouseAux houseAux, int[] houseFeatures, int[] houseAuxFeatures, int[] terrainFeatures)
+        Article article, string[] urls, string outstandingPicture, House house, HouseAux houseAux, int[] houseFeatures, int[] houseAuxFeatures, int[] terrainFeatures)
         {
             ArticleViewModel articleViewModel = new ArticleViewModel();
             articleViewModel.Article = article;

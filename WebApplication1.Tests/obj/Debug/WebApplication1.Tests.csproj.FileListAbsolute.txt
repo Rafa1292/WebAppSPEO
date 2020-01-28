@@ -84,7 +84,6 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Web.Infrastructure.dll
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\System.Web.Helpers.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\System.Web.Mvc.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\System.Web.Razor.dll
@@ -112,7 +111,6 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\WebApplication1.dll.config
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\System.Web.Helpers.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\System.Web.Mvc.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\System.Web.Razor.xml
@@ -151,3 +149,7 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Debug\
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Debug\WebApplication1.Tests.csproj.CopyComplete
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Debug\WebApplication1.Tests.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Debug\WebApplication1.Tests.pdb
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.Schema.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.Schema.xml

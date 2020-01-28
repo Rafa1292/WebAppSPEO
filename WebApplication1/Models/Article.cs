@@ -18,6 +18,9 @@ namespace WebApplication1.Models
         [Display(Name = "Estado")]
         public bool State { get; set; }
 
+        public DateTime CreationDate { get; set; }
+
+        public EArticleKind ArticleKind { get; set; }
         public bool SoldState { get; set; }
 
         [Display(Name = "Codigo de articulo")]

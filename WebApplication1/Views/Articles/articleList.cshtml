@@ -2,7 +2,8 @@
 
 @foreach (var item in Model)
 {
-    <div class="col-md-2 card-style  p-0 shadow rounded d-flex text-center">
+    var itemClass = item.Article.ArticleKind + "-item";
+    <div class="col-md-2 card-style @itemClass p-0 shadow rounded d-flex text-center">
         <div class="col-md-12 card-header-style">
             <strong>@Html.DisplayFor(modelItem => item.Article.Ubication.UbicationCategory.Name)</strong>
             <label>@item.Article.Ubication.Name</label>
@@ -25,13 +26,32 @@
             @state
         </div>
         <div class="col-md-12 icAlignStyle">
-            <strong>Precio:</strong> @item.Currency@item.Article.Price
+            <strong>Precio:</strong>
+        </div>
+        <div class="col-md-12 icAlignStyle ">
+            @item.Currency@item.Article.Price
         </div>
         <div class="col-md-12 icAlignStyle ">
             <strong>Enlistado por <br /></strong>
         </div>
         <div class="col-md-12 icAlignStyle ">
             @item.Article.IndividualContributor.Name
+        </div>
+        <div class="form-group col-12">
+            <label><strong>Clasificacion</strong></label>
+            <div class="col-md-12">
+                @{
+                    var itemStyle = @item.Article.ArticleKind.ToString();
+                }
+                <select name="ArticleKindId" id="ArticleKindId-@item.Article.Id" class="form-control @itemStyle" onchange="clasification(@item.Article.Id, this.value)">
+                    @foreach (var clasify in ViewBag.ArticleKindId)
+                    {
+                        var selectedOption = item.Article.ArticleKind.ToString() == clasify.Text ? "selected" : "";
+                        <option class="bg-light" @selectedOption value="@clasify.Value">@clasify.Text</option>
+                    }
+                </select>
+            </div>
+            <span id="errorUbicationId" class="text-danger col-md-12"></span>
         </div>
         <div class="col-md-12 icAlignStyle">
             @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary m-1" })
@@ -52,3 +72,43 @@
     </div>
 }
 
+<script>
+    function clasification(articleId, kindValue) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Clasify","Articles")',
+                data: {
+                    articleId: articleId,
+                    kindValue: kindValue
+                },
+                cache: false
+            })
+                .then(function (data) {
+                    var id = `ArticleKindId-${articleId}`
+                    var arr_from_json = JSON.parse(data);
+                    if (!arr_from_json[0].Value) {
+                        alert("Has excedido el numero de opciones disponibles.");
+                        document.getElementById(id).options.item(arr_from_json[1].Value).selected = 'selected';
+                    }
+                    else {
+
+                        changeClass(id,arr_from_json[2].Value )
+
+                    }
+                })
+                .fail(function (data) {
+                    alert('Algo no ha ido como deberia!');
+                })
+               return false;
+    }
+
+    function changeClass(id, newClass) {
+        var element = document.getElementById(id);
+        element.classList.remove("Venta");
+        element.classList.remove("Oportunidad");
+        element.classList.remove("Sobresaliente");
+        element.classList.add(newClass);
+
+
+    }
+</script>
