@@ -401,7 +401,6 @@ a:link {
 .sale-label-body {
     width: 120px;
     height: 30px;
-    background-color: #dc3545;
     margin-left: -112px;
     z-index: 12;
     margin-top: 10px;
@@ -412,7 +411,6 @@ a:link {
     width: 8px;
     height: 5px;
     clip-path: polygon(0% 100%, 0% 0%, 100% 0%);
-    background: #dc3545;
     opacity: .9;
     margin-left: -8px;
     margin-top: 40px;
@@ -447,7 +445,7 @@ a:link {
 
 
 
-.ribbon a:link, .ribbon a:visited {
+.ribbon a {
     color: #000;
     text-decoration: none;
     float: left;
@@ -602,4 +600,16 @@ a:link {
 
 .Oportunidad {
     background-color: rgba(23, 162, 184, .4) !important;
+}
+
+.sale-Sobresaliente {
+    background-color: #ffc107;
+}
+
+.sale-Oportunidad {
+    background-color: #17a2b8;
+}
+
+.sale-Venta {
+    background-color: #dc3545;
 }

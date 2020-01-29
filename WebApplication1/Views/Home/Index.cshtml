@@ -50,67 +50,16 @@
     <hr />
     <div class="col-md-12 d-flex justify-content-center mb-4">
         <div class='ribbon index-items-description font-weight-bold'>
-            <a href='#'><span>Sobresaliente</span></a>
-            <a href='#'><span>Reciente</span></a>
-            <a href='#'><span>Oportunidades</span></a>
+            <a onclick="getIndexArticles(1)"><span>Sobresaliente</span></a>
+            <a onclick="getIndexArticles(2)"><span>Reciente</span></a>
+            <a onclick="getIndexArticles(3)"><span>Oportunidades</span></a>
         </div>
     </div>
     <br />
     <br />
-    <div class="col-md-12 d-flex flex-wrap index-article-container">
-        @{
-            var i = 1;
+    <div class="col-md-12 d-flex flex-wrap index-article-container" id="IndexArticleList">
+        @Html.Partial("IndexArticleList")
 
-            foreach (var item in Model)
-            {
-
-                var imgSrc = String.Format("data:image/png;base64,{0}", item.OutstandingPicture);
-
-                <div class="col-md-4 mb-3 justify-content-center d-flex item index-item-container-@i">
-                    <div class="index-item-body">
-
-                        <div class="index-item-thumbnail">
-                            <a class="index-item-link" href="#">
-                                <img class="index-item-img" src="@imgSrc" alt="Alternate Text" />
-
-                                <div class="index-item-hover-img">
-                                    <span class="properties__params">Property type - Cottage</span>
-                                    <span class="properties__params">Contract type - Urgent Sale</span>
-
-                                    <span class="properties__time">Added date: 4 years ago</span>
-                                    <span class="properties__more">View details</span>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="index-item-info">
-                            <span class="p-2 m-2 index-item-description">@item.Description</span>
-                            <span class="index-item-house-info">
-                                @if (item.HouseAux != null)
-                                {
-                                    <i class="fas fa-bath"></i> @item.HouseAux.BathroomsAux
-                                    <i class="fas fa-bed"></i> @item.HouseAux.BedroomsAux
-                                    <i class="fas fa-warehouse"></i> @item.HouseAux.GarageAux
-                                    <i class="fab fa-buffer"></i> @item.HouseAux.LevelsAux
-                                }
-                            </span>
-                            <div class="divider"></div>
-                            <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">@item.Currency@item.Article.Price</strong>
-                        </div>
-
-                    </div>
-                    <div class="sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">@item.Article.ArticleKind</span></div>
-                    <div class="sale-label-ribbon"></div>
-                </div>
-
-                i++;
-                if (i == 4)
-                {
-                    i = 1;
-                }
-            }
-
-        }
     </div>
     <br />
     <div style="background-color: #fff;">
@@ -178,15 +127,16 @@
 
 
                         <div class="col-md-3 ">
-                            <div class="d-flex flex-wrap justify-content-center mt-4">
+                            <div class="d-flex flex-wrap justify-content-center mt-4 shadow-lg" style="width: 250px;">
 
-                                <div class="" style="height: 225px;">
+                                <div class="" style="max-width: 250px;">
                                     <a class="" href="#">
-                                        <img class="" src="@imgSrc" alt="Alternate Text" style="max-width: 300px;" />
+                                        <img class="" src="@imgSrc" alt="Alternate Text" style="max-width: 250px; height:300px; object-fit:cover;" />
                                     </a>
                                 </div>
 
                                 <div class="p-4 " style="text-align: justify;">
+                                    <strong class="text-center" style="font-size: 20px; font-family: Montserrat,sans-serif;">@ubication.UbicationCategory.Name<br /> @ubication.Name</strong>
                                     <div class="divider m-4"></div>
                                     <strong class="p-2 m-2  index-item-price" style="font-size: 14px;">
                                         Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College
@@ -205,13 +155,12 @@
 </div>
 <script>
 
-    function IsInView() {
+    window.onscroll = function IsInView() {
         var html = document.getElementsByTagName("html")[0];
         var articleToShow = document.getElementsByClassName("item");
         var headToShow = document.getElementsByClassName("conocenos-animation");
 
 
-        document.addEventListener("wheel", function () {
             var topVent = html.scrollTop;
             for (var i = 0; i < articleToShow.length; i++) {
                 var topElement = articleToShow[i].offsetHeight;
@@ -234,11 +183,10 @@
                 }
 
             }
-        })
+        
     }
 
 
 
-    IsInView()
 
 </script>

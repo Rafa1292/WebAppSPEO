@@ -29,33 +29,86 @@ namespace WebApplication1.Controllers
             }
 
             ViewBag.UbicationPicture = db.UbicationPictures.ToList();
-            ViewBag.Ubications = db.Ubications.ToList();
+            var ubicationList = from u in db.Ubications
+                                where u.UbicationCategory.Name == "Condominio"
+                                select u;
+            ViewBag.Ubications = ubicationList.ToList();
 
-            var ListOutstandingEF = from a in ArticleViewModelList
-                                    where a.Article.ArticleKind == EArticleKind.Sobresaliente
-                                    select a;
 
-            var ListOportunityEF = from a in ArticleViewModelList
-                                    where a.Article.ArticleKind == EArticleKind.Oportunidad
-                                    select a;
+            var ArticleViewModelListOrder = ArticleViewModelList.OrderByDescending(a => a.Article.CreationDate).ToList();
 
-            var ArticleViewModelListOrder = ArticleViewModelList.OrderBy(a => a.Article.CreationDate).ToList();
-
-            List<ArticleViewModel> ArticleViewModelMixedList = new List<ArticleViewModel>();
+            List<ArticleViewModel> ArticleViewModelCutList = new List<ArticleViewModel>();
 
             var i = 0;
             foreach (var article in ArticleViewModelListOrder)
             {
-                if (i <= 8)
+                if (i <= 8  && article.Article.ArticleKind == EArticleKind.Venta)
                 {
-                    ArticleViewModelMixedList.Add(article);
+                    ArticleViewModelCutList.Add(article);
+                    i++;
                 }
             }
 
-            ArticleViewModelMixedList.AddRange(ListOutstandingEF.ToList());
-            ArticleViewModelMixedList.AddRange(ListOportunityEF.ToList());
+            //ArticleViewModelMixedList.AddRange(ListOutstandingEF.ToList());
+            //ArticleViewModelMixedList.AddRange(ListOportunityEF.ToList());
 
-            return View(ArticleViewModelMixedList);
+            return View(ArticleViewModelCutList);
+        }
+
+        public ActionResult GetIndexArticles(int id)
+        {
+            var articlesEF = from a in db.Articles
+                             where a.State && !a.SoldState
+                             select a;
+
+            var articles = articlesEF.ToList().OrderBy(a => a.CreationDate).ToList(); ;
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            List<ArticleViewModel> ArticleViewModelPartialList = new List<ArticleViewModel>();
+
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+
+            switch (id)
+            {
+                case 1:
+                    var ListOutstandingEF = from a in ArticleViewModelList
+                                            where a.Article.ArticleKind == EArticleKind.Sobresaliente
+                                            select a;
+                    ArticleViewModelPartialList = ListOutstandingEF.ToList();
+                    break;
+
+                case 2:
+                    List<ArticleViewModel> ArticleViewModelCutList = new List<ArticleViewModel>();
+
+                    var i = 0;
+                    foreach (var article in ArticleViewModelList)
+                    {
+                        if (i <= 8 && article.Article.ArticleKind == EArticleKind.Venta)
+                        {
+                            ArticleViewModelCutList.Add(article);
+                            i++;
+                        }
+                    }
+                    ArticleViewModelPartialList = ArticleViewModelCutList;
+                    break;
+                                       
+                case 3:
+                    var ListOportunityEF = from a in ArticleViewModelList
+                                           where a.Article.ArticleKind == EArticleKind.Oportunidad
+                                           select a;
+                    ArticleViewModelPartialList = ListOportunityEF.ToList();
+                    break;
+
+
+
+            }
+
+
+
+            return PartialView("IndexArticleList", ArticleViewModelPartialList);
         }
 
         public ArticleViewModel GetArticleViewModel(Article article)
