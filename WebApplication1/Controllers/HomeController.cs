@@ -5,6 +5,13 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.ViewModel;
 using WebApplication1.Models;
+using System.Net.Mail;
+using System.Text;
+using System.Net.Mime;
+using System.IO;
+using System.Drawing;
+using System.Dynamic;
+using System.Web.Script.Serialization;
 
 namespace WebApplication1.Controllers
 {
@@ -33,6 +40,8 @@ namespace WebApplication1.Controllers
                                 where u.UbicationCategory.Name == "Condominio"
                                 select u;
             ViewBag.Ubications = ubicationList.ToList();
+            ViewBag.UbicationCategory = new SelectList(db.UbicationCategory, "UbicationCategoryId", "Name");
+
 
 
             var ArticleViewModelListOrder = ArticleViewModelList.OrderByDescending(a => a.Article.CreationDate).ToList();
@@ -42,7 +51,7 @@ namespace WebApplication1.Controllers
             var i = 0;
             foreach (var article in ArticleViewModelListOrder)
             {
-                if (i <= 8  && article.Article.ArticleKind == EArticleKind.Venta)
+                if (i <= 8 && article.Article.ArticleKind == EArticleKind.Venta)
                 {
                     ArticleViewModelCutList.Add(article);
                     i++;
@@ -53,6 +62,27 @@ namespace WebApplication1.Controllers
             //ArticleViewModelMixedList.AddRange(ListOportunityEF.ToList());
 
             return View(ArticleViewModelCutList);
+        }
+
+        public ActionResult ArticleViewModel()
+        {
+            int id = 63;
+            Article article = db.Articles.Find(id);
+            ArticleViewModel articleViewModel = GetArticleViewModel(article);
+
+            IQueryable<UbicationPicture> ubicationPictures = from p in db.UbicationPictures
+                                                             where p.UbicationId == article.UbicationId && !p.OutstandingPicture 
+                                                             select p;
+            IQueryable<int> ubicationFeatureUbication = from u in db.UbicationFeaturesUbication
+                                                             where u.UbicationId == articleViewModel.UbicationId 
+                                                             select u.UbicationFeatureId;
+            ViewBag.ubicationPictures = ubicationPictures.ToList();
+            ViewBag.TerrainFeatures = new SelectList(db.TerrainFeatures, "TerrainFeatureId", "Description");
+            ViewBag.HouseFeatures = new SelectList(db.HouseFeatures, "HouseFeatureId", "Description");
+            ViewBag.UbicationFeaturesUbication = ubicationFeatureUbication.ToList();
+            ViewBag.UbicationFeatures = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
+
+            return View(articleViewModel);
         }
 
         public ActionResult GetIndexArticles(int id)
@@ -77,7 +107,8 @@ namespace WebApplication1.Controllers
                     var ListOutstandingEF = from a in ArticleViewModelList
                                             where a.Article.ArticleKind == EArticleKind.Sobresaliente
                                             select a;
-                    ArticleViewModelPartialList = ListOutstandingEF.ToList();
+                    List<ArticleViewModel> articleViewModelsOrderedList = ListOutstandingEF.ToList();
+                    ArticleViewModelPartialList = articleViewModelsOrderedList.OrderByDescending(a => a.Article.CreationDate).ToList();
                     break;
 
                 case 2:
@@ -94,7 +125,7 @@ namespace WebApplication1.Controllers
                     }
                     ArticleViewModelPartialList = ArticleViewModelCutList;
                     break;
-                                       
+
                 case 3:
                     var ListOportunityEF = from a in ArticleViewModelList
                                            where a.Article.ArticleKind == EArticleKind.Oportunidad
@@ -251,6 +282,196 @@ namespace WebApplication1.Controllers
             articleViewModel.HouseAux = houseAux;
 
             return articleViewModel;
+        }
+
+
+        public string ClientForm(string name, string mail, string phoneNumber, int UbicationCategory, int rangeFrom, int rangeTo)
+        {
+            dynamic result = new ExpandoObject();
+            string ErrorMessage = "Error al agregar el cliente a la base de datos";
+            string ExistingMessage = "Este correo ya ha sido agregado anteriormente";
+            string SendErrorMessage = "Error al enviar el correo";
+            var jsonSerialiser = new JavaScriptSerializer();
+
+            try
+            {
+                Client client = new Client();
+                client.Join = DateTime.Now;
+                client.Name = name;
+                client.Mail = mail;
+                client.PhoneNumber = phoneNumber;
+                client.UbicationCategory = UbicationCategory;
+                client.RangeFrom = rangeFrom;
+                client.RangeTo = rangeTo;
+                if (VerifyClient(client))
+                {
+                    NewClient(client);
+                }
+                else
+                {
+                    result.status = false;
+                    result.message = ExistingMessage;
+                    return jsonSerialiser.Serialize(result);
+
+                }
+            }
+            catch (Exception)
+            {
+                result.status = false;
+                result.message = ErrorMessage;
+                return jsonSerialiser.Serialize(result);
+            }
+
+
+            /*var picture = db.UbicationPictures.Find(3);
+            var picture1 = db.UbicationPictures.Find(4);
+            var picture2 = db.UbicationPictures.Find(3);
+
+            MemoryStream image = new MemoryStream(picture.PictureArray);
+            MemoryStream image1 = new MemoryStream(picture1.PictureArray);
+            MemoryStream image2 = new MemoryStream(picture2.PictureArray);*/
+
+            try
+            {
+                var ubicationCategoryName = db.UbicationCategory.Find(UbicationCategory).Name;
+
+                var body =
+                            "<h2 > Buenas,</h2>" +
+                            "<p>" +
+                            "Mi nombre es " + name + ", estoy en busca de una propiedad en " + ubicationCategoryName + "<br />" +
+                            "tengo un presupuesto entre ¢" + rangeFrom + ",000,000 y ¢" + rangeTo + ",000,000.<br />" +
+                            "<strong> Espero pronta respuesta</strong> <br />" +
+                            "Gracias!!!" +
+                            "</p >" +
+                            " <br />" +
+                            "<h4 > Informacion de contacto</h4 >" +
+                            "<span > Correo: " + mail + "</span >" +
+                            "<br />" +
+                            "<span > Movil: " + phoneNumber + "</span > <br />" +
+                            "<img width='250' height='250' src='cid:imagen' /><br />" +
+                            "<img width='250' height='250' src='cid:imagen1' /><br />" +
+                            "<img width='250' height='250' src='cid:imagen2' /><br />";
+
+                AlternateView plainView =
+                AlternateView.CreateAlternateViewFromString(body,
+                                Encoding.UTF8,
+                                MediaTypeNames.Text.Html);
+                /*LinkedResource img =
+                             new LinkedResource(image,
+                            MediaTypeNames.Image.Jpeg);
+                LinkedResource img1 =
+                 new LinkedResource(image1,
+                MediaTypeNames.Image.Jpeg);
+                LinkedResource img2 =
+                 new LinkedResource(image2,
+                MediaTypeNames.Image.Jpeg);
+                img.ContentId = "imagen";
+                img1.ContentId = "imagen1";
+                img2.ContentId = "imagen2";
+                plainView.LinkedResources.Add(img);
+                plainView.LinkedResources.Add(img1);
+                plainView.LinkedResources.Add(img2);*/
+
+
+                SendMail("", "Solicitud de informacion sobre bienes raices", plainView);
+
+                result.status = true;
+                return jsonSerialiser.Serialize(result);
+            }
+            catch (Exception)
+            {
+
+                result.status = false;
+                result.message = SendErrorMessage;
+                return jsonSerialiser.Serialize(result);
+            }
+
+        }
+
+        public bool VerifyClient(Client client)
+        {
+            var status = true;
+            List<Client> ClientList = db.Clients.ToList();
+            foreach (var clientItem in ClientList)
+            {
+                if (clientItem.Mail == client.Mail)
+                {
+                    status = false;
+                }
+            }
+
+            return status;
+        }
+
+        public bool NewClient(Client client)
+        {
+            var status = false;
+            try
+            {
+                db.Clients.Add(client);
+                db.SaveChanges();
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                status = false;
+            }
+            {
+
+                return status;
+            }
+
+        }
+
+        public bool SendMail(string to, string subject, AlternateView alternateView)
+        {
+            var status = false;
+
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("rvilla3452@gmail.com");
+                if (to != "")
+                {
+                    mail.To.Add(to);
+
+                }
+                mail.To.Add("jrvj_1292@hotmail.com");
+                mail.Subject = subject;
+                mail.AlternateViews.Add(alternateView);
+                mail.IsBodyHtml = true;
+                mail.Priority = MailPriority.Normal;
+
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.Port = 25;
+                smtp.EnableSsl = true;
+                smtp.UseDefaultCredentials = true;
+                string MailAccount = "rvilla3452@gmail.com";
+                string Password = "dhliugyqeqsyqrbi";
+                smtp.Credentials = new System.Net.NetworkCredential(MailAccount, Password);
+                smtp.Send(mail);
+                status = true;
+                return status;
+
+            }
+            catch (Exception)
+            {
+                status = false;
+                return status;
+            }
+
+
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

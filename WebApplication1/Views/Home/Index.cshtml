@@ -7,39 +7,85 @@
 
 
 
-<div class="container-fluid home-template">
+<div class="container-fluid home-template" id="home-template">
 </div>
 
-<div class="p-4 d-flex flex-wrap justify-content-center container position-relative  text-light" style="margin:50px auto 300px 60px;   max-width: 300px; background-color: rgba(255, 255, 255, .3)">
-    <h6 class="text-light text-center">
-        Queremos acompañarte en este paso tan importante,
-        si nos dejas tu contacto todo sera mas fácil.
-        <br /><br />
+
+<div class="p-4 d-flex flex-wrap justify-content-center form-container rounded position-relative  text-light" id="form-container">
+    <div class="col-12 form-header mb-4 text-light"id="form-header">
+        <h4><strong> Queremos acompañarte en este paso tan importante...</strong></h4><br />
+        <h6 class=" form-header d-flex" >
+            Dejanos tu contacto y haremos todo mas simple por vos.
+        </h6>
+    </div>
+    <div class="col-md-12 m-0 p-0">
+        <form class="text-white form-1 d-flex flex-wrap " id="form-1">
+            <div class="d-flex flex-wrap">
+
+                <div class="col-6 m-0" style="height: 95px;">
+                    <label for="name">Nombre</label>
+                    <input type="text" class="form-control rounded" style="opacity: .7;" id="name">
+                    <small class="text-danger" id="nameError"></small>
+                </div>
+                <div class="col-6 m-0" style="height: 95px;">
+                    <label for="Email">Correo</label>
+                    <input type="email" class="form-control rounded" style="opacity: .7;" id="mail" aria-describedby="emailHelp">
+                    <small class="text-danger" id="mailError"></small>
+                </div>
+                <div class="col-6 m-0" style="height: 95px;">
+                    <label for="phone">Telefono</label>
+                    <input type="text" class="form-control rounded" style="opacity: .7;" id="phone" aria-describedby="emailHelp">
+                    <small class="text-danger" id="phoneError"></small>
+                </div>
+                <div class=" col-6" style="height: 95px;">
+                    <label for="phone">Tipo de ubicacion</label>
+                    @Html.DropDownList("UbicationCategory", null, "Categorias", new { @class = "form-control", @style = "opacity: 0.7" })
+                    <small class="text-danger" id="categoryError"></small>
+                </div>
+                <div class="form-group col-12 d-flex flex-wrap p-4 rounded border-light text-center border">
+                    <label class="col-12 mb-4" for="inversionRange">Rango de inversion</label><br />
+                    <label class="col-12">Desde</label>
+                    <div class="col-12 d-flex justify-content-center">
+                        <select class="form-control col-6" style="opacity: .7;" onchange="rangeValue(this.value)" id="rangeFrom">
+                            @for (int i = 10; i < 62; i += 2)
+                            {
+                                <option value="@i">¢@i,000,000</option>
+                            }
+                        </select>
+                    </div>
+                    <label class="col-12">Hasta</label>
+                    <div class="col-12 d-flex justify-content-center">
+                        <select class="form-control col-6" style="opacity: .7;" id="rangeTo">
+                            @for (int i = 20; i < 62; i += 2)
+                            {
+                                <option value="@i">¢@i,000,000</option>
+                            }
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12 d-flex flex-wrap justify-content-center text-center">
+                        <h5 class="text-light col-12">
+                            Te apuntas?
+                        </h5>
+                        <button type="button" class="btn btn-success" onclick="validateForm()">De acuerdo!</button>
+                    </div>
+                </div>
+
+        </form>
+    </div>
+
+    <h6 class="text-light success-text" id="success-text">
+        <strong>TODO LISTO... </strong><br /><br />
+        Tu informacion se envio correctamente,<br />
+        en unas horas nuestro equipo de trabajo<br />
+        se comunicara contigo.<br /><br />
+        GRACIAS por dejarnos acompañarte en este proceso.<br /><br />
+        <small>En la parte inferior puedes ir viendo nuestros productos.</small>
     </h6>
-
-    <form class="text-white">
-        <div class="form-group ">
-            <label for="name">Nombre</label>
-            <input type="email" class="form-control rounded-0" style="opacity: .7;" id="name" aria-describedby="emailHelp">
-        </div>
-        <div class="form-group ">
-            <label for="exampleInputEmail1">Correo</label>
-            <input type="email" class="form-control rounded-0" style="opacity: .7;" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <small id="emailHelp" class="form-text" style="opacity: .6;">No compartiremos tu correo con terceros.</small>
-        </div>
-        <div class="form-group mb-4">
-            <label for="exampleInputEmail1">Telefono</label>
-            <input type="email" class="form-control rounded-0" style="opacity: .7;" id="exampleInputEmail1" aria-describedby="emailHelp">
-        </div>
-        <h5 class="text-light">
-            Te apuntas?
-        </h5>
-        <button type="submit" class="btn btn-success">De acuerdo!</button>
-    </form>
 </div>
-<br />
-<br />
-<div class="d-flex flex-wrap">
+
+<div class="d-flex flex-wrap" id="product-container">
     <div class="col-md-12 text-center text-capitalize index-items-title-container font-weight-bold">
         <h2 class="index-items-title">
             Nuestros  productos
@@ -67,16 +113,15 @@
             <div class="pt-5 d-flex justify-content-center ">
                 <img class="rounded" src="~/Images/logo2.png" style="height:200px;" />
             </div>
-            <hr />
             <div class="col-md-12">
                 <h2 class="index-items-title m-4">
                     Conocenos
                 </h2>
             </div>
         </div>
-        <div class="col-md-12 d-flex justify-content-center mt-5 p-0  flex-wrap text-center" style="background-color:#dfe6e9">
+        <div class="col-md-12 d-flex justify-content-center mt-5 p-0  flex-wrap text-center" style=" background:linear-gradient(to bottom, white, #dfe6e9); overflow:hidden">
 
-            <div class="col-md-12 p-0 d-flex flex-wrap">
+            <div class="col-md-12 p-5 d-flex  flex-wrap" id="history" style="background-color:#fff; transform: translate(980px, 0px); transition: 2s; ">
                 <div class="col-md-4 index-meeting-header">
                     <h2 class="index-items-title text-light m-4">
                         Nuestra historia
@@ -91,7 +136,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12 p-0 d-flex flex-wrap">
+            <div class="col-md-12 p-5 d-flex flex-wrap" style="background-color:#fff; transform: translate(-980px, 0px); transition: 2s; " id="experience">
 
                 <div class="col-md-8 index-meeting-body">
                     <p>
@@ -135,7 +180,7 @@
                                     </a>
                                 </div>
 
-                                <div class="p-4 " style="text-align: justify;">
+                                <div class="p-4 ">
                                     <strong class="text-center" style="font-size: 20px; font-family: Montserrat,sans-serif;">@ubication.UbicationCategory.Name<br /> @ubication.Name</strong>
                                     <div class="divider m-4"></div>
                                     <strong class="p-2 m-2  index-item-price" style="font-size: 14px;">
@@ -153,40 +198,130 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
+    <div class="modal-dialog load-gif m-0" role="document">
+        <div class="modal-content load-gif bg-transparent">
+            <img class="house-gif" src="~/Images/home-solid.svg" height="100" id="house-gif" />
+
+        </div>
+    </div>
+</div>
 <script>
 
     window.onscroll = function IsInView() {
         var html = document.getElementsByTagName("html")[0];
         var articleToShow = document.getElementsByClassName("item");
         var headToShow = document.getElementsByClassName("conocenos-animation");
+        var formContainer = document.getElementById("form-container").clientHeight;
+        var fixAnimation = formContainer < 500 ? 400 : 0;
+        var topVent = html.scrollTop;
+        for (var i = 0; i < articleToShow.length; i++) {
+            var topElement = articleToShow[i].offsetHeight;
 
+            if (topVent > topElement - fixAnimation + topElement * 0.7) {
 
-            var topVent = html.scrollTop;
-            for (var i = 0; i < articleToShow.length; i++) {
-                var topElement = articleToShow[i].offsetHeight;
-
-                if (topVent > topElement + topElement * 0.4) {
-
-                    articleToShow[i].style.transform = "translate(0, 0)";
-                    articleToShow[i].style.opacity = "1";
-
-                }
+                articleToShow[i].style.transform = "translate(0, 0)";
+                articleToShow[i].style.opacity = "1";
 
             }
-            for (var i = 0; i < headToShow.length; i++) {
-                var topElementHead = headToShow[i].offsetHeight;
 
-                if (topVent > topElementHead + 1100) {
+        }
+        for (var i = 0; i < headToShow.length; i++) {
+            var topElementHead = headToShow[i].offsetHeight;
 
-                    headToShow[i].style.opacity = "1";
+            if (topVent > topElementHead + 1700 - fixAnimation) {
 
-                }
+                headToShow[i].style.opacity = "1";
 
             }
-        
+
+            if (topVent > topElementHead + 1900 - fixAnimation) {
+
+                document.getElementById("history").style.transform = "translate(0, 0)";
+                document.getElementById("experience").style.transform = "translate(0, 0)";
+
+            }
+
+        }
+
     }
 
 
+    function rangeValue(val) {
+        var start = parseInt(val);
+        var element = document.getElementById("rangeTo");
+        content = "";
+        for (var i = start; i < 62; i += 2) {
+            content +=
+                `<option value="${i}">¢${i},000,000</option>`;
+        }
+        element.innerHTML = content;
+    }
 
+
+    function SendForm() {
+        window.scrollTo(0, 0);
+        $('#exampleModal').modal('show');
+        var form = document.getElementById("form-1");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ClientForm","Home")',
+                data: {
+                    name: form[0].value,
+                    mail: form[1].value,
+                    phoneNumber: form[2].value,
+                    UbicationCategory: form[3].value,
+                    rangeFrom: form[4].value,
+                    rangeTo: form[5].value,
+
+                },
+                cache: false
+            })
+                .then(function (data) {
+                 var response = JSON.parse(data);
+                    if (response[0].Value) {
+                        formOk();
+                        $('#exampleModal').modal('hide');
+
+                    }
+                    else {
+                        //alertify.success("ok")
+                        //alert(response[1].Value);
+
+                        $('#exampleModal').modal('hide');
+                        document.getElementById("mailError").innerHTML = "*Este correo ya existe";
+                    }
+
+                })
+                .fail(function (data) {
+                    alert('No se puede enviar el formulario debido a que la conexion fallo!');
+                        $('#exampleModal').modal('hide');
+                })
+               return false;
+    }
+
+    function formOk() {
+        var formContainer = document.getElementById("form-container");
+        var bgTemplate = document.getElementById("home-template");
+        var formHeader = document.getElementById("form-header");
+        var form = document.getElementById("form-1");
+        var successText = document.getElementById("success-text");
+        var productContainer = document.getElementById("product-container");
+        successText.style.display = "block";
+        bgTemplate.style.height = "700px";
+        formContainer.style.transform = "rotateY(180deg)";
+        formContainer.style.height = "300px";
+        formHeader.style.opacity = "0";
+        form.style.opacity = "0";
+        successText.style.opacity = "1";
+        productContainer.style.marginTop = "390px ";
+    }
+
+    function gif() {
+        $('#exampleModal').modal('show')
+
+    }
 
 </script>

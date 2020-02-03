@@ -23,8 +23,10 @@ function validateArticleForm() {
     var price = validateItem("Article_Price", 0, "");
     var ubication = validateItem("UbicationId", 0, "");
     var enlisted = validateItem("IndividualContributorId", 0, "");
+    var ownerName = validateItem("Article_OwnerName", null, "");
+    var ownerPhone = validateItem("Article_OwnerPhone", 0, "");
 
-    var validate = price && ubication && enlisted ? true : false;
+    var validate = price && ubication && enlisted && ownerName && ownerPhone? true : false;
 
     return validate;
 }

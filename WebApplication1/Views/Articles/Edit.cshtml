@@ -22,14 +22,14 @@
     <div class=" d-flex rounded article-validate-button">
         <div><strong>Fotos</strong></div>
     </div>
-    <div class="rounded article-validate-button" id="articleValidateButtonHouse" style="display: @ViewBag.houseForm">
+    <div class="rounded article-validate-button" id="articleValidateButtonHouse" style='display: @ViewBag.houseForm'>
         <div><strong>Casa</strong></div>
     </div>
-    <div class="rounded article-validate-button" id="articleValidateButtonHouseAux" style="display: @ViewBag.houseAuxForm">
+    <div class="rounded article-validate-button" id="articleValidateButtonHouseAux" style='display:@ViewBag.houseAuxForm'>
         <div><strong>Casa #2</strong></div>
     </div>
     <div style="margin-left: 1%;">
-        <button class="btn-outline-success btn rounded" id="containerButton" onclick="showHouseForm()" style="min-width:84px; min-height: 38px; margin-top: 5px; display: @ViewBag.houseFormBtn;">
+        <button class="btn-outline-success btn rounded" id="containerButton" onclick="showHouseForm()" style='min-width:84px; min-height: 38px; margin-top: 5px; display: @ViewBag.houseFormBtn'>
             <i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i>
         </button>
     </div>
@@ -118,6 +118,23 @@
                     </select>
                 </div>
                 <span id="errorIndividualContributorId" class="text-danger col-md-12"></span>
+            </div>
+
+
+            <div class="form-group col-md-3">
+                @Html.LabelFor(model => model.Article.OwnerName, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Article.OwnerName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, null, `Debes incluir un nombre`)" } })
+                </div>
+                <span id="errorArticle_OwnerName" class="text-danger col-md-12"></span>
+            </div>
+
+            <div class="form-group col-md-3">
+                @Html.LabelFor(model => model.Article.OwnerPhone, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Article.OwnerPhone, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, 0, `Debes incluir un numero`)" } })
+                </div>
+                <span id="errorArticle_OwnerPhone" class="text-danger col-md-12"></span>
             </div>
 
         </div>

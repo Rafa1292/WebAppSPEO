@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         public int UbicationId { get; set; }
 
         [Display(Name = "Descripcion")]
-        [StringLength(200, ErrorMessage = "Maximo 200 caracteres")]
+        [StringLength(1000, ErrorMessage = "Maximo 200 caracteres")]
         public string Description { get; set; }
 
         [Display(Name = "Nombre")]

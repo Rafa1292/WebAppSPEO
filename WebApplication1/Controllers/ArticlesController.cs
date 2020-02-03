@@ -141,10 +141,11 @@ namespace WebApplication1.Controllers
             return View(ArticleViewModelList);
         }
 
+
         public ActionResult PropertySold(int id, bool state)
         {
             Article article = db.Articles.Find(id);
-            article.SoldState = state;
+            article.SoldState = !state;
             db.Entry(article).State = EntityState.Modified;
             db.SaveChanges();
 
@@ -152,13 +153,14 @@ namespace WebApplication1.Controllers
 
 
             List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-            foreach (var articleItem in articles)
+            foreach (var item in articles)
             {
-                ArticleViewModel articleViewModel = GetArticleViewModel(articleItem);
+                ArticleViewModel articleViewModel = GetArticleViewModel(item);
                 ArticleViewModelList.Add(articleViewModel);
             }
+            ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
 
-            return View("Index", ArticleViewModelList);
+            return PartialView("articleList", ArticleViewModelList);
         }
 
 
@@ -204,6 +206,7 @@ namespace WebApplication1.Controllers
             }
 
 
+            ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
 
             return PartialView("articleList", ArticleViewModelList);
         }
@@ -341,10 +344,9 @@ namespace WebApplication1.Controllers
                         db.Articles.Add(article);
 
                         db.SaveChanges();
-
+                        AddTerrainFeatures(terrainFeatures, terrain.TerrainId, article.Id);
 
                         List<ArticlePicture> Pictures = new List<ArticlePicture>();
-                        List<TerrainFeatureTerrain> Features = new List<TerrainFeatureTerrain>();
                         ArticlePicture picture = new ArticlePicture();
                         picture.OutstandingPicture = true;
                         picture.PictureArray = Convert.FromBase64String(outstandingPicture);
@@ -359,16 +361,7 @@ namespace WebApplication1.Controllers
                             Pictures.Add(picture);
                         }
 
-                        foreach (var feature in terrainFeatures)
-                        {
-                            TerrainFeatureTerrain terrainFeature = new TerrainFeatureTerrain();
-                            terrainFeature.TerrainFeatureId = feature;
-                            terrainFeature.TerrainId = article.Id;
-                            Features.Add(terrainFeature);
-                        }
-
                         db.ArticlePictures.AddRange(Pictures);
-                        db.TerrainFeaturesTerrain.AddRange(Features);
                         if (house.Levels != 0)
                         {
                             AddHouse(house, HouseFeatures, article.Id);
@@ -441,6 +434,19 @@ namespace WebApplication1.Controllers
 
         }
 
+        public void AddTerrainFeatures(int[] features, int terrainId, int articleId)
+        {
+            List<TerrainFeatureTerrain> Features = new List<TerrainFeatureTerrain>();
+            foreach (var feature in features)
+            {
+                TerrainFeatureTerrain terrainFeature = new TerrainFeatureTerrain();
+                terrainFeature.TerrainFeatureId = feature;
+                terrainFeature.TerrainId = articleId;
+                Features.Add(terrainFeature);
+            }
+            db.TerrainFeaturesTerrain.AddRange(Features);
+
+        }
         // GET: Articles/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -607,7 +613,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ArticleViewModel articleViewModel)
         {
-            Article article = articleViewModel.Article;
+            Article article = db.Articles.Find(articleViewModel.Article.Id);
 
             using (var transaction = db.Database.BeginTransaction())
             {
@@ -615,10 +621,14 @@ namespace WebApplication1.Controllers
                 {
                     if (articleViewModel.Article != null)
                     {
+                        article.OwnerName = articleViewModel.Article.OwnerName;
+                        article.OwnerPhone = articleViewModel.Article.OwnerPhone;
+                        article.Price = articleViewModel.Article.Price;
                         article.Currency = articleViewModel.Currency;
                         article.Description = articleViewModel.Description;
                         article.IndividualContributorId = articleViewModel.IndividualContributorId;
                         article.UbicationId = articleViewModel.UbicationId;
+                        article.State = false;
                         db.Entry(article).State = EntityState.Modified;
                     }
 
@@ -626,6 +636,8 @@ namespace WebApplication1.Controllers
                     {
                         db.Entry(articleViewModel.Terrain).State = EntityState.Modified;
                     }
+
+                    EditTerrainFeatures(articleViewModel.Terrain, articleViewModel.TerrainFeatures);
 
                     articleViewModel.House = articleViewModel.House.Levels > 0 ? articleViewModel.House : null;
                     articleViewModel.HouseAux = articleViewModel.HouseAux.LevelsAux > 0 ? articleViewModel.HouseAux : null;
@@ -660,7 +672,7 @@ namespace WebApplication1.Controllers
 
                     return RedirectToAction("Index");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     transaction.Rollback();
                     ReloadViewBags(articleViewModel);
@@ -669,6 +681,54 @@ namespace WebApplication1.Controllers
             }
 
 
+        }
+
+        public void EditTerrainFeatures(Terrain terrain, int[] terrainFeatures)
+        {
+            //---------------Features section---------------//
+
+            IQueryable<TerrainFeatureTerrain> currentFeatures = from f in db.TerrainFeaturesTerrain
+                                                            where f.TerrainId == terrain.TerrainId
+                                                            select f;
+
+            List<TerrainFeatureTerrain> currentFeaturesList = currentFeatures.ToList();
+
+            foreach (var currentFeature in currentFeaturesList)
+            {
+                var NoExists = true;
+
+                foreach (var feature in terrainFeatures)
+                {
+                    if (currentFeature.TerrainFeatureId == feature)
+                    {
+                        NoExists = false;
+                    }
+                }
+
+                if (NoExists)
+                {
+                    db.TerrainFeaturesTerrain.Remove(currentFeature);
+                }
+            }
+
+
+            foreach (var feature in terrainFeatures)
+            {
+                var Exists = false;
+
+                foreach (var currentFeature in currentFeaturesList)
+                {
+                    if (currentFeature.TerrainFeatureId == feature)
+                    {
+                        Exists = true;
+                    }
+                }
+
+                if (!Exists)
+                {
+                    CreateTerrainFeature(feature, terrain.TerrainId);
+                }
+            }
         }
 
         public void CompareHouses(List<House> houseList, int id, House frstHouse, House scndHouse, int[] frstFeatures, int[] scndFeatures)
@@ -782,6 +842,15 @@ namespace WebApplication1.Controllers
             houseFeaturehouse.HouseFeatureId = houseFeature;
             houseFeaturehouse.HouseId = houseId;
             db.HouseFeatureHouse.Add(houseFeaturehouse);
+        }
+
+        public void CreateTerrainFeature(int terrainFeature, int terrainId)
+        {
+
+            TerrainFeatureTerrain terrainFeatureTerrain = new TerrainFeatureTerrain();
+            terrainFeatureTerrain.TerrainFeatureId = terrainFeature;
+            terrainFeatureTerrain.TerrainId = terrainId;
+            db.TerrainFeaturesTerrain.Add(terrainFeatureTerrain);
         }
 
         public void EditHouse(House house)

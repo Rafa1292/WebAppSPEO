@@ -246,7 +246,7 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\es\Microsoft
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.csproj.CopyComplete
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.pdb
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.csprojAssemblyReference.cache
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.Schema.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.Schema.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.csprojAssemblyReference.cache

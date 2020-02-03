@@ -230,11 +230,13 @@ display:flex;
     position: absolute;
     padding-top: 70px;
     margin-top: -70px;
+    background-position: top;
     background-image: url('../Images/shutterstock_363324191.jpg');
-    height: 800px;
+    height: 970px;
     object-fit: cover;
     background-size: cover;
     background-repeat:no-repeat;
+    transition: 3s;
 }
 
 .nav-style {
@@ -612,4 +614,93 @@ a:link {
 
 .sale-Venta {
     background-color: #dc3545;
+}
+
+.form-1 {
+    transition: 1s;
+}
+
+.form-header {
+    transition: 1s;
+}
+
+.form-container {
+    margin: 20px auto 250px 60px !important;
+    max-width: 500px !important;
+    background-color: rgba(255, 255, 255, .3);
+    transition: height 1s, transform 2s;
+}
+
+.success-text {
+    display: none;
+    position:absolute;
+    padding: 40px;
+    opacity: 0;
+    transform: rotateY(180deg);
+    transition: 2s;
+    transition-delay: 1s;
+}
+
+.load-gif {
+    height: 100%;
+    min-width: 100%;
+    display: flex;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.house-gif {
+    
+    animation-duration: 2s;
+    animation-name: sizeGif;
+    animation-iteration-count: infinite;
+}
+
+
+
+@keyframes sizeGif {
+    0% {
+        height: 50px;
+    }
+
+    50% {
+        height: 75px;
+    }
+
+    100% {
+        height: 50px;
+    }
+}
+
+.item {
+    height: 500px;
+    width: 600px;
+    object-fit: cover;
+}
+
+.item-gallery {
+    height: 130px;
+    width: 130px;
+}
+
+.index-sale-label-ribbon {
+    position: absolute;
+    width: 8px;
+    height: 5px;
+    clip-path: polygon(0% 100%, 0% 0%, 100% 0%);
+    opacity: .9;
+    margin-left: 304px;
+    margin-top: 50px;
+}
+
+.index-sale-label-body {
+    margin-top: 20px;
+
+    margin-left: 248px;
+    width: 120px;
+    position: absolute;
+    height: 30px;
+    z-index: 12;
+    box-shadow: -4px 9px 7px -4px;
 }

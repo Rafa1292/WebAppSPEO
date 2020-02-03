@@ -37,6 +37,18 @@
         <div class="col-md-12 icAlignStyle ">
             @item.Article.IndividualContributor.Name
         </div>
+        <div class="col-md-12 icAlignStyle ">
+            <strong>Propietario <br /></strong>
+        </div>
+        <div class="col-md-12 icAlignStyle ">
+            @item.Article.OwnerName
+        </div>
+        <div class="col-md-12 icAlignStyle ">
+            <strong>Contacto <br /></strong>
+        </div>
+        <div class="col-md-12 icAlignStyle ">
+            @item.Article.OwnerPhone
+        </div>
         <div class="form-group col-12">
             <label><strong>Clasificacion</strong></label>
             <div class="col-md-12">
@@ -55,15 +67,20 @@
         </div>
         <div class="col-md-12 icAlignStyle">
             @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary m-1" })
-            @if (item.Article.SoldState)
-            {
-                @Html.ActionLink("Vendida", "PropertySold", new { id = item.Article.Id, state = false }, new { @class = "btn btn-danger m-1" })
+            @{
+                var stateName = "Vendida";
+                var stateClass = "btn btn-danger m1";
 
+                if (!item.Article.SoldState)
+                {
+                    stateName = "En Venta";
+                    stateClass = "btn btn-success m1";
+
+                }
             }
-            else
-            {
-                @Html.ActionLink("En venta", "PropertySold", new { id = item.Article.Id, state = true }, new { @class = "btn btn-success m-1" })
-            }
+
+            <button id="propertyStateBtn-@item.Article.Id" type="button" class="@stateClass" onclick='propertyState(@item.Article.Id,"@item.Article.SoldState.ToString()","@stateName" )'>@stateName</button>
+
 
         </div>
         <div class="col-md-12">
@@ -102,13 +119,35 @@
                return false;
     }
 
+    function propertyState(id, state, stateName) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("PropertySold","Articles")',
+                data: {
+                    id: id,
+                    state: state
+                },
+                cache: false
+            })
+                .then(function (data) {
+                    if (data) {
+                        var element = document.getElementById(`articleListContainer`);
+                        element.innerHTML = data;
+
+                    }
+                })
+                .fail(function (data) {
+                    alert('Algo no ha ido como deberia!');
+                })
+               return false;
+        }
+
     function changeClass(id, newClass) {
         var element = document.getElementById(id);
         element.classList.remove("Venta");
         element.classList.remove("Oportunidad");
         element.classList.remove("Sobresaliente");
         element.classList.add(newClass);
-
 
     }
 </script>

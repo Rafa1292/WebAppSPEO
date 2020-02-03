@@ -15,6 +15,12 @@ namespace WebApplication1.Models
         [StringLength(200,ErrorMessage = "Maximo 200 caracteres")]
         public string Description { get; set; }
 
+        [Display(Name = "Propietario")]
+        public string OwnerName { get; set; }
+
+        [Display(Name = "Contacto propietario")]
+        public int OwnerPhone { get; set; }
+
         [Display(Name = "Estado")]
         public bool State { get; set; }
 
