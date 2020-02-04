@@ -37,6 +37,8 @@ namespace WebApplication1.Models
 
         public ICollection<ArticleClient> ArticlesClient { get; set; }
 
+        public ICollection<ClientStateAction> clientStateActions { get; set; }
+
 
     }
 }

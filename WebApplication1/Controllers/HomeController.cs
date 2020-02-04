@@ -410,6 +410,16 @@ namespace WebApplication1.Controllers
             {
                 db.Clients.Add(client);
                 db.SaveChanges();
+                var State = db.ClientStates.FirstOrDefault(c => c.Name == "Lead");
+                var Action = db.StateActions.FirstOrDefault(a => a.Name == "Informacion");
+                var StateActionState = db.StateActionState.FirstOrDefault(s => s.ClientStateId == State.ClientStateId && s.StateActionId == Action.StateActionId);
+                ClientStateAction clientStateAction = new ClientStateAction();
+                clientStateAction.ClientId = client.ClientId;
+                clientStateAction.StateActionStateId = StateActionState.StateActionStateId;
+                clientStateAction.JoinAction = DateTime.Now;
+                clientStateAction.Message = "Solicitud de informacion";
+                db.ClientStateAction.Add(clientStateAction);
+                db.SaveChanges();
                 status = true;
             }
             catch (Exception ex)

@@ -190,11 +190,13 @@
     <Compile Include="Controllers\ArticlesController.cs" />
     <Compile Include="Controllers\CantonsController.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
+    <Compile Include="Controllers\ClientStatesController.cs" />
     <Compile Include="Controllers\DistritsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseFeaturesController.cs" />
     <Compile Include="Controllers\IndividualContributorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StateActionsController.cs" />
     <Compile Include="Controllers\TerrainFeaturesController.cs" />
     <Compile Include="Controllers\UbicationCategoriesController.cs" />
     <Compile Include="Controllers\UbicationFeaturesController.cs" />
@@ -209,6 +211,8 @@
     <Compile Include="Models\ArticlePicture.cs" />
     <Compile Include="Models\Canton.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ClientState.cs" />
+    <Compile Include="Models\ClientStateAction.cs" />
     <Compile Include="Models\Distrit.cs" />
     <Compile Include="Models\EArticleKind.cs" />
     <Compile Include="Models\Feature.cs" />
@@ -219,6 +223,8 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IndividualContributor.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\StateActions.cs" />
+    <Compile Include="Models\StateActionState.cs" />
     <Compile Include="Models\Terrain.cs" />
     <Compile Include="Models\TerrainFeature.cs" />
     <Compile Include="Models\TerrainFeatureTerrain.cs" />
@@ -569,6 +575,17 @@
     <Content Include="Views\Home\IndexArticleList.cshtml" />
     <Content Include="Views\Shared\Mail_html.cshtml" />
     <Content Include="Views\Home\ArticleViewModel.cshtml" />
+    <Content Include="Views\ClientStates\Create.cshtml" />
+    <Content Include="Views\ClientStates\Delete.cshtml" />
+    <Content Include="Views\ClientStates\Details.cshtml" />
+    <Content Include="Views\ClientStates\Edit.cshtml" />
+    <Content Include="Views\ClientStates\Index.cshtml" />
+    <Content Include="Views\StateActions\Create.cshtml" />
+    <Content Include="Views\StateActions\Delete.cshtml" />
+    <Content Include="Views\StateActions\Details.cshtml" />
+    <Content Include="Views\StateActions\Edit.cshtml" />
+    <Content Include="Views\StateActions\Index.cshtml" />
+    <Content Include="Views\Clients\StateView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

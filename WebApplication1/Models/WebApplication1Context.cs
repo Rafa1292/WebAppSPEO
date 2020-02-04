@@ -52,5 +52,15 @@ namespace WebApplication1.Models
         public System.Data.Entity.DbSet<WebApplication1.Models.House> Houses { get; set; }
 
         public System.Data.Entity.DbSet<WebApplication1.Models.Terrain> Terrains { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.ClientState> ClientStates { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.StateAction> StateActions { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.StateActionState> StateActionState { get; set; }
+
+        public System.Data.Entity.DbSet<WebApplication1.Models.ClientStateAction> ClientStateAction { get; set; }
+
+        
     }
 }

@@ -7,53 +7,176 @@
 <div class="justify-content-center d-flex">
     <h3 class="url-label">Clientes</h3>
 </div>
+<div class="d-flex flex-wrap">
+    @using (Html.BeginForm("Edit", "Clients", FormMethod.Post, new { @class = "col-md-6" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <h4>Editar cliente</h4>
+            <hr />
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ClientId)
 
-<div class="form-horizontal">
-    <h4>Editar cliente</h4>
-    <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ClientId)
+            <div class="form-group">
+                @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Guardar cambios" class="btn btn-success" />
+                    <a href="/Clients" class="btn btn-outline-secondary">Regresar</a>
+                </div>
+            </div>
         </div>
+    }
+    <div class="col-md-6" id="states">
+        @Html.Partial("StateView")
     </div>
+</div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Guardar cambios" class="btn btn-success" />
-            <a href="/Clients" class="btn btn-outline-secondary">Regresar</a>
+<div class="modal fade" id="ActionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar accion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group d-flex justify-content-center">
+                    <label class="control-label col-12"><strong>Introduzca un mensaje para la accion</strong></label>
+                    <textarea class="form-control" aria-label="With textarea" rows="6" cols="50" id="message"></textarea>
+                </div>
+                <input class="d-none" id="Action_ClientId" value="@Model.ClientId" />
+                <input class="d-none" id="Action_StateAction" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="SendForm()" class="btn btn-primary">Agregar</button>
+            </div>
         </div>
     </div>
 </div>
-}
 
+<div class="modal fade" id="Bitacora" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Bitacora</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group d-flex justify-content-center">
+                    <table class="table mt-3 text-center">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Accion</th>
+                                <th scope="col">Mensaje</th>
+                                <th scope="col">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var client in ViewBag.CLientStateAction)
+                            {
+                                <tr>
+                                    <td>
+                                        @client.StateActionState.StateAction.Name
+                                    </td>
+                                    <td>
+                                        @client.Message
+                                    </td>
+                                    <td>
+                                        @client.JoinAction
+                                    </td>
+                                </tr>
 
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
+    <div class="modal-dialog load-gif m-0" role="document">
+        <div class="modal-content load-gif bg-transparent">
+            <img class="house-gif" src="~/Images/home-solid.svg" height="100" id="house-gif" />
+
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+    function AddAction(StateActionStateId) {
+        var element = document.getElementById("Action_StateAction");
+        element.value = StateActionStateId;
+        $("#ActionModal").modal("show");
+    }
+
+        function SendForm() {
+        $('#exampleModal').modal('show');
+
+        var StateActionStateId = document.getElementById("Action_StateAction").value;
+        var ClientId = document.getElementById("Action_ClientId").value;
+        var message = document.getElementById("message").value;
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddAction","Clients")',
+                data: {
+                    StateActionStateId: StateActionStateId,
+                    ClientId: ClientId,
+                    Message: message
+
+                },
+                cache: false
+            })
+                .then(function (data) {
+                    var container = document.getElementById("states");
+                    container.innerHTML = data;
+                    $("#ActionModal").modal("hide");
+                    document.getElementById("message").innerHTML = "";
+                            $('#exampleModal').modal('hide');
+
+
+                })
+                .fail(function (data) {
+                            $('#exampleModal').modal('hide');
+
+                })
+               return false;
+    }
+    </script>
+
 }

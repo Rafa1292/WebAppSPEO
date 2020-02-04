@@ -14,19 +14,24 @@
 <hr />
 
 <div class="container row d-flex text-center">
-    <div class="col-md-3 ">
+    <div class="col-md-2 ">
         <strong>
             @Html.DisplayNameFor(model => model.Name)
         </strong>
     </div>
-    <div class="col-md-3 ">
+    <div class="col-md-2 ">
         <strong>
             @Html.DisplayNameFor(model => model.Mail)
         </strong>
     </div>
-    <div class="col-md-3 ">
+    <div class="col-md-2 ">
         <strong>
             @Html.DisplayNameFor(model => model.PhoneNumber)
+        </strong>
+    </div>
+    <div class="col-md-2 ">
+        <strong>
+            <label>Estado actual</label>
         </strong>
     </div>
 </div>
@@ -36,17 +41,31 @@
 
 @foreach (var item in Model)
 {
+    var actualState = 1;
+    var stateName = "Lead";
     <div class="container row d-flex mb-3  text-center">
-        <div class="col-md-3 ">
+        <div class="col-md-2 ">
             @Html.DisplayFor(modelItem => item.Name)
         </div>
-        <div class="col-md-3 ">
+        <div class="col-md-2 ">
             @Html.DisplayFor(modelItem => item.Mail)
         </div>
-        <div class="col-md-3 ">
+        <div class="col-md-2 ">
             @Html.DisplayFor(modelItem => item.PhoneNumber)
         </div>
-        <div class="col-md-3 ">
+        <div class="col-md-2 ">
+            @foreach (var state in ViewBag.CLientStateAction)
+            {
+                if (item.ClientId == state.ClientId && state.StateActionState.ClientStateId > actualState)
+                {
+                    stateName = state.StateActionState.ClientState.Name;
+                }
+            }
+            <label><strong>@stateName</strong></label>
+
+        </div>
+
+        <div class="col-md-2 ">
             @Html.ActionLink("Editar", "Edit", new { id = item.ClientId }, new { @class = "btn btn-outline-info" })
             @Html.ActionLink("Borrar", "Delete", new { id = item.ClientId }, new { @class = "btn btn-outline-danger delete-button" })
         </div>

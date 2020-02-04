@@ -17,23 +17,12 @@ namespace WebApplication1.Controllers
         // GET: Clients
         public ActionResult Index()
         {
+            ViewBag.CLientStateAction = db.ClientStateAction.ToList();
+
             return View(db.Clients.ToList());
         }
 
-        // GET: Clients/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Client client = db.Clients.Find(id);
-            if (client == null)
-            {
-                return HttpNotFound();
-            }
-            return View(client);
-        }
+
 
         // GET: Clients/Create
         public ActionResult Create()
@@ -48,9 +37,12 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ClientId,Name,Mail,PhoneNumber")] Client client)
         {
+
+
             if (ModelState.IsValid)
             {
                 db.Clients.Add(client);
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -61,6 +53,7 @@ namespace WebApplication1.Controllers
         // GET: Clients/Edit/5
         public ActionResult Edit(int? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -70,7 +63,88 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.States = db.ClientStates.ToList();
+            ViewBag.Actions = db.StateActions.ToList();
+            ViewBag.ActionStates = db.StateActionState.ToList();
+            var clientState = from c in db.ClientStateAction
+                              where c.ClientId == id
+                              select c;
+            ViewBag.CLientStateAction = clientState.ToList();
+            List<int> InState = new List<int>();
+            foreach (var ClientState in clientState.ToList())
+            {
+                StateActionState stateActionState = db.StateActionState.Find(ClientState.StateActionStateId);
+                InState.Add(stateActionState.ClientStateId);
+            }
+            ViewBag.ActualState = InState.Max();
+
             return View(client);
+        }
+
+        public ActionResult AddAction (int StateActionStateId, int ClientId, string Message)
+        {
+
+
+            ClientStateAction clientStateAction = StateKey(ClientId, Message, StateActionStateId);
+            if (clientStateAction == null)
+            {
+                clientStateAction = CreateClientStateAction(ClientId, Message, StateActionStateId);
+            }
+
+            db.ClientStateAction.Add(clientStateAction);
+            db.SaveChanges();
+            ViewBag.States = db.ClientStates.ToList();
+            ViewBag.Actions = db.StateActions.ToList();
+            ViewBag.ActionStates = db.StateActionState.ToList();
+            var clientState = from c in db.ClientStateAction
+                              where c.ClientId == ClientId
+                              select c;
+            ViewBag.CLientStateAction = clientState.ToList();
+            List<int> InState = new List<int>();
+            foreach (var ClientState in clientState.ToList())
+            {
+                StateActionState stateActionState = db.StateActionState.Find(ClientState.StateActionStateId);
+                InState.Add(stateActionState.ClientStateId);
+            }
+            ViewBag.ActualState = InState.Max();
+
+            return PartialView("StateView");
+        }
+
+        public ClientStateAction StateKey(int ClientId, string Message, int StateActionStateId)
+        {
+            ClientStateAction clientStateAction = new ClientStateAction();
+
+            switch (StateActionStateId)
+            {
+                case 2:
+                    clientStateAction = CreateClientStateAction(ClientId, Message, 10);
+                    break;
+                case 17:
+                    clientStateAction = CreateClientStateAction(ClientId, Message, 26);
+                    break;
+                case 29:
+                    clientStateAction = CreateClientStateAction(ClientId, Message, 41);
+                    break;
+                default:
+                    clientStateAction = null;
+                    break;
+            }
+
+            return clientStateAction;
+
+        }
+
+        public ClientStateAction CreateClientStateAction(int ClientId, string Message, int StateActionStateId)
+        {
+            ClientStateAction clientStateAction = new ClientStateAction();
+            clientStateAction.ClientId = ClientId;
+            clientStateAction.JoinAction = DateTime.Now;
+            clientStateAction.Message = Message;
+            clientStateAction.StateActionStateId = StateActionStateId;
+
+            return clientStateAction;
         }
 
         // POST: Clients/Edit/5
