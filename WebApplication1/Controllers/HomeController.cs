@@ -64,9 +64,8 @@ namespace WebApplication1.Controllers
             return View(ArticleViewModelCutList);
         }
 
-        public ActionResult ArticleViewModel()
+        public ActionResult ArticleViewModel(int id)
         {
-            int id = 63;
             Article article = db.Articles.Find(id);
             ArticleViewModel articleViewModel = GetArticleViewModel(article);
 
@@ -474,6 +473,226 @@ namespace WebApplication1.Controllers
 
         }
 
+        public ActionResult PropertiesView()
+        {
+            var articlesEF = from a in db.Articles
+                             where a.State && !a.SoldState
+                             select a;
+
+            var articles = articlesEF.ToList();
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+
+            return View(ArticleViewModelList);
+        }
+
+        public ActionResult GetArticles(string type, string param)
+        {
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+
+            switch (type)
+            {
+                case "Ubicacion":
+                    ArticleViewModelList = FilterUbication(param);
+                    break;
+
+                case "Categoria":
+                    ArticleViewModelList = FilterCategory(param);
+                    break;
+
+                case "Tamaño":
+                    ArticleViewModelList = FilterSize(Int32.Parse(param));
+                    break;
+
+                case "Precio":
+                    ArticleViewModelList = FilterPrice(Int32.Parse(param));
+                    break;
+
+                default:
+                    var articles = db.Articles.ToList();
+                    ArticleViewModelList = GetArticleViewModelList(articles);
+                    break;
+
+            }
+
+            return PartialView("articleList", ArticleViewModelList);
+        }
+
+        public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
+        {
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+            return ArticleViewModelList;
+
+        }
+
+        public List<ArticleViewModel> FilterCategory(string category)
+        {
+            var articlesEF = from a in db.Articles
+                             where a.Ubication.UbicationCategory.Name == category
+                             select a;
+
+            var articles = articlesEF.ToList();
+
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
+        }
+
+        public List<ArticleViewModel> FilterPrice(int size)
+        {
+            int initialPrice = 0;
+            int finalPrice = 0;
+            string currency = "";
+
+            switch (size)
+            {
+                case 1:
+                    initialPrice = 20000;
+                    finalPrice = 30000;
+                    currency = "$";
+                    break;
+
+                case 2:
+                    initialPrice = 30000;
+                    finalPrice = 40000;
+                    currency = "$";
+                    break;
+
+                case 3:
+                    initialPrice = 40000;
+                    finalPrice = 500000;
+                    currency = "$";
+                    break;
+
+                case 4:
+                    initialPrice = 10000000;
+                    finalPrice = 20000000;
+                    currency = "¢";
+                    break;
+                case 5:
+                    initialPrice = 20000000;
+                    finalPrice = 30000000;
+                    currency = "¢";
+                    break;
+                case 6:
+                    initialPrice = 30000000;
+                    finalPrice = 1000000000;
+                    currency = "¢";
+                    break;
+            }
+
+
+            var articles = db.Articles.ToList();
+            List<Article> ArticleList = new List<Article>();
+            foreach (var art in articles)
+            {
+                if (Int32.Parse(art.Price) >= initialPrice && Int32.Parse(art.Price) <= finalPrice && art.Currency == currency)
+                {
+                    ArticleList.Add(art);
+                }
+            }
+
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(ArticleList);
+
+            return ArticleViewModelList;
+        }
+
+        public List<ArticleViewModel> FilterSize(int size)
+        {
+            int initialSize = 0;
+            int finalSize = 0;
+
+            switch (size)
+            {
+                case 1:
+                    initialSize = 100;
+                    finalSize = 200;
+                    break;
+
+                case 2:
+                    initialSize = 300;
+                    finalSize = 500;
+                    break;
+
+                case 3:
+                    initialSize = 500;
+                    finalSize = 700;
+                    break;
+
+                case 4:
+                    initialSize = 700;
+                    finalSize = 100000;
+                    break;
+            }
+
+
+            var articlesEF = from a in db.Articles
+                             where (a.Terrain.BackgroundMeasure * a.Terrain.ForeheadMeasure) >= initialSize && 
+                             (a.Terrain.BackgroundMeasure * a.Terrain.ForeheadMeasure) <= finalSize
+                             select a;
+
+            var articles = articlesEF.ToList();
+
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
+        }
+
+        public List<ArticleViewModel> FilterUbication(string ubication)
+        {
+
+            var articlesEF = from a in db.Articles
+                             where a.Ubication.Name == ubication
+                             select a;
+            var articles = articlesEF.ToList();
+
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+            return ArticleViewModelList;
+        }
+
+        public string GetParamsList(string type)
+        {
+
+            List<string> objectList = new List<string>();
+
+            switch (type)
+            {
+                case "Ubicacion":
+                    var ubications = from u in db.Ubications
+                                     select u.Name;
+                    objectList = ubications.ToList();
+                    break;
+                case "Categoria":
+                    var category = from c in db.UbicationCategory
+                                     select c.Name;
+                    objectList = category.ToList();
+                    break;
+
+            }
+            var content = "<option selected disabled>Seleccionar filtro</option>";
+            foreach (var obj in objectList)
+            {
+                content += "<option value='" + obj + "'>" + obj + "</option>";
+            }
+
+            return content;
+        }
 
         protected override void Dispose(bool disposing)
         {

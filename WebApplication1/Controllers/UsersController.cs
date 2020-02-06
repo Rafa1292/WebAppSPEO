@@ -174,6 +174,32 @@ namespace WebApplication1.Controllers
             UserView userView = GetUserView(userId);
             return View("Roles", userView);
         }
+
+        public ActionResult DeleteUser(string userId)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            var deleteUser = userManager.Users.ToList().Find(u => u.Id == userId);
+            userManager.Delete(deleteUser);
+
+            var users = userManager.Users.ToList();
+            var usersView = new List<UserView>();
+            foreach (var user in users)
+            {
+                if (user.UserName != "rvilla3452@gmail.com")
+                {
+                    UserView userView = new UserView
+                    {
+                        Email = user.Email,
+                        Name = user.UserName,
+                        UserID = user.Id
+                    };
+                    usersView.Add(userView);
+                }
+            }
+
+            return View("index", usersView);
+
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

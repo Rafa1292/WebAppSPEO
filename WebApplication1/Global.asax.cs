@@ -32,6 +32,8 @@ namespace WebApplication1
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
+
+
         private void AddPermissionsToSuperUser(ApplicationDbContext db)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
@@ -77,6 +79,8 @@ namespace WebApplication1
                 userManager.Create(user, "rafavilla2013.");
             }
         }
+
+
 
         private void CreateRoles(ApplicationDbContext db)
         {

@@ -3,42 +3,44 @@
 @{
     ViewBag.Title = "Delete";
 }
-
-<div class="justify-content-center d-flex">
-    <h3 class="url-label">Categorias</h3>
-</div>
-
-<div>
-    <hr />
-    <div class="justify-content-center d-flex ">
-        <div>
-            <h5>
-                Si eliminas este canton no sera posible recuperarlo.
-            </h5>
-        </div>
-    </div>
-    <hr />
-
-    <div class="justify-content-center d-flex text-center">
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-        </dl>
-    </div>
+<div class=" p-4">
 
     <div class="justify-content-center d-flex">
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
+        <h3 class="url-label">Categorias</h3>
+    </div>
 
-            <div class="form-actions no-color">
-                <input type="submit" value="Borrar" class="btn btn-danger" />
-                <a href="/UbicationCategories" class="btn btn-outline-secondary">Regresar</a>
+    <div>
+        <hr />
+        <div class="justify-content-center d-flex ">
+            <div>
+                <h5>
+                    Si eliminas este canton no sera posible recuperarlo.
+                </h5>
             </div>
-        }
+        </div>
+        <hr />
+
+        <div class="justify-content-center d-flex text-center">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+            </dl>
+        </div>
+
+        <div class="justify-content-center d-flex">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Borrar" class="btn btn-danger" />
+                    <a href="/UbicationCategories" class="btn btn-outline-secondary">Regresar</a>
+                </div>
+            }
+        </div>
     </div>
 </div>

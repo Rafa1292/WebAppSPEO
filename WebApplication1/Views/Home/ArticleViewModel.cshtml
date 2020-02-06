@@ -88,12 +88,9 @@
 
                 <div class="container-fluid d-flex justify-content-center  flex-wrap">
                     <div class="autoplay mb-5" style="width:600px; height: 400px;">
-                        <div class="">
-                            <img src="@imgSrc" class="item rounded" />
-                        </div>
-                        @foreach (var picture in Model.Urls)
+                        @foreach (var picture in ViewBag.ubicationPictures)
                         {
-                            imgSrc = String.Format("data:image/png;base64,{0}", picture);
+                            imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(picture.PictureArray));
                             <div class="">
                                 <img src="@imgSrc" class=" rounded" width="600" height="400" />
                             </div>
@@ -170,7 +167,7 @@
                     </p>
                 </div>
 
-                <table class="table">
+                <table class="table text-center">
                     <thead>
                         <tr>
                             <th scope="col"></th>
@@ -233,6 +230,7 @@
                                 Cracteristicas
                             </th>
                             <td>
+
                                 @foreach (var feature in Model.HouseFeatures)
                                 {
                                     foreach (var featureName in ViewBag.HouseFeatures)

@@ -593,6 +593,8 @@
     <Content Include="Views\Users\Roles.cshtml" />
     <Content Include="Views\Users\AddRole.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Home\PropertiesView.cshtml" />
+    <Content Include="Views\Home\ArticleList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

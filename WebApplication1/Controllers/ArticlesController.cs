@@ -163,8 +163,6 @@ namespace WebApplication1.Controllers
             return PartialView("articleList", ArticleViewModelList);
         }
 
-
-
         public ActionResult ApproveArticle(int id)
         {
             Article article = db.Articles.Find(id);

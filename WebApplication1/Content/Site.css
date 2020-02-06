@@ -401,22 +401,17 @@ a:link {
 }
 
 .sale-label-body {
-    width: 120px;
+    width: 130px;
     height: 30px;
-    margin-left: -112px;
+    margin-left: -140px;
     z-index: 12;
     margin-top: 10px;
     box-shadow: -4px 9px 7px -4px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
-.sale-label-ribbon {
-    width: 8px;
-    height: 5px;
-    clip-path: polygon(0% 100%, 0% 0%, 100% 0%);
-    opacity: .9;
-    margin-left: -8px;
-    margin-top: 40px;
-}
 
 .index-item-body:hover .index-item-img {
     transform: scale(1.5);

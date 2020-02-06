@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -21,6 +23,19 @@ namespace WebApplication1.Controllers
             return View(db.IndividualContributors.ToList());
         }
 
+        private void CreateUser(ApplicationDbContext db_user, IndividualContributor individualContributor)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db_user));
+            var user = new ApplicationUser
+            {
+                UserName = individualContributor.Mail,
+                Email = individualContributor.Mail
+            };
+
+            userManager.Create(user, "abcd1234.");
+
+        }
+
 
         // GET: IndividualContributors/Create
         public ActionResult Create()
@@ -40,6 +55,9 @@ namespace WebApplication1.Controllers
                 individualContributor.PictureArray = Convert.FromBase64String(url);
                 db.IndividualContributors.Add(individualContributor);
                 db.SaveChanges();
+                ApplicationDbContext db_user = new ApplicationDbContext();
+                CreateUser( db_user, individualContributor);
+
                 return RedirectToAction("Index");
             }
             ViewBag.Url = url;
