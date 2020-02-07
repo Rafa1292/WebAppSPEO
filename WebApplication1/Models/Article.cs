@@ -45,5 +45,6 @@ namespace WebApplication1.Models
         public int IndividualContributorId { get; set; }
         public ICollection<ArticleClient> ArticlesClient { get; set; }
         public ICollection<ArticlePicture> ArticlesPicture { get; set; }
+
     }
 }

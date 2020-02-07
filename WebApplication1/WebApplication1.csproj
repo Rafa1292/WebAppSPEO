@@ -595,6 +595,7 @@
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Home\PropertiesView.cshtml" />
     <Content Include="Views\Home\ArticleList.cshtml" />
+    <Content Include="Views\Articles\filesUpload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

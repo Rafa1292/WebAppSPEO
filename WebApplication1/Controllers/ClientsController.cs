@@ -118,13 +118,13 @@ namespace WebApplication1.Controllers
 
             switch (StateActionStateId)
             {
-                case 2:
+                case 2://llamada
                     clientStateAction = CreateClientStateAction(ClientId, Message, 10);
                     break;
-                case 17:
+                case 17://cita
                     clientStateAction = CreateClientStateAction(ClientId, Message, 26);
                     break;
-                case 29:
+                case 29://Venta Realizada
                     clientStateAction = CreateClientStateAction(ClientId, Message, 41);
                     break;
                 default:

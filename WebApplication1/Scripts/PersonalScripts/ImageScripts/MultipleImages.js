@@ -111,7 +111,7 @@ function createThumbnail(input, iterator, thumbnail_id) {
     figure.appendChild(thumbnail);
     imageContainer.appendChild(figure);
     imageContainer.appendChild(closeButton);
-    document.getElementById('imagesPreview').appendChild(imageContainer);
+    document.getElementById("imagesPreview").appendChild(imageContainer);
     getBase64Image(input.files[iterator], thumbnail_id);
 
 }
@@ -175,7 +175,7 @@ function getBase64Image(input, id) {
         var base64String = document.createElement('input');
         base64String.setAttribute('id', input.name);
         base64String.setAttribute('class', "inputs");
-        base64String.setAttribute('name', 'urls[]');//se usa para enviar info al controlador
+        base64String.setAttribute('name', "urls[]");//se usa para enviar info al controlador
         base64String.setAttribute('style', 'display: none;');
         base64String.setAttribute('type', 'text');
         base64String.value = dataURL;

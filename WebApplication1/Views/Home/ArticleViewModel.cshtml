@@ -65,6 +65,13 @@
                         @Model.Article.Ubication.UbicationCategory.Name @Model.Article.Ubication.Name
                     </span>
                 </h4>
+
+                @foreach (var file in ViewBag.Files)
+                {
+
+                    <a href="@Url.Action("DownloadFile", "Home", new { id = file.ArticleFileId })">@file.Name.@file.Extension</a>
+
+                }
             </div>
             <label><strong>Ubicado en: </strong>@Model.Article.Ubication.Distrit.Canton.Name, @Model.Article.Ubication.Distrit.Name.</label>
             <div class="col-12">
@@ -261,6 +268,7 @@
         }
 
     </div>
+
 
 </div>
 

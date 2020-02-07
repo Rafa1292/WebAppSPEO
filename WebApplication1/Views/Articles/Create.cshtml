@@ -39,7 +39,9 @@
 <hr />
 
 
-@using (Html.BeginForm("Create", "Articles", FormMethod.Post, new { @id = "Form" }))
+@using (Html.BeginForm("Create", "Articles", null,
+            FormMethod.Post,
+            new { enctype = "multipart/form-data", method = "post", @id = "Form" }))
 {
     @Html.AntiForgeryToken()
 
@@ -169,7 +171,7 @@
 
                 <div class="col-xs-2 d-flex mb-2 " style="padding-left: 5px">
                     <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
-                    <input multiple id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+                    <input multiple id="pickImage" type="file" name="" style="display: none" onchange='showPreview(event,"imagesPreview","urls[]")' />
                 </div>
 
                 @if (ViewBag.urls != null)
@@ -198,9 +200,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 
     <div class="col-md-12 ">
@@ -265,5 +264,7 @@
                 })
                return false;
         }
+
+
     </script>
 }

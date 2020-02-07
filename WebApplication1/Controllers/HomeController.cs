@@ -75,6 +75,7 @@ namespace WebApplication1.Controllers
             IQueryable<int> ubicationFeatureUbication = from u in db.UbicationFeaturesUbication
                                                              where u.UbicationId == articleViewModel.UbicationId 
                                                              select u.UbicationFeatureId;
+
             ViewBag.ubicationPictures = ubicationPictures.ToList();
             ViewBag.TerrainFeatures = new SelectList(db.TerrainFeatures, "TerrainFeatureId", "Description");
             ViewBag.HouseFeatures = new SelectList(db.HouseFeatures, "HouseFeatureId", "Description");

@@ -42,11 +42,11 @@ namespace WebApplication1.Controllers
             Article article = db.Articles.Find(articleId);
 
             var oportunityListEF = from a in db.Articles
-                                            where a.ArticleKind == EArticleKind.Oportunidad
-                                            select a;
-            var outstandingListEF = from a in db.Articles
-                                   where a.ArticleKind == EArticleKind.Sobresaliente
+                                   where a.ArticleKind == EArticleKind.Oportunidad
                                    select a;
+            var outstandingListEF = from a in db.Articles
+                                    where a.ArticleKind == EArticleKind.Sobresaliente
+                                    select a;
             var oportunityList = oportunityListEF.ToList();
             var outstandingList = outstandingListEF.ToList();
             var previewKind = GetEnumValue(article);
@@ -301,6 +301,7 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+
         // POST: Articles/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -308,7 +309,10 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ArticleViewModel articleViewModel)
         {
-            if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0 
+
+
+
+            if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0
                 && articleViewModel.TerrainFeatures.Length > 0 && articleViewModel.OutstandingPicture != null)
             {
                 Article article = articleViewModel.Article;
@@ -343,6 +347,7 @@ namespace WebApplication1.Controllers
 
                         db.SaveChanges();
                         AddTerrainFeatures(terrainFeatures, terrain.TerrainId, article.Id);
+
 
                         List<ArticlePicture> Pictures = new List<ArticlePicture>();
                         ArticlePicture picture = new ArticlePicture();
@@ -686,8 +691,8 @@ namespace WebApplication1.Controllers
             //---------------Features section---------------//
 
             IQueryable<TerrainFeatureTerrain> currentFeatures = from f in db.TerrainFeaturesTerrain
-                                                            where f.TerrainId == terrain.TerrainId
-                                                            select f;
+                                                                where f.TerrainId == terrain.TerrainId
+                                                                select f;
 
             List<TerrainFeatureTerrain> currentFeaturesList = currentFeatures.ToList();
 
@@ -1154,7 +1159,6 @@ namespace WebApplication1.Controllers
 
             return content;
         }
-
 
         protected override void Dispose(bool disposing)
         {
