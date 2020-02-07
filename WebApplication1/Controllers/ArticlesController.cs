@@ -309,7 +309,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ArticleViewModel articleViewModel)
         {
-
+            HttpFileCollectionBase files = Request.Files;
 
 
             if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0
@@ -348,6 +348,11 @@ namespace WebApplication1.Controllers
                         db.SaveChanges();
                         AddTerrainFeatures(terrainFeatures, terrain.TerrainId, article.Id);
 
+                        for (int i = 0; i < files.Count; i++)
+                        {
+                            HttpPostedFileBase file = files[i];
+                            SubirArchivo(file, article.Id);
+                        }
 
                         List<ArticlePicture> Pictures = new List<ArticlePicture>();
                         ArticlePicture picture = new ArticlePicture();
@@ -462,6 +467,11 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
+
+            var filesEF = from f in db.Archivos
+                          where f.ArticleId == id
+                          select f;
+            ViewBag.Files = filesEF.ToList();
             ArticleViewModel articleViewModel = GetArticleViewModel(article);
             ReloadViewBags(articleViewModel);
             return View(articleViewModel);
@@ -618,6 +628,7 @@ namespace WebApplication1.Controllers
         {
             Article article = db.Articles.Find(articleViewModel.Article.Id);
 
+            HttpFileCollectionBase files = Request.Files;
             using (var transaction = db.Database.BeginTransaction())
             {
                 try
@@ -633,6 +644,12 @@ namespace WebApplication1.Controllers
                         article.UbicationId = articleViewModel.UbicationId;
                         article.State = false;
                         db.Entry(article).State = EntityState.Modified;
+                    }
+
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        HttpPostedFileBase file = files[i];
+                        SubirArchivo(file, article.Id);
                     }
 
                     if (articleViewModel.Terrain != null)
@@ -1159,6 +1176,76 @@ namespace WebApplication1.Controllers
 
             return content;
         }
+
+        [HttpPost]
+        public void SubirArchivo(HttpPostedFileBase file, int id)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                // Extraemos el contenido en Bytes del archivo subido.
+                var _contenido = new byte[file.ContentLength];
+                file.InputStream.Read(_contenido, 0, file.ContentLength);
+
+                // Separamos el Nombre del archivo de la Extensión.
+                int indiceDelUltimoPunto = file.FileName.LastIndexOf('.');
+                string _nombre = file.FileName.Substring(0, indiceDelUltimoPunto);
+                string _extension = file.FileName.Substring(indiceDelUltimoPunto + 1,
+                                    file.FileName.Length - indiceDelUltimoPunto - 1);
+
+                // Instanciamos la clase Archivo y asignammos los valores.
+                Archivo _archivo = new Archivo()
+                {
+                    Nombre = _nombre,
+                    Extension = _extension,
+                    ArticleId = id
+                };
+
+                try
+                {
+                    // Subimos el archivo al Servidor.
+                    _archivo.SubirArchivo(_contenido);
+                    // Guardamos en la base de datos la instancia del archivo
+                    db.Archivos.Add(_archivo);
+                    db.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    // Aquí el código para manejar la Excepción.
+                }
+            }
+
+            // Redirigimos a la Acción 'Index' para mostrar
+            // Los archivos subidos al Servidor.
+        }
+
+        [HttpPost]
+        public void EliminarArchivo(Guid id)
+        {
+            Archivo _archivo;
+
+
+            _archivo = db.Archivos.FirstOrDefault(x => x.Id == id);
+
+
+            if (_archivo != null)
+            {
+
+                _archivo = db.Archivos.FirstOrDefault(x => x.Id == id);
+                db.Archivos.Remove(_archivo);
+                if (db.SaveChanges() > 0)
+                {
+                    // Eliminamos el archivo del Servidor.
+                    _archivo.EliminarArchivo();
+                }
+
+                // Redirigimos a la Acción 'Index' para mostrar
+                // Los archivos subidos al Servidor.
+            }
+
+        }
+
+
 
         protected override void Dispose(bool disposing)
         {

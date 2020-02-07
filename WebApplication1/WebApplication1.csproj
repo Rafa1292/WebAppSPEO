@@ -207,6 +207,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Archivo.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="Models\ArticleClient.cs" />
     <Compile Include="Models\ArticlePicture.cs" />
@@ -599,6 +600,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ArchivosApp\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -201,6 +201,26 @@
         </div>
     </div>
 
+    <div class="col-md-12 shadow d-flex p-0 flex-wrap  mb-3">
+        <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
+            <h3 class="">Agregar archivos </h3>
+            <span class="show-hide-bottom-form">
+                <i onclick="showHouseBodyForm('file')" class="fas fa-plus " style="display: none;" id="filePlusButton"></i>
+                <i onclick="hideHouseBodyForm('file')" class="fas fa-minus " id="fileMinusButton"></i>
+            </span>
+        </div>
+        <div class="col-md-12 mt-3 container mb-3 d-flex flex-wrap" style="display:flex" name="fileFormBody" id="filesPreview">
+            <div class="col-2">
+                <label for="file" class="btn btn-success p-2 m-2">Seleccionr archivos</label>
+            </div>
+            <input class="d-none" type="file" multiple name="file" id="file" onchange="showPreviewFiles(event)">
+            <div class="d-flex flex-wrap " id="previewFiles">
+
+            </div>
+        </div>
+
+    </div>
+
 
     <div class="col-md-12 ">
         <hr />
@@ -265,6 +285,20 @@
                return false;
         }
 
+        function showPreviewFiles(event) {
+        
+            var input = event.target;
+        
+            for (var i = 0; i < input.files.length; i++) {
+                var thumbnail_id = input.files[i].name;
+                var element = document.getElementById("previewFiles");
+                var fileLabel = document.createElement('label');
+                fileLabel.classList.add("p-2", "m-2", "border", "border-secondary", "rounded");
+                fileLabel.innerText = thumbnail_id;
+                element.append(fileLabel);
+
+            }
+        }
 
     </script>
 }

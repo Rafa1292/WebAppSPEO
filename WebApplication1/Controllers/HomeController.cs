@@ -76,6 +76,10 @@ namespace WebApplication1.Controllers
                                                              where u.UbicationId == articleViewModel.UbicationId 
                                                              select u.UbicationFeatureId;
 
+            var filesEF = from f in db.Archivos
+                          where f.ArticleId == id
+                          select f;
+            ViewBag.Files = filesEF.ToList();
             ViewBag.ubicationPictures = ubicationPictures.ToList();
             ViewBag.TerrainFeatures = new SelectList(db.TerrainFeatures, "TerrainFeatureId", "Description");
             ViewBag.HouseFeatures = new SelectList(db.HouseFeatures, "HouseFeatureId", "Description");
@@ -142,6 +146,40 @@ namespace WebApplication1.Controllers
             return PartialView("IndexArticleList", ArticleViewModelPartialList);
         }
 
+        [HttpGet]
+        public ActionResult DescargarArchivo(Guid id)
+        {
+            Archivo _archivo;
+            FileContentResult _fileContent;
+
+                _archivo = db.Archivos.FirstOrDefault(x => x.Id == id);
+
+            if (_archivo == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                try
+                {
+                    // Descargamos el archivo del Servidor.
+                    _fileContent = new FileContentResult(_archivo.DescargarArchivo(),
+                                                         "application/octet-stream");
+                    _fileContent.FileDownloadName = _archivo.Nombre + "." + _archivo.Extension;
+
+                    // Actualizamos el nº de descargas en la base de datos.
+
+
+
+
+                    return _fileContent;
+                }
+                catch (Exception ex)
+                {
+                    return HttpNotFound();
+                }
+            }
+        }
         public ArticleViewModel GetArticleViewModel(Article article)
         {
             var pictures = GetPictures(article.Id);

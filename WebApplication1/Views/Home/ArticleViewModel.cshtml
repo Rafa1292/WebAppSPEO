@@ -66,15 +66,10 @@
                     </span>
                 </h4>
 
-                @foreach (var file in ViewBag.Files)
-                {
-
-                    <a href="@Url.Action("DownloadFile", "Home", new { id = file.ArticleFileId })">@file.Name.@file.Extension</a>
-
-                }
+                
             </div>
             <label><strong>Ubicado en: </strong>@Model.Article.Ubication.Distrit.Canton.Name, @Model.Article.Ubication.Distrit.Name.</label>
-            <div class="col-12">
+            <div class="col-12 text-break">
                 <p>@Model.Article.Ubication.Description</p>
             </div>
             <label><strong>Amenidades: </strong></label>
@@ -119,7 +114,6 @@
                     @Model.Article.Code
                 </span>
             </h4>
-
         </div>
         <div class="col-md-12 flex-wrap d-flex">
             <div class="col-12">
@@ -267,6 +261,20 @@
             </div>
         }
 
+        <div class="col-md-12">
+            <div class="col-12 mb-3">
+                <h5>Contenido descargable</h5>
+            </div>
+
+            @foreach (var file in ViewBag.Files)
+            {
+                <a class="rounded border border-secondary text-secondary p-2 m-2 " href="@Url.Action("DescargarArchivo", "Home", new { id = file.Id })">
+                    <span>@file.Nombre.@file.Extension</span>
+
+                </a>
+
+            }
+        </div>
     </div>
 
 

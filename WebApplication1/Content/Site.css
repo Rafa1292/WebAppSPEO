@@ -86,7 +86,7 @@ textarea {
 }
 
     .ubication-feature-lbl-selected:hover {
-        background-color: darkred;
+        background-color: darkred !important;
         color: white;
     }
 
