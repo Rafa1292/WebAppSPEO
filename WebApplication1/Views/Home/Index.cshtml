@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
+﻿@model WebApplication1.Models.LandingView
 
 
 @{
@@ -6,38 +6,37 @@
 }
 
 
-
 <div class="container-fluid home-template" id="home-template">
 </div>
 
-
-<div class="p-4 d-flex flex-wrap justify-content-center form-container rounded position-relative  text-light" id="form-container">
-    <div class="col-12 form-header mb-4 text-light"id="form-header">
+@*form*@
+<div class="p-4 d-flex flex-wrap justify-content-center form-container rounded position-relative  text-white" id="form-container">
+    <div class="col-12 form-header mb-4 text-light" id="form-header">
         <h4><strong> Queremos acompañarte en este paso tan importante...</strong></h4><br />
-        <h6 class=" form-header d-flex" >
+        <h6 class=" form-header d-flex">
             Dejanos tu contacto y haremos todo mas simple por vos.
         </h6>
     </div>
     <div class="col-md-12 m-0 p-0">
-        <form class="text-white form-1 d-flex flex-wrap " id="form-1">
+        <form class=" form-1 d-flex flex-wrap " id="form-1">
             <div class="d-flex flex-wrap">
 
-                <div class="col-6 m-0" style="height: 95px;">
+                <div class="col-xl-6 m-0" style="height: 95px;">
                     <label for="name">Nombre</label>
                     <input type="text" class="form-control rounded" style="opacity: .7;" id="name">
                     <small class="text-danger" id="nameError"></small>
                 </div>
-                <div class="col-6 m-0" style="height: 95px;">
+                <div class="col-xl-6 m-0" style="height: 95px;">
                     <label for="Email">Correo</label>
                     <input type="email" class="form-control rounded" style="opacity: .7;" id="mail" aria-describedby="emailHelp">
                     <small class="text-danger" id="mailError"></small>
                 </div>
-                <div class="col-6 m-0" style="height: 95px;">
+                <div class="col-xl-6 m-0" style="height: 95px;">
                     <label for="phone">Telefono</label>
                     <input type="text" class="form-control rounded" style="opacity: .7;" id="phone" aria-describedby="emailHelp">
                     <small class="text-danger" id="phoneError"></small>
                 </div>
-                <div class=" col-6" style="height: 95px;">
+                <div class=" col-xl-6" style="height: 95px;">
                     <label for="phone">Tipo de ubicacion</label>
                     @Html.DropDownList("UbicationCategory", null, "Categorias", new { @class = "form-control", @style = "opacity: 0.7" })
                     <small class="text-danger" id="categoryError"></small>
@@ -46,7 +45,7 @@
                     <label class="col-12 mb-4" for="inversionRange">Rango de inversion</label><br />
                     <label class="col-12">Desde</label>
                     <div class="col-12 d-flex justify-content-center">
-                        <select class="form-control col-6" style="opacity: .7;" onchange="rangeValue(this.value)" id="rangeFrom">
+                        <select class="form-control col-6 dpl-form" style="opacity: .7;" onchange="rangeValue(this.value)" id="rangeFrom">
                             @for (int i = 10; i < 62; i += 2)
                             {
                                 <option value="@i">¢@i,000,000</option>
@@ -55,22 +54,22 @@
                     </div>
                     <label class="col-12">Hasta</label>
                     <div class="col-12 d-flex justify-content-center">
-                        <select class="form-control col-6" style="opacity: .7;" id="rangeTo">
+                        <select class="form-control col-6 dpl-form" style="opacity: .7;" id="rangeTo">
                             @for (int i = 20; i < 62; i += 2)
                             {
                                 <option value="@i">¢@i,000,000</option>
                             }
                         </select>
-                        </div>
-                    </div>
-
-                    <div class="col-12 d-flex flex-wrap justify-content-center text-center">
-                        <h5 class="text-light col-12">
-                            Te apuntas?
-                        </h5>
-                        <button type="button" class="btn btn-success" onclick="validateForm()">De acuerdo!</button>
                     </div>
                 </div>
+
+                <div class="col-12 d-flex flex-wrap justify-content-center text-center">
+                    <h5 class="text-light col-12">
+                        Te apuntas?
+                    </h5>
+                    <button type="button" class="btn btn-success" onclick="validateForm()">De acuerdo!</button>
+                </div>
+            </div>
 
         </form>
     </div>
@@ -85,6 +84,7 @@
     </h6>
 </div>
 
+@*ProductList*@
 <div class="d-flex flex-wrap" id="product-container">
     <div class="col-md-12 text-center text-capitalize index-items-title-container font-weight-bold">
         <h2 class="index-items-title">
@@ -108,94 +108,102 @@
 
     </div>
     <br />
-    <div style="background-color: #fff;">
-        <div class="conocenos-animation">
-            <div class="pt-5 d-flex justify-content-center ">
-                <img class="rounded" src="~/Images/logo2.png" style="height:200px;" />
+</div>
+
+@*aboutus*@
+<div style="background-color: #fff;" id="aboutUs">
+    <div class="conocenos-animation">
+        <div class="pt-5 d-flex justify-content-center ">
+            <img class="rounded" src="~/Images/logo2.png" style="height:200px;" />
+        </div>
+        <div class="col-md-12">
+            <h2 class="index-items-title m-4">
+                Conocenos
+            </h2>
+        </div>
+    </div>
+    <div class="col-md-12 d-flex justify-content-center mt-5 p-0  flex-wrap text-center" style=" background:linear-gradient(to bottom, white, white); overflow:hidden">
+
+        <div class="col-md-12 p-5 d-flex  flex-wrap" id="history" style="background-color:#fff; transform: translate(980px, 0px); transition: 2s; ">
+            <div class="col-md-4 index-meeting-header">
+                <h2 class="index-items-title text-light m-4">
+                    Nuestra historia
+                </h2>
             </div>
-            <div class="col-md-12">
-                <h2 class="index-items-title m-4">
-                    Conocenos
+            <div class="col-md-8 index-meeting-body">
+                <p>
+                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+                    The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-12 p-5 d-flex flex-wrap" style="background-color:#fff; transform: translate(-980px, 0px); transition: 2s; " id="experience">
+
+            <div class="col-md-8 index-meeting-body">
+                <p>
+                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+                </p>
+            </div>
+            <div class="col-md-4 index-meeting-header">
+                <h2 class="index-items-title text-light m-4">
+                    Experiencia
                 </h2>
             </div>
         </div>
-        <div class="col-md-12 d-flex justify-content-center mt-5 p-0  flex-wrap text-center" style=" background:linear-gradient(to bottom, white, #dfe6e9); overflow:hidden">
+    </div>
+</div>
 
-            <div class="col-md-12 p-5 d-flex  flex-wrap" id="history" style="background-color:#fff; transform: translate(980px, 0px); transition: 2s; ">
-                <div class="col-md-4 index-meeting-header">
-                    <h2 class="index-items-title text-light m-4">
-                        Nuestra historia
-                    </h2>
-                </div>
-                <div class="col-md-8 index-meeting-body">
-                    <p>
-                        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+@*agents*@
+<div class=" d-flex flex-wrap container-fluid pb-3 agents pt-5"  id="Agents">
+    @Html.Partial("Agents")
+</div>
 
-                        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-md-12 p-5 d-flex flex-wrap" style="background-color:#fff; transform: translate(-980px, 0px); transition: 2s; " id="experience">
-
-                <div class="col-md-8 index-meeting-body">
-                    <p>
-                        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-                    </p>
-                </div>
-                <div class="col-md-4 index-meeting-header">
-                    <h2 class="index-items-title text-light m-4">
-                        Experiencia
-                    </h2>
-                </div>
-            </div>
+@*Ubications*@
+<div class="col-md-12 p-0 d-flex flex-wrap pt-5 mb-5" style="    background: linear-gradient(to bottom, white, #dfe6e9);">
+    <div class="col-md-12 ">
+        <h2 class="index-items-title text-dark m-4">
+            Proyectos disponibles
+        </h2>
+    </div>
+    <div class="col-md-12 d-flex flex-wrap justify-content-center">
+        @foreach (var ubication in ViewBag.Ubications)
+        {
+            var imgSrc = "";
+            foreach (var picture in ViewBag.UbicationPicture)
+            {
+                if (picture.UbicationId == ubication.UbicationId && picture.OutstandingPicture)
+                {
+                    imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(picture.PictureArray));
+                }
+            }
 
 
-            <div class="col-md-12 p-0 d-flex flex-wrap pt-5 mb-5" style="    background: linear-gradient(to bottom, white, #dfe6e9);">
-                <div class="col-md-12 ">
-                    <h2 class="index-items-title text-dark m-4">
-                        Proyectos disponibles
-                    </h2>
-                </div>
-                <div class="col-md-12 d-flex flex-wrap justify-content-center">
-                    @foreach (var ubication in ViewBag.Ubications)
-                    {
-                        var imgSrc = "";
-                        foreach (var picture in ViewBag.UbicationPicture)
-                        {
-                            if (picture.UbicationId == ubication.UbicationId && picture.OutstandingPicture)
-                            {
-                                imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(picture.PictureArray));
-                            }
-                        }
+            <div class="col-md-4">
+                <div class="d-flex pb-3 flex-wrap justify-content-center mt-4 shadow-lg" style="width: inherit;">
 
+                    <div class="" style="width: inherit;">
+                        <a style="width:inherit; height: inherit;" href="#">
+                            <img class="" src="@imgSrc" alt="Alternate Text" style="width: inherit; height:300px; object-fit:cover;" />
+                        </a>
+                    </div>
 
-                        <div class="col-md-3 ">
-                            <div class="d-flex flex-wrap justify-content-center mt-4 shadow-lg" style="width: 250px;">
+                    <div class="pt-3 col-lg-12 text-center" style="width: 90%;">
+                        <strong class="text-center" style="font-size: 20px; font-family: Montserrat,sans-serif;">@ubication.UbicationCategory.Name @ubication.Name</strong>
+                        <div class="divider m-3"></div>
+                    </div>
+                    <div class="text-justify">
+                        <strong class="p-2   index-ubication-description" style="font-size: 14px;">
+                            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College
+                            @ubication.Description <a href="#" class="btn p-1 btn-secondary">Info</a>
+                        </strong>
+                    </div>
 
-                                <div class="" style="max-width: 250px;">
-                                    <a class="" href="#">
-                                        <img class="" src="@imgSrc" alt="Alternate Text" style="max-width: 250px; height:300px; object-fit:cover;" />
-                                    </a>
-                                </div>
-
-                                <div class="p-4 ">
-                                    <strong class="text-center" style="font-size: 20px; font-family: Montserrat,sans-serif;">@ubication.UbicationCategory.Name<br /> @ubication.Name</strong>
-                                    <div class="divider m-4"></div>
-                                    <strong class="p-2 m-2  index-item-price" style="font-size: 14px;">
-                                        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College
-                                        @ubication.Description <a href="#" class="btn p-1 btn-secondary">Info</a>
-                                    </strong>
-                                </div>
-
-                            </div>
-                        </div>
-                    }
                 </div>
             </div>
-
-        </div>
+        }
     </div>
 </div>
 
@@ -214,13 +222,18 @@
         var html = document.getElementsByTagName("html")[0];
         var articleToShow = document.getElementsByClassName("item");
         var headToShow = document.getElementsByClassName("conocenos-animation");
-        var formContainer = document.getElementById("form-container").clientHeight;
-        var fixAnimation = formContainer < 500 ? 400 : 0;
+        var agents =  document.getElementsByClassName("ic");
+        var homeTemplate = document.getElementById("home-template").clientHeight;
+        var fixAnimation = homeTemplate - 940
         var topVent = html.scrollTop;
+        var aboutUs = document.getElementById("aboutUs").clientHeight;
+        var fixAnimationAgents = aboutUs - 1520;
+  
+
         for (var i = 0; i < articleToShow.length; i++) {
             var topElement = articleToShow[i].offsetHeight;
 
-            if (topVent > topElement - fixAnimation + topElement * 0.7) {
+            if (topVent > (820 + fixAnimation)) {
 
                 articleToShow[i].style.transform = "translate(0, 0)";
                 articleToShow[i].style.opacity = "1";
@@ -231,18 +244,33 @@
         for (var i = 0; i < headToShow.length; i++) {
             var topElementHead = headToShow[i].offsetHeight;
 
-            if (topVent > topElementHead + 1700 - fixAnimation) {
+            if (topVent >  (fixAnimation + 2500)) {
 
                 headToShow[i].style.opacity = "1";
 
             }
 
-            if (topVent > topElementHead + 1900 - fixAnimation) {
+            if (topVent > (fixAnimation + 2900)) {
 
                 document.getElementById("history").style.transform = "translate(0, 0)";
+            }
+
+            if (topVent > (fixAnimation + 3200)) {
+
                 document.getElementById("experience").style.transform = "translate(0, 0)";
+            }
+
+        }
+
+        for (var i = 0; i < agents.length; i++) {
+
+            if (topVent >  (fixAnimationAgents + 420 + 3850 )) {
+
+                agents[i].style.transform = "translateZ(-100px)";
+                agents[i].style.opacity = "1";
 
             }
+
 
         }
 
@@ -312,7 +340,7 @@
         successText.style.display = "block";
         bgTemplate.style.height = "700px";
         formContainer.style.transform = "rotateY(180deg)";
-        formContainer.style.height = "300px";
+        formContainer.style.height = "350px";
         formHeader.style.opacity = "0";
         form.style.opacity = "0";
         successText.style.opacity = "1";

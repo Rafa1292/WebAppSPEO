@@ -224,6 +224,7 @@
     <Compile Include="Models\HouseFeatureHouse.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IndividualContributor.cs" />
+    <Compile Include="Models\LandingView.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\StateActions.cs" />
     <Compile Include="Models\StateActionState.cs" />
@@ -597,6 +598,7 @@
     <Content Include="Views\Home\PropertiesView.cshtml" />
     <Content Include="Views\Home\ArticleList.cshtml" />
     <Content Include="Views\Articles\filesUpload.cshtml" />
+    <Content Include="Views\Home\Agents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

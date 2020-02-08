@@ -70,6 +70,7 @@ namespace WebApplication1.Controllers
             var clientState = from c in db.ClientStateAction
                               where c.ClientId == id
                               select c;
+
             ViewBag.CLientStateAction = clientState.ToList();
             List<int> InState = new List<int>();
             foreach (var ClientState in clientState.ToList())
@@ -77,12 +78,13 @@ namespace WebApplication1.Controllers
                 StateActionState stateActionState = db.StateActionState.Find(ClientState.StateActionStateId);
                 InState.Add(stateActionState.ClientStateId);
             }
+
             ViewBag.ActualState = InState.Max();
 
             return View(client);
         }
 
-        public ActionResult AddAction (int StateActionStateId, int ClientId, string Message)
+        public ActionResult AddAction(int StateActionStateId, int ClientId, string Message)
         {
 
 
@@ -114,18 +116,65 @@ namespace WebApplication1.Controllers
 
         public ClientStateAction StateKey(int ClientId, string Message, int StateActionStateId)
         {
-            ClientStateAction clientStateAction = new ClientStateAction();
+            ClientStateAction clientStateAction = null;
 
-            switch (StateActionStateId)
+            StateActionState stateActionState = db.StateActionState.FirstOrDefault(s => s.StateActionStateId == StateActionStateId);
+            StateAction action = db.StateActions.FirstOrDefault(x => x.StateActionId == stateActionState.StateActionId);
+
+            StateActionState NewStateActionState;
+
+            if (action.Name == "Rechazado")
             {
-                case 2://llamada
-                    clientStateAction = CreateClientStateAction(ClientId, Message, 10);
+                NewStateActionState = db.StateActionState.FirstOrDefault(
+                    s => s.ClientState.Name == "Rechazado" && s.StateAction.Name == "Rechazado");
+                clientStateAction = CreateClientStateAction(ClientId, Message, NewStateActionState.StateActionStateId);
+            }
+
+            switch (stateActionState.ClientState.Name)
+            {
+                case "Lead":
+                    if (action.Name == "Llamada")
+                    {
+                        NewStateActionState = db.StateActionState.FirstOrDefault(
+                           s => s.ClientState.Name == "Contacto" && s.StateAction.Name == "llamada");
+                        clientStateAction = CreateClientStateAction(ClientId, Message, NewStateActionState.StateActionStateId);
+                    }
                     break;
-                case 17://cita
-                    clientStateAction = CreateClientStateAction(ClientId, Message, 26);
+                case "Contacto":
+                    if (action.Name == "Cita")
+                    {
+                        NewStateActionState = db.StateActionState.FirstOrDefault(
+                           s => s.ClientState.Name == "Visita" && s.StateAction.Name == "Cita");
+                        clientStateAction = CreateClientStateAction(ClientId, Message, NewStateActionState.StateActionStateId);
+                    }
                     break;
-                case 29://Venta Realizada
-                    clientStateAction = CreateClientStateAction(ClientId, Message, 41);
+                case "Visita":
+                    if (action.Name == "Venta realizada")
+                    {
+                        NewStateActionState = db.StateActionState.FirstOrDefault(
+                           s => s.ClientState.Name == "Venta" && s.StateAction.Name == "Venta realizada");
+                        clientStateAction = CreateClientStateAction(ClientId, Message, NewStateActionState.StateActionStateId);
+                    }
+                    break;
+                case "Venta":
+                    if (action.Name == "Cerrar")
+                    {
+                        NewStateActionState = db.StateActionState.FirstOrDefault(
+                           s => s.ClientState.Name == "Vendido" && s.StateAction.Name == "Venta realizada");
+                        clientStateAction = CreateClientStateAction(ClientId, Message, NewStateActionState.StateActionStateId);
+                    }
+                    break;
+                case "Rechazado":
+                    if (action.Name == "Recuperar cliente")
+                    {
+                        ClientStateAction clientStateActionToDelete = db.ClientStateAction.FirstOrDefault(
+                            c => c.ClientId == ClientId && c.StateActionState.ClientState.Name == "Rechazado");
+                        db.ClientStateAction.Remove(clientStateActionToDelete);
+                        db.SaveChanges();
+                        NewStateActionState = db.StateActionState.FirstOrDefault(
+                           s => s.ClientState.Name == "Contacto" && s.StateAction.Name == "Informacion");
+                        clientStateAction = CreateClientStateAction(ClientId, Message, NewStateActionState.StateActionStateId);
+                    }
                     break;
                 default:
                     clientStateAction = null;

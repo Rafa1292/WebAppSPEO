@@ -35,13 +35,15 @@ namespace WebApplication1.Controllers
                 ArticleViewModelList.Add(articleViewModel);
             }
 
+            var individualContributors = db.IndividualContributors.ToList();
+
             ViewBag.UbicationPicture = db.UbicationPictures.ToList();
             var ubicationList = from u in db.Ubications
                                 where u.UbicationCategory.Name == "Condominio"
                                 select u;
             ViewBag.Ubications = ubicationList.ToList();
             ViewBag.UbicationCategory = new SelectList(db.UbicationCategory, "UbicationCategoryId", "Name");
-
+            
 
 
             var ArticleViewModelListOrder = ArticleViewModelList.OrderByDescending(a => a.Article.CreationDate).ToList();
@@ -61,7 +63,13 @@ namespace WebApplication1.Controllers
             //ArticleViewModelMixedList.AddRange(ListOutstandingEF.ToList());
             //ArticleViewModelMixedList.AddRange(ListOportunityEF.ToList());
 
-            return View(ArticleViewModelCutList);
+            LandingView landingView = new LandingView
+            {
+                ArticleViewModels = ArticleViewModelCutList,
+                IndividualContributors = individualContributors
+            };
+
+            return View(landingView);
         }
 
         public ActionResult ArticleViewModel(int id)

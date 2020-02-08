@@ -1,9 +1,9 @@
-﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
+﻿@model WebApplication1.Models.LandingView
 
 @{
     var i = 1;
 
-    foreach (var item in Model)
+    foreach (var item in Model.ArticleViewModels)
     {
 
         var imgSrc = String.Format("data:image/png;base64,{0}", item.OutstandingPicture);
@@ -50,7 +50,7 @@
                 </div>
 
             </div>
-            <div class="sale-@item.Article.ArticleKind sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">@item.Article.ArticleKind</span></div>
+            <div class="sale-@item.Article.ArticleKind px-2 sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">@item.Article.ArticleKind</span></div>
         </div>
 
         i++;
@@ -98,7 +98,7 @@
         for (var i = 0; i < articleToShow.length; i++) {
             articleToShow[i].style.transition = "5s";
                     articleToShow[i].style.transform = "translate(0, 0)";
-                    articleToShow[i].style.opacity = "1";                
+                    articleToShow[i].style.opacity = "1";
 
             }
 
@@ -133,7 +133,7 @@
         if (status) {
             SendForm();
         }
-        
+
     }
 
 </script>
