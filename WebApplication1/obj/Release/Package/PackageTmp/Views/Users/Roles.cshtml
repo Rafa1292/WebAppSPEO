@@ -1,0 +1,42 @@
+﻿@model WebApplication1.ViewModel.UserView
+@{
+    ViewBag.Title = "Roles";
+}
+
+<div class="container p-4">
+
+    <div class="justify-content-center d-flex">
+        <h3 class="url-label">Roles de: @Model.Name</h3>
+    </div>
+
+    <p>
+        @Html.ActionLink("Agregar Rol", "AddRole", new { userId = Model.UserID }, new { @class = "btn btn-outline-primary" })
+    </p>
+
+    <table class="table">
+        @foreach (var role in Model.Roles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => role.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Borrar", "Delete", new { userId = Model.UserID, roleId = role.RoleID }, new { @class = "btn btn-outline-danger" })
+
+                </td>
+
+            </tr>
+        }
+
+    </table>
+    @Html.ActionLink("Regresar", "Index", new { }, new { @class = "btn btn-secondary" })
+
+</div>
+
+
+
+
+
+
+
+

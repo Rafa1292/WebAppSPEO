@@ -1,0 +1,106 @@
+﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
+
+<div class="justify-content-center p-2 d-flex">
+    <h3 class="url-label">Aprobaciones</h3>
+</div>
+<hr />
+
+<div class="d-flex flex-wrap container-fluid p-2">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-12 d-flex p-3 rounded flex-wrap mb-3 align-items-lg-start text-center">
+            <div class="col-md-12 text-center approve-articles-header-container">
+                <strong> @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name</strong>
+                <span class="p-1 rounded border ">
+                    @item.Article.Code
+                </span>
+            </div>
+            <div class="d-flex flex-wrap col-md-12 approve-articles-container p-3">
+                <div class="col-md-3 border-right-gray">
+                    <div class="col-md-12">
+                        <h5><strong>Informacion del articulo</strong></h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="backgroundless-list"><strong>Precio:</strong><br /> @item.Currency@item.Article.Price</li>
+                        @{
+                            var areaTotalTerreno = item.Terrain.ForeheadMeasure * item.Terrain.BackgroundMeasure;
+                        }
+                        <li class="backgroundless-list"><strong>Medida de fondo:</strong><br /> @item.Terrain.BackgroundMeasure Mts</li>
+                        <li class="backgroundless-list"><strong>Medida de frente:</strong><br /> @item.Terrain.ForeheadMeasure Mts</li>
+                        <li class="backgroundless-list"><strong>Area total:</strong><br /> @areaTotalTerreno Mts²</li>
+                    </ul>
+                </div>
+                @if (item.House != null)
+                {
+                    <div class="col-md-3 flex-wrap d-flex border-right-gray">
+                        <div class="col-md-12">
+                            <h5><strong>Informacion de casa</strong></h5>
+                        </div>
+                        <div class="col-md-12">
+                            <ul class="list-group list-group-flush">
+                                <li class="backgroundless-list"><strong>Medida de frente:</strong><br /> @item.House.HouseForeheadMeasure Mts</li>
+                                <li class="backgroundless-list"><strong>Medida de fondo:</strong><br /> @item.House.HouseBackgroundMeasure Mts</li>
+                                @{
+                                    var areaTotalCasa = item.House.HouseForeheadMeasure * item.House.HouseBackgroundMeasure;
+                                }
+                                <li class="backgroundless-list"><strong>Area total:</strong><br /> @areaTotalCasa Mts²</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-12 d-flex flex-wrap">
+                            <div class="col-md-3"><i class="fas fa-bath"></i> @item.House.Bathrooms</div>
+                            <div class="col-md-3"><i class="fas fa-bed"></i> @item.House.Bedrooms</div>
+                            <div class="col-md-3"><i class="fas fa-warehouse"></i> @item.House.Garage</div>
+                            <div class="col-md-3"><i class="fab fa-buffer"></i> @item.House.Levels</div>
+                        </div>
+
+                    </div>
+                }
+                @if (item.HouseAux != null)
+                {
+
+
+                    <div class="col-md-3 flex-wrap d-flex border-right-gray">
+                        <div class="col-md-12">
+                            <h5><strong>Informacion de casa extra</strong></h5>
+                        </div>
+                        <div class="col-md-12">
+                            <ul class="list-group list-group-flush">
+                                <li class="backgroundless-list"><strong>Medida de frente:</strong><br /> @item.HouseAux.HouseForeheadMeasureAux Mts</li>
+                                <li class="backgroundless-list"><strong>Medida de fondo:</strong><br /> @item.HouseAux.HouseBackgroundMeasureAux Mts</li>
+                                @{
+                                    var areaTotalCasaExtra = item.HouseAux.HouseForeheadMeasureAux * item.HouseAux.HouseBackgroundMeasureAux;
+                                }
+                                <li class="backgroundless-list"><strong>Area total:</strong><br /> @areaTotalCasaExtra Mts²</li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-12 d-flex flex-wrap">
+                            <div class="col-md-3"><i class="fas fa-bath"></i> @item.HouseAux.BathroomsAux</div>
+                            <div class="col-md-3"><i class="fas fa-bed"></i> @item.HouseAux.BedroomsAux</div>
+                            <div class="col-md-3"><i class="fas fa-warehouse"></i> @item.HouseAux.GarageAux</div>
+                            <div class="col-md-3"><i class="fab fa-buffer"></i> @item.HouseAux.LevelsAux</div>
+                        </div>
+
+                    </div>
+                }
+                <div class="col-md-3">
+                    @{
+                        var imgSrc = String.Format("data:image/png;base64,{0}", item.OutstandingPicture);
+                    }
+                    <div class=" col-md-12 d-flex justify-content-center">
+                        <div class="rounded m-4 approve-articles-image shadow" style="background-image: url(@imgSrc)">
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        @Html.ActionLink("Aprobar", "ApproveArticle", new { id = item.Article.Id }, new { @class = "btn btn-success" })
+                    </div>
+                    <div class="col-md-12 text-center mt-2">
+                        <strong>Enlistado por:</strong><br /> @item.Article.IndividualContributor.Name
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

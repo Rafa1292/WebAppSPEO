@@ -1,0 +1,33 @@
+﻿@model WebApplication1.Models.Client
+
+@{
+    var ubicationName = "";
+    foreach (var ubication in ViewBag.UbicationCategory)
+    {
+        if (Int32.Parse(ubication.Value) == Model.UbicationCategory)
+        {
+            ubicationName = ubication.Text;
+        }
+    }
+}
+    <div class="col-md-12 p-2 m-3">
+        <p>
+            <h2>Buenas,</h2>
+            <br />
+            <img src="#" width="50" height="50" alt="Alternate Text" />
+            Mi nombre es @Model.Name, estoy en busca de una propiedad en @ubicationName.ToString() <br />
+            tengo un presupuesto entre ¢@Model.RangeFrom,000,000 y ¢@Model.RangeTo,000,000.<br />
+            <strong> Espero pronta respuesta</strong> <br />
+            Gracias!!!
+
+        </p>
+
+        <br />
+        <h6>Informacion de contacto</h6>
+        <span>Correo: @Model.Mail</span>
+        <br />
+        <span>Movil: @Model.PhoneNumber</span>
+    </div>
+
+
+

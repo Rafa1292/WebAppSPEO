@@ -35,7 +35,7 @@
                     <li class="nav-item active">
                         <a class="nav-link label-brand" href="/">SU PROPIEDAD EN OCCIDENTE <span class="sr-only">(current)</span></a>
                     </li>
-                    @if (!User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
