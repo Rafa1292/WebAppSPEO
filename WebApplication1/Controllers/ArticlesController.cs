@@ -17,7 +17,7 @@ using System.Web.Security;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize (Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class ArticlesController : Controller
     {
         private WebApplication1Context db = new WebApplication1Context();
@@ -335,11 +335,10 @@ namespace WebApplication1.Controllers
                         db.Terrains.Add(terrain);
                         db.SaveChanges();
 
-  
-
+                        IndividualContributor individualContributor = db.IndividualContributors.FirstOrDefault(i => i.Mail == User.Identity.Name);
                         article.Currency = articleViewModel.Currency;
                         article.Description = articleViewModel.Description;
-                        article.IndividualContributorId = articleViewModel.IndividualContributorId;
+                        article.IndividualContributorId = 2;
                         article.UbicationId = articleViewModel.UbicationId;
                         article.Code = "A" + terrain.TerrainId;
                         article.State = false;
@@ -352,10 +351,14 @@ namespace WebApplication1.Controllers
                         db.SaveChanges();
                         AddTerrainFeatures(terrainFeatures, terrain.TerrainId, article.Id);
 
+
                         for (int i = 0; i < files.Count; i++)
                         {
                             HttpPostedFileBase file = files[i];
-                            SubirArchivo(file, article.Id);
+                            if (file != null)
+                            {
+                                SubirArchivo(file, article.Id);
+                            }
                         }
 
                         List<ArticlePicture> Pictures = new List<ArticlePicture>();
@@ -453,7 +456,7 @@ namespace WebApplication1.Controllers
             {
                 TerrainFeatureTerrain terrainFeature = new TerrainFeatureTerrain();
                 terrainFeature.TerrainFeatureId = feature;
-                terrainFeature.TerrainId = articleId;
+                terrainFeature.TerrainId = terrainId;
                 Features.Add(terrainFeature);
             }
             db.TerrainFeaturesTerrain.AddRange(Features);
@@ -644,7 +647,6 @@ namespace WebApplication1.Controllers
                         article.Price = articleViewModel.Article.Price;
                         article.Currency = articleViewModel.Currency;
                         article.Description = articleViewModel.Description;
-                        article.IndividualContributorId = articleViewModel.IndividualContributorId;
                         article.UbicationId = articleViewModel.UbicationId;
                         article.State = false;
                         db.Entry(article).State = EntityState.Modified;
