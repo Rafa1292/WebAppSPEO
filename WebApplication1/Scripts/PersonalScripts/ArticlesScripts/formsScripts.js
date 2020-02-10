@@ -22,7 +22,7 @@ function showHouseForm() {
     }
     else {
         var form = document.getElementById("houseFormAux");
-        form.style.display = "flex";
+        form.style.display = "flex ";
         var btnInfo = document.getElementById("articleValidateButtonHouseAux")
         btnInfo.style.display = "flex";
         CreateHouseFormAux = true;
@@ -34,7 +34,7 @@ function deleteHouseForm(formDeleteBtn) {
 
     if (formDeleteBtn) {
         var form = document.getElementById("houseForm");
-        form.style.display = "none";
+        form.style.display = "none !important";
         var btnInfo = document.getElementById("articleValidateButtonHouse")
         btnInfo.style.display = "none";
         document.getElementById("HouseFeaturesList").innerHTML = "";
@@ -43,7 +43,7 @@ function deleteHouseForm(formDeleteBtn) {
         cleanForm("House");
     } else {
         var form = document.getElementById("houseFormAux");
-        form.style.display = "none";
+        form.style.display = "none !important";
         var btnInfo = document.getElementById("articleValidateButtonHouseAux")
         btnInfo.style.display = "none";
         document.getElementById("HouseAuxFeaturesList").innerHTML = "";

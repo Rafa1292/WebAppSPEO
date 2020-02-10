@@ -1040,7 +1040,9 @@ namespace WebApplication1.Controllers
             {
                 return HttpNotFound();
             }
-            return View(article);
+            ArticleViewModel articleViewModel = GetArticleViewModel(article);
+
+            return View(articleViewModel);
         }
 
         // POST: Articles/Delete/5

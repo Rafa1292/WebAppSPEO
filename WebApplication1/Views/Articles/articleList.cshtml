@@ -3,7 +3,7 @@
 @foreach (var item in Model)
 {
     var itemClass = item.Article.ArticleKind + "-item";
-    <div class="col-md-2 card-style @itemClass p-0 shadow rounded d-flex text-center">
+    <div class="col-md-2 card-style @itemClass p-0 shadow rounded d-flex text-center article-create-container">
         <div class="col-md-12 card-header-style">
             <strong>@Html.DisplayFor(modelItem => item.Article.Ubication.UbicationCategory.Name)</strong>
             <label>@item.Article.Ubication.Name</label>

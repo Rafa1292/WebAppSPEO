@@ -217,6 +217,21 @@ textarea {
     border-bottom-right-radius: 15px;
 }
 
+#TerrainFeaturesList .list-group-item {
+    min-width: fit-content;
+    border: 1px solid rgba(0, 0, 0, .1);
+}
+
+#HouseFeaturesList .list-group-item {
+    min-width: fit-content;
+    border: 1px solid rgba(0, 0, 0, .1);
+}
+
+#HouseAuxFeaturesList .list-group-item {
+    min-width: fit-content;
+    border: 1px solid rgba(0, 0, 0, .1);
+}
+
 .border-right-gray {
     border-right: 1px solid rgba(10,10,10,.2);
 }
@@ -269,6 +284,7 @@ textarea {
 .ic-mail {
     font-size: 20px;
 }
+
 .ic-1 {
     transform: perspective(700px) translateZ(-500px);
     transition: 2s;
@@ -303,7 +319,44 @@ textarea {
     transform: perspective(1000px) translateZ(-147px);
 }
 
+.article-filter {
+    justify-content: center;
+}
 
+.article-filter-option {
+    justify-content: center;
+}
+
+.min-height-100 {
+    min-height: 100px;
+    display: block;
+}
+
+.form-btn-container {
+    display: none;
+}
+
+.form-mobile {
+    display: none;
+}
+
+.experience-mobile {
+    display: none;
+    background-color: #2c3e50;
+    align-items: center;
+    justify-content: center;
+}
+
+.experience-desktop {
+    background-color: #2c3e50;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.agents-description {
+    padding: 10px;
+}
 @media (max-width: 1024px) {
     .home-template {
         height: 1100px;
@@ -354,6 +407,25 @@ textarea {
 }
 
 @media (max-width: 768px) {
+
+    .form-mobile {
+        display: flex;
+    }
+
+    .home-template {
+        height: 640px;
+    }
+
+
+    .product-container {
+        margin-top: 280px;
+    }
+
+    .form-btn-container {
+        padding-top: 60px !important;
+        padding-left: 30px !important;
+    }
+
     .nav-style {
         background-color: rgba(10, 10, 10, 1);
     }
@@ -361,6 +433,7 @@ textarea {
     .mail {
         font-size: 11px;
     }
+
     .home-template {
         background-image: url('../Images/shutterstock_363324191vertical.jpg');
         background-size: cover;
@@ -373,6 +446,7 @@ textarea {
     }
 
     .form-container {
+        display: none !important;
         background-color: rgba(0, 0, 0, .8) !important;
     }
 
@@ -396,10 +470,11 @@ textarea {
     .ic-picture-img {
         object-fit: cover;
         width: 210px;
+        height: 210px;
         border: 2px solid #17a2b8;
     }
 
-    .ic-mail{
+    .ic-mail {
         font-size: 15px !important;
     }
 
@@ -411,9 +486,58 @@ textarea {
         height: 60px;
         width: 60px !important;
     }
+
+    .article-create-container {
+        min-width: 220px !important;
+        margin: 12px 4px;
+    }
+
+    .card-header-style {
+        min-width: 219px !important;
+    }
 }
 
+@media (max-width: 426px) {
+    .ribbon {
+        font-size: 10px !important;
+    }
+
+    .form-mobile {
+        background-color: rgba(0,0,0,.7);
+        margin-top: 38px;
+        padding: 5px;
+        width: 80% !important;
+        margin-left: 10%;
+    }
+
+    .product-container {
+        margin-top: 170px;
+    }
+
+    .experience-mobile {
+        display: flex;
+    }
+
+    .experience-desktop {
+        display: none;
+    }
+
+    .agents {
+        margin-top: -120px;
+    }
+}
+
+
 @media (max-width: 425px) {
+
+
+
+    .form-btn-container {
+        padding-top: 30px !important;
+        padding-left: 10% !important;
+        padding-right: 10% !important;
+    }
+
     .home-template {
         background-image: url('../Images/shutterstock_363324191vertical.jpg');
         background-size: contain;
@@ -422,7 +546,47 @@ textarea {
     .index-item-body {
         width: 310px;
     }
+
+    .create-article-btn {
+        justify-content: center !important;
+    }
+
+
 }
+
+@media (max-width: 375px) {
+
+    .ribbon {
+        font-size: 9px !important;
+    }
+
+    .product-container {
+        margin-top: 60px;
+    }
+
+    .form-mobile {
+        font-size: 12px;
+        margin-top: 8px;
+    }
+
+    .form-control {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 320px) {
+    .ribbon {
+        font-size: 8px !important;
+    }
+
+    .form-btn-container {
+        padding-top: 5px !important;
+        padding-left: 0% !important;
+        padding-right: 0% !important;
+    }
+}
+
+
 
 .index-article-container {
     background: linear-gradient(to bottom, #dfe6e9, white);

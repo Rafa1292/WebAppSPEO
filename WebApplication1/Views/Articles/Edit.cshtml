@@ -48,16 +48,16 @@
 
 
     <div class="col-md-12 shadow  p-0 flex-wrap  mb-3">
-        <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
-            <h3 class="">Informacion del articulo</h3>
-            <span class="show-hide-bottom-form">
+        <div class="col-md-12 article-container-header justify-content-between d-flex ">
+            <h3 class="col-xs-11">Informacion del articulo</h3>
+            <span class="show-hide-bottom-form col-xs-1">
                 <i onclick="showHouseBodyForm('article')" class="fas fa-plus " style="display: none;" id="articlePlusButton"></i>
                 <i onclick="hideHouseBodyForm('article')" class="fas fa-minus " id="articleMinusButton"></i>
             </span>
         </div>
         <div class=" col-md-12 row mt-3 mb-3" name="articleFormBody">
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-lg-3">
                 @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12">
                     @{
@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-lg-3">
                 @Html.LabelFor(model => model.Article.Price, htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12 ">
                     <div class="input-group-prepend">
@@ -90,7 +90,7 @@
             </div>
 
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-lg-3">
                 @Html.LabelFor(model => model.Article.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12">
                     <select name="UbicationId" id="UbicationId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
@@ -105,7 +105,7 @@
                 <span id="errorUbicationId" class="text-danger col-md-12"></span>
             </div>
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-lg-3">
                 @Html.LabelFor(model => model.Article.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-12">
                     <select name="IndividualContributorId" id="IndividualContributorId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
@@ -121,7 +121,7 @@
             </div>
 
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-lg-3">
                 @Html.LabelFor(model => model.Article.OwnerName, htmlAttributes: new { @class = "control-label col-md-12" })
                 <div class="col-md-12">
                     @Html.EditorFor(model => model.Article.OwnerName, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, null, `Debes incluir un nombre`)" } })
@@ -212,9 +212,9 @@
                 <i onclick="hideHouseBodyForm('file')" class="fas fa-minus " id="fileMinusButton"></i>
             </span>
         </div>
-        <div class="col-md-12 mt-3 container mb-3 flex-wrap" style="display:flex" name="fileFormBody" >
-            <div class="col-2">
-                <label for="file" class="btn btn-success p-2 m-2">Seleccionr archivos</label>
+        <div class="col-md-12 mt-3 container mb-3 justify-content-center flex-wrap" style="display:flex" name="fileFormBody">
+            <div class="col-2" style="min-width:fit-content;">
+                <label for="file" class="btn btn-success p-2 m-2">Seleccionar archivos</label>
                 <input class="d-none" type="file" multiple name="file" id="file" onchange="showPreviewFiles(event)">
             </div>
             <div class="d-flex flex-wrap ">
@@ -222,20 +222,20 @@
                 {
                     foreach (var file in ViewBag.Files)
                     {
-                <label class="p-2 m-2 border border-secondary rounded " id='@file.Id'>
-                    @file.Nombre.@file.Extension
-                    <a onclick='deleteFiles("@file.Id")' class="text-danger ">
-                        <small class="text-danger" >
-                            <i class="fas fa-times-circle"></i>
-                        </small>
-                    </a>
-                </label>
+                        <label class="p-2 m-2 border border-secondary rounded " id='@file.Id'>
+                            @file.Nombre.@file.Extension
+                            <a onclick='deleteFiles("@file.Id")' class="text-danger ">
+                                <small class="text-danger">
+                                    <i class="fas fa-times-circle"></i>
+                                </small>
+                            </a>
+                        </label>
 
                     }
 
                 }
             </div>
-            <div class="d-flex flex-wrap " id="previewFiles">
+            <div class="d-flex flex-wrap justify-content-center" id="previewFiles">
 
             </div>
         </div>
@@ -244,15 +244,12 @@
 
     <div class="col-md-12 ">
         <hr />
-        <div class="form-group">
-
-            <div class="container-fluid row">
-                <div class="col-md-6 d-flex justify-content-end">
-                    <input type="button" value="Guardar cambios" onclick="ValidateForm()" class="btn btn-success" id="houseFormButton" />
-                </div>
-                <div class="col-md-6">
-                    <a href="/Articles" class="btn btn-outline-secondary">Regresar</a>
-                </div>
+        <div class="d-flex flex-wrap justify-content-center ">
+            <div class="m-2">
+                <input type="button" value="Guardar cambios" onclick="ValidateForm()" class="btn btn-success" id="houseFormButton" />
+            </div>
+            <div class="m-2">
+                <a href="/Articles" class="btn btn-outline-secondary">Regresar</a>
             </div>
         </div>
     </div>
@@ -315,7 +312,7 @@
                 .then(function (data) {
                     var element = document.getElementById(id);
                     element.remove();
-                    
+
                 })
                 .fail(function (data) {
                     alert('No se pudo eliminar el archivo!');

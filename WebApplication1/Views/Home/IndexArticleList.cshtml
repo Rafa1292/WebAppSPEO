@@ -104,36 +104,6 @@
 
     }
 
-    function validateForm() {
-        var valMail = /^(?:[^<>()[\].,;:\s@@']+(\.[^<>()[\].,;:\s@@']+)*|'[^\n']+')@@(?:[^<>()[\].,;:\s@@']+\.)+[^<>()[\]\.,;:\s@@']{2,63}$/i;
-        var valPhone = new RegExp("^[0-9]{4}(-)+[0-9]{4}$");
-        var valName = /^[A-Z]+$/i;
-        var name = valName.test(document.getElementById("name").value);
-        var mail = valMail.test(document.getElementById("mail").value);
-        var phone = valPhone.test(document.getElementById("phone").value);
-        var category = document.getElementById("UbicationCategory").value;
-        var status = true;
-        if (!name) {
-            document.getElementById("nameError").innerHTML = "*Debe introducir un nombre valido"
-            var status = false;
-        }
-        if (!mail) {
-            document.getElementById("mailError").innerHTML = "*Debe introducir un correo valido"
-            var status = false;
-        }
-        if (!phone) {
-            document.getElementById("phoneError").innerHTML = "*Debe introducir un movil valido"
-            var status = false;
-        }
-        if (!(category > 0)) {
-            document.getElementById("categoryError").innerHTML = "*Debe seleccionar una categoria"
-            var status = false;
-        }
 
-        if (status) {
-            SendForm();
-        }
-
-    }
 
 </script>

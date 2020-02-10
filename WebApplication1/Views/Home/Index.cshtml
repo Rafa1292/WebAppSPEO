@@ -9,8 +9,52 @@
 <div class="container-fluid home-template" id="home-template">
 </div>
 
+<div class="col-12  form-btn-container flex-wrap form-mobile" id="form-mobile">
+    <div class="col-md-12 mb-2 text-white">
+        <h4>Llegaste al lugar correcto!!!</h4>
+
+    </div>
+    <div class="col-md-6 text-white " id="data-request-user">
+        <p>
+            <strong>
+                Queremos ayudarte a encontrar la propiedad de tus sueños...
+            </strong>
+            <br /><br />
+            Para mejorar la experiencia puedes dejarnos tus datos y en breve <br />
+            estaremos en contacto contigo.
+            <br /><br />
+
+            <strong>
+                Hagamoslo facil...
+            </strong>
+        </p>
+    </div>
+
+    <div class="col-md-6 text-white flex-wrap p-0" style="display: none;" id="form-mobile-greetings">
+        <div class="col-12">
+            <p>
+                Gracias por darnos la oportunidad de asesorarte... <br /> <br />
+                <strong>
+                    No te arrepentiras!!!
+                </strong>
+            </p>
+        </div>
+
+        <div class="col-12">
+            <small>En la parte inferior puedes ir viendo nuestros productos.</small>
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-3">
+        <button id="formBtn" type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#exampleModalLong">
+            Hagamoslo!
+        </button>
+    </div>
+
+</div>
+
 @*form*@
-<div class="p-4 d-flex flex-wrap justify-content-center form-container rounded position-relative  text-white" id="form-container">
+<div class="p-4   flex-wrap justify-content-center form-container rounded position-relative  text-white" id="form-container" tabindex="-1" role="dialog" style="display: flex;">
     <div class="col-12 form-header mb-4 text-light" id="form-header">
         <h4><strong> Queremos acompañarte en este paso tan importante...</strong></h4><br />
         <h6 class=" form-header d-flex">
@@ -23,23 +67,23 @@
 
                 <div class="col-xl-6 m-0" style="height: 95px;">
                     <label for="name">Nombre</label>
-                    <input type="text" class="form-control rounded" style="opacity: .7;" id="name">
-                    <small class="text-danger" id="nameError"></small>
+                    <input type="text" class="form-control rounded" style="opacity: .7;" id="nameform-1">
+                    <small class="text-danger" id="nameErrorform-1"></small>
                 </div>
                 <div class="col-xl-6 m-0" style="height: 95px;">
                     <label for="Email">Correo</label>
-                    <input type="email" class="form-control rounded" style="opacity: .7;" id="mail" aria-describedby="emailHelp">
-                    <small class="text-danger" id="mailError"></small>
+                    <input type="email" class="form-control rounded" style="opacity: .7;" id="mailform-1" aria-describedby="emailHelp">
+                    <small class="text-danger" id="mailErrorform-1"></small>
                 </div>
                 <div class="col-xl-6 m-0" style="height: 95px;">
                     <label for="phone">Telefono</label>
-                    <input type="text" class="form-control rounded" style="opacity: .7;" id="phone" aria-describedby="emailHelp">
-                    <small class="text-danger" id="phoneError"></small>
+                    <input type="text" class="form-control rounded" style="opacity: .7;" id="phoneform-1">
+                    <small class="text-danger" id="phoneErrorform-1"></small>
                 </div>
                 <div class=" col-xl-6" style="height: 95px;">
                     <label for="phone">Tipo de ubicacion</label>
-                    @Html.DropDownList("UbicationCategory", null, "Categorias", new { @class = "form-control", @style = "opacity: 0.7" })
-                    <small class="text-danger" id="categoryError"></small>
+                    @Html.DropDownList("UbicationCategory", null, "Categorias", new { @class = "form-control", @style = "opacity: 0.7", @id = "UbicationCategory" + "form-1" })
+                    <small class="text-danger" id="categoryErrorform-1"></small>
                 </div>
                 <div class="form-group col-12 d-flex flex-wrap p-4 rounded border-light text-center border">
                     <label class="col-12 mb-4" for="inversionRange">Rango de inversion</label><br />
@@ -67,7 +111,7 @@
                     <h5 class="text-light col-12">
                         Te apuntas?
                     </h5>
-                    <button type="button" class="btn btn-success" onclick="validateForm()">De acuerdo!</button>
+                    <button type="button" class="btn btn-success" onclick="validateForm('form-1')">De acuerdo!</button>
                 </div>
             </div>
 
@@ -84,8 +128,83 @@
     </h6>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" sty role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="background-color:rgba(0,0,0,.4)">
+        <div class="modal-content" style="background-color:rgba(0,0,0,.4)">
+            <div class="modal-header col-12 text-center form-header flex-wrap d-flex mb-4 p-4 text-light" id="form-header">
+                <h4 class=" form-header d-flex">
+                    <strong> Dejanos tu contacto y haremos <br /> todo mas simple por vos.</strong>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="text-white" aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class=" form-1 d-flex flex-wrap text-white" id="form-2">
+                    <div class="d-flex flex-wrap">
+
+                        <div class="col-xl-6 m-0" style="height: 95px;">
+                            <label for="name">Nombre</label>
+                            <input type="text" class="form-control rounded" style="opacity: .7;" id="nameform-2">
+                            <small class="text-danger" id="nameErrorform-2"></small>
+                        </div>
+                        <div class="col-xl-6 m-0" style="height: 95px;">
+                            <label for="Email">Correo</label>
+                            <input type="email" class="form-control rounded" style="opacity: .7;" id="mailform-2">
+                            <small class="text-danger" id="mailErrorform-2"></small>
+                        </div>
+                        <div class="col-xl-6 m-0" style="height: 95px;">
+                            <label for="phone">Telefono</label>
+                            <input type="text" class="form-control rounded" style="opacity: .7;" id="phoneform-2">
+                            <small class="text-danger" id="phoneErrorform-2"></small>
+                        </div>
+                        <div class=" col-xl-6" style="height: 95px;">
+                            <label for="phone">Tipo de ubicacion</label>
+                            @Html.DropDownList("UbicationCategory", null, "Categorias", new { @class = "form-control", @style = "opacity: 0.7", @id = "UbicationCategory" + "form-2" })
+                            <small class="text-danger" id="categoryErrorfprm-2"></small>
+                        </div>
+                        <div class="form-group col-12 d-flex flex-wrap p-4 rounded border-light text-center border">
+                            <label class="col-12 mb-4" for="inversionRange">Rango de inversion</label><br />
+                            <label class="col-12">Desde</label>
+                            <div class="col-12 d-flex justify-content-center">
+                                <select class="form-control col-6 dpl-form" style="opacity: .7;" onchange="rangeValue(this.value)" id="rangeFrom">
+                                    @for (int i = 10; i < 62; i += 2)
+                                    {
+                                        <option value="@i">¢@i,000,000</option>
+                                    }
+                                </select>
+                            </div>
+                            <label class="col-12">Hasta</label>
+                            <div class="col-12 d-flex justify-content-center">
+                                <select class="form-control col-6 dpl-form" style="opacity: .7;" id="rangeTo">
+                                    @for (int i = 20; i < 62; i += 2)
+                                    {
+                                        <option value="@i">¢@i,000,000</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 d-flex flex-wrap justify-content-center text-center">
+                            <h5 class="text-light col-12">
+                                Te apuntas?
+                            </h5>
+                            <button type="button" class="btn btn-success" onclick="validateForm('form-2')">De acuerdo!</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @*ProductList*@
-<div class="d-flex flex-wrap" id="product-container">
+<div class="d-flex flex-wrap product-container" id="product-container">
     <div class="col-md-12 text-center text-capitalize index-items-title-container font-weight-bold">
         <h2 class="index-items-title">
             Nuestros  productos
@@ -103,7 +222,7 @@
     </div>
     <br />
     <br />
-    <div class="col-md-12 d-flex flex-wrap index-article-container" id="IndexArticleList">
+    <div class="col-md-12 d-flex flex-wrap index-article-container justify-content-center" id="IndexArticleList">
         @Html.Partial("IndexArticleList")
 
     </div>
@@ -112,7 +231,7 @@
 
 @*aboutus*@
 <div style="background-color: #fff;" id="aboutUs">
-    <div class="conocenos-animation">
+    <div class="conocenos-animation" id="conocenos-animation">
         <div class="pt-5 d-flex justify-content-center ">
             <img class="rounded" src="~/Images/logo2.png" style="height:200px;" />
         </div>
@@ -141,13 +260,19 @@
 
         <div class="col-md-12 p-5 d-flex flex-wrap" style="background-color:#fff; transform: translate(-980px, 0px); transition: 2s; " id="experience">
 
+            <div class="col-md-4 experience-mobile">
+                <h2 class="index-items-title text-light m-4">
+                    Experiencia
+                </h2>
+            </div>
+
             <div class="col-md-8 index-meeting-body">
                 <p>
                     Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
 
                 </p>
             </div>
-            <div class="col-md-4 index-meeting-header">
+            <div class="col-md-4  experience-desktop">
                 <h2 class="index-items-title text-light m-4">
                     Experiencia
                 </h2>
@@ -157,7 +282,7 @@
 </div>
 
 @*agents*@
-<div class=" d-flex flex-wrap container-fluid pb-3 agents pt-5"  id="Agents">
+<div class=" d-flex flex-wrap container-fluid pb-3 agents pt-5" id="Agents">
     @Html.Partial("Agents")
 </div>
 
@@ -207,6 +332,25 @@
     </div>
 </div>
 
+@*blog*@
+<div class="col-md-12 p-2 d-flex flex-wrap pt-5 mb-5 bg-white">
+
+    <div class="col-md-3">
+
+    </div>
+
+    <div class="col-md-6 flex-wrap d-flex">
+
+        <div class="col-md-12 text-center">
+
+        </div>
+
+        <div class="col-md-12 text-justify">
+
+        </div>
+
+    </div>
+</div>
 <!-- Modal -->
 <div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
     <div class="modal-dialog load-gif m-0" role="document">
@@ -218,22 +362,33 @@
 </div>
 <script>
 
+    function variation() {
+        var ContainerBegin = Containercoords.top + topVent;
+        var productContainerVariation = ContainerBegin < 1062 ? ContainerBegin - 1062 : 1062 - ContainerBegin;
+        var variation = 820 + productContainerVariation;
+
+        return variation;
+    }
+
     window.onscroll = function IsInView() {
+
+
+        //Variables globales
         var html = document.getElementsByTagName("html")[0];
-        var articleToShow = document.getElementsByClassName("item");
-        var headToShow = document.getElementsByClassName("conocenos-animation");
-        var agents =  document.getElementsByClassName("ic");
-        var homeTemplate = document.getElementById("home-template").clientHeight;
-        var fixAnimation = homeTemplate - 940
         var topVent = html.scrollTop;
-        var aboutUs = document.getElementById("aboutUs").clientHeight;
-        var fixAnimationAgents = aboutUs - 1520;
-  
+
+        //animacion articulos
+        var productContainer = document.getElementById("product-container");
+        var productContainercoords = productContainer.getBoundingClientRect();
+        var productContainerBegin = productContainercoords.top + topVent;
+        var productContainerVariation = productContainerBegin < 1062 ? productContainerBegin - 1062 : 1062 - productContainerBegin;
+        var articleToShow = document.getElementsByClassName("item");
+        var productAnimation = 820 + productContainerVariation;
+
 
         for (var i = 0; i < articleToShow.length; i++) {
-            var topElement = articleToShow[i].offsetHeight;
 
-            if (topVent > (820 + fixAnimation)) {
+            if (topVent > productAnimation) {
 
                 articleToShow[i].style.transform = "translate(0, 0)";
                 articleToShow[i].style.opacity = "1";
@@ -241,33 +396,55 @@
             }
 
         }
-        for (var i = 0; i < headToShow.length; i++) {
-            var topElementHead = headToShow[i].offsetHeight;
 
-            if (topVent >  (fixAnimation + 2500)) {
 
-                headToShow[i].style.opacity = "1";
+        //animacion marca
 
-            }
+        var brand = document.getElementById("conocenos-animation");
+        var brandContainercoords = brand.getBoundingClientRect();
+        var brandContainerBegin = brandContainercoords.top + topVent;
+        var brandContainerVariation = brandContainerBegin < 2826 ? brandContainerBegin - 2826 : 2826 - brandContainerBegin;
+        var brandAnimation = 2500 + brandContainerVariation;
 
-            if (topVent > (fixAnimation + 2900)) {
+        if (topVent >  brandAnimation) {
 
-                document.getElementById("history").style.transform = "translate(0, 0)";
-            }
-
-            if (topVent > (fixAnimation + 3200)) {
-
-                document.getElementById("experience").style.transform = "translate(0, 0)";
-            }
+            brand.style.opacity = "1";
 
         }
 
-        for (var i = 0; i < agents.length; i++) {
+        //animacion aboutUs
 
-            if (topVent >  (fixAnimationAgents + 420 + 3850 )) {
+        var aboutUs = document.getElementById("history");
+        var aboutUsContainercoords = aboutUs.getBoundingClientRect();
+        var aboutUsContainerBegin = aboutUsContainercoords.top + topVent;
+        var aboutUsContainerVariation = aboutUsContainerBegin < 3201 ? aboutUsContainerBegin - 3201 : 3201 - aboutUsContainerBegin;
+        var aboutUsAnimation = 2900 + aboutUsContainerVariation;
 
-                agents[i].style.transform = "translateZ(-100px)";
-                agents[i].style.opacity = "1";
+        if (topVent > aboutUsAnimation) {
+
+            aboutUs.style.transform = "translate(0, 0)";
+        }
+
+        if (topVent > 3100 + aboutUsContainerVariation ) {
+
+            document.getElementById("experience").style.transform = "translate(0, 0)";
+        }
+
+        //animacion agents
+
+        var agents = document.getElementById("Agents");
+        var agentsToShow = document.getElementsByClassName("ic");
+        var agentsContainercoords = agents.getBoundingClientRect();
+        var agentsContainerBegin = agentsContainercoords.top + topVent;
+        var agentsContainerVariation = agentsContainerBegin < 4134 ? agentsContainerBegin - 4134 : 4134 - agentsContainerBegin;
+        var agentsAnimation = 3700 + agentsContainerVariation;
+
+        for (var i = 0; i < agentsToShow.length; i++) {
+
+            if (topVent >  agentsAnimation) {
+
+                agentsToShow[i].style.transform = "translateZ(-100px)";
+                agentsToShow[i].style.opacity = "1";
 
             }
 
@@ -289,10 +466,10 @@
     }
 
 
-    function SendForm() {
+    function SendForm(id) {
         window.scrollTo(0, 0);
         $('#exampleModal').modal('show');
-        var form = document.getElementById("form-1");
+        var form = document.getElementById(id);
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("ClientForm","Home")',
@@ -310,7 +487,7 @@
                 .then(function (data) {
                  var response = JSON.parse(data);
                     if (response[0].Value) {
-                        formOk();
+                        formOk(id);
                         $('#exampleModal').modal('hide');
 
                     }
@@ -330,25 +507,71 @@
                return false;
     }
 
-    function formOk() {
-        var formContainer = document.getElementById("form-container");
-        var bgTemplate = document.getElementById("home-template");
-        var formHeader = document.getElementById("form-header");
-        var form = document.getElementById("form-1");
-        var successText = document.getElementById("success-text");
-        var productContainer = document.getElementById("product-container");
-        successText.style.display = "block";
-        bgTemplate.style.height = "700px";
-        formContainer.style.transform = "rotateY(180deg)";
-        formContainer.style.height = "350px";
-        formHeader.style.opacity = "0";
-        form.style.opacity = "0";
-        successText.style.opacity = "1";
-        productContainer.style.marginTop = "390px ";
+    function formOk(id) {
+
+        if (id == "form-1") {
+            var formContainer = document.getElementById("form-container");
+            var bgTemplate = document.getElementById("home-template");
+            var formHeader = document.getElementById("form-header");
+            var form = document.getElementById("form-1");
+            var successText = document.getElementById("success-text");
+            var productContainer = document.getElementById("product-container");
+            successText.style.display = "block";
+            bgTemplate.style.height = "700px";
+            formContainer.style.transform = "rotateY(180deg)";
+            formContainer.style.height = "350px";
+            formHeader.style.opacity = "0";
+            form.style.opacity = "0";
+            successText.style.opacity = "1";
+            productContainer.style.marginTop = "390px ";
+        }
+        else {
+            var btnForm = document.getElementById("formBtn");
+            btnForm.style.opacity = "0";
+            var userRequestInfo = document.getElementById("data-request-user");
+            var greetings = document.getElementById("form-mobile-greetings");
+            greetings.style.display = "flex";
+            userRequestInfo.style.display = "none";
+            $('#exampleModalLong').modal('hide');
+
+        }
+
     }
 
     function gif() {
         $('#exampleModal').modal('show')
+
+    }
+
+        function validateForm(id) {
+        var valMail = /^(?:[^<>()[\].,;:\s@@']+(\.[^<>()[\].,;:\s@@']+)*|'[^\n']+')@@(?:[^<>()[\].,;:\s@@']+\.)+[^<>()[\]\.,;:\s@@']{2,63}$/i;
+        var valPhone = new RegExp("^[0-9]{4}(-)+[0-9]{4}$");
+        var valName = /^[A-Z]+$/i;
+        var name = valName.test(document.getElementById(`name${id}`).value);
+        var mail = valMail.test(document.getElementById(`mail${id}`).value);
+        var phone = valPhone.test(document.getElementById(`phone${id}`).value);
+        var category = document.getElementById(`UbicationCategory${id}`).value;
+        var status = true;
+        if (!name) {
+            document.getElementById("nameError" + id).innerHTML = "*Debe introducir un nombre valido"
+            var status = false;
+        }
+        if (!mail) {
+            document.getElementById("mailError" + id).innerHTML = "*Debe introducir un correo valido"
+            var status = false;
+        }
+        if (!phone) {
+            document.getElementById("phoneError" + id).innerHTML = "*Debe introducir un movil valido"
+            var status = false;
+        }
+        if (!(category > 0)) {
+            document.getElementById("categoryError" + id).innerHTML = "*Debe seleccionar una categoria"
+            var status = false;
+        }
+
+        if (status) {
+            SendForm(id);
+        }
 
     }
 
