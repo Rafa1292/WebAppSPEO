@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html style="min-height: 100%;">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -35,7 +35,7 @@
                     <li class="nav-item active">
                         <a class="nav-link label-brand" href="/">SU PROPIEDAD EN OCCIDENTE <span class="sr-only">(current)</span></a>
                     </li>
-                    @if (!User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -97,7 +97,7 @@
     <div class="footer text-center">
 
         <div class="container-fluid row text-light">
-            <div class="col-xl-3">
+            <div class="col-lg-3">
                 <div class="col-md-12 ">
                     <h4> Contactanos</h4>
                 </div>
@@ -117,7 +117,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-xl-3">
+            <div class="col-lg-3">
                 <div class="col-md-12 ">
                     <h4> Siguenos en:</h4>
                 </div>
@@ -127,7 +127,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-xl-3">
+            <div class="col-lg-3">
                 <div class="col-md-12 ">
                     <h4> Informacion</h4>
                 </div>
@@ -140,7 +140,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-xl-3">
+            <div class="col-lg-3">
                 <div class="col-md-12">
                     <h5>
                         Diseño y desarrollo por:

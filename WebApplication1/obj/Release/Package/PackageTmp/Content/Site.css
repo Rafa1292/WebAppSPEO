@@ -413,12 +413,12 @@ textarea {
     }
 
     .home-template {
-        height: 640px;
+        height: 520px;
     }
 
 
     .product-container {
-        margin-top: 280px;
+        margin-top: 140px;
     }
 
     .form-btn-container {
@@ -495,6 +495,10 @@ textarea {
     .card-header-style {
         min-width: 219px !important;
     }
+
+    .form-mobile {
+        margin-bottom: 160px;
+    }
 }
 
 @media (max-width: 426px) {
@@ -504,14 +508,14 @@ textarea {
 
     .form-mobile {
         background-color: rgba(0,0,0,.7);
-        margin-top: 38px;
+        margin-top: 19px;
         padding: 5px;
         width: 80% !important;
         margin-left: 10%;
     }
 
     .product-container {
-        margin-top: 170px;
+        margin-top: 60px;
     }
 
     .experience-mobile {
@@ -533,9 +537,9 @@ textarea {
 
 
     .form-btn-container {
-        padding-top: 30px !important;
-        padding-left: 10% !important;
-        padding-right: 10% !important;
+        padding-top: 15px !important;
+        padding-left: 5% !important;
+        padding-right: 5% !important;
     }
 
     .home-template {
@@ -565,8 +569,9 @@ textarea {
     }
 
     .form-mobile {
-        font-size: 12px;
+        font-size: 11px;
         margin-top: 8px;
+        margin-bottom: 130px;
     }
 
     .form-control {
@@ -583,6 +588,10 @@ textarea {
         padding-top: 5px !important;
         padding-left: 0% !important;
         padding-right: 0% !important;
+    }
+
+    .form-mobile {
+        margin-bottom: 80px;
     }
 }
 

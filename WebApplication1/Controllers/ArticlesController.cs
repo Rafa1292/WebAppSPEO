@@ -13,9 +13,11 @@ using System.Web.Mvc.Html;
 using System.Web.Helpers;
 using System.Dynamic;
 using Newtonsoft.Json;
+using System.Web.Security;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize (Roles = "Admin")]
     public class ArticlesController : Controller
     {
         private WebApplication1Context db = new WebApplication1Context();
@@ -332,6 +334,8 @@ namespace WebApplication1.Controllers
 
                         db.Terrains.Add(terrain);
                         db.SaveChanges();
+
+  
 
                         article.Currency = articleViewModel.Currency;
                         article.Description = articleViewModel.Description;
