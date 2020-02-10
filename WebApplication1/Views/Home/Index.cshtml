@@ -333,7 +333,7 @@
 </div>
 
 @*blog*@
-<div class="col-md-12 p-2 d-flex flex-wrap pt-5 mb-5 bg-white">
+@*<div class="col-md-12 p-2 d-flex flex-wrap pt-5 mb-5 bg-white">
 
     <div class="col-md-3">
 
@@ -350,7 +350,7 @@
         </div>
 
     </div>
-</div>
+</div>*@
 <!-- Modal -->
 <div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
     <div class="modal-dialog load-gif m-0" role="document">
@@ -381,7 +381,7 @@
         var productContainer = document.getElementById("product-container");
         var productContainercoords = productContainer.getBoundingClientRect();
         var productContainerBegin = productContainercoords.top + topVent;
-        var productContainerVariation = productContainerBegin < 1062 ? productContainerBegin - 1062 : 1062 - productContainerBegin;
+        var productContainerVariation =  productContainerBegin - 1062 ;
         var articleToShow = document.getElementsByClassName("item");
         var productAnimation = 820 + productContainerVariation;
 
@@ -403,7 +403,7 @@
         var brand = document.getElementById("conocenos-animation");
         var brandContainercoords = brand.getBoundingClientRect();
         var brandContainerBegin = brandContainercoords.top + topVent;
-        var brandContainerVariation = brandContainerBegin < 2826 ? brandContainerBegin - 2826 : 2826 - brandContainerBegin;
+        var brandContainerVariation =  brandContainerBegin - 2826 ;
         var brandAnimation = 2500 + brandContainerVariation;
 
         if (topVent >  brandAnimation) {
@@ -417,7 +417,7 @@
         var aboutUs = document.getElementById("history");
         var aboutUsContainercoords = aboutUs.getBoundingClientRect();
         var aboutUsContainerBegin = aboutUsContainercoords.top + topVent;
-        var aboutUsContainerVariation = aboutUsContainerBegin < 3201 ? aboutUsContainerBegin - 3201 : 3201 - aboutUsContainerBegin;
+        var aboutUsContainerVariation =  aboutUsContainerBegin - 3201;
         var aboutUsAnimation = 2900 + aboutUsContainerVariation;
 
         if (topVent > aboutUsAnimation) {
@@ -431,12 +431,16 @@
         }
 
         //animacion agents
+        // 1024    anm inicia  3400 , 
+        // desktop anm inicia : 3721 , div inicia: 4131
+        //mobile    anm inicia : 8072 , div inicia: 8367
+
 
         var agents = document.getElementById("Agents");
         var agentsToShow = document.getElementsByClassName("ic");
         var agentsContainercoords = agents.getBoundingClientRect();
         var agentsContainerBegin = agentsContainercoords.top + topVent;
-        var agentsContainerVariation = agentsContainerBegin < 4134 ? agentsContainerBegin - 4134 : 4134 - agentsContainerBegin;
+        var agentsContainerVariation = agentsContainerBegin - 4134 ;
         var agentsAnimation = 3700 + agentsContainerVariation;
 
         for (var i = 0; i < agentsToShow.length; i++) {

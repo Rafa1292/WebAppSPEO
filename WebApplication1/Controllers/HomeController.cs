@@ -150,8 +150,11 @@ namespace WebApplication1.Controllers
             }
 
 
+            LandingView landingView = new LandingView() {
+                ArticleViewModels = ArticleViewModelPartialList
+            };
 
-            return PartialView("IndexArticleList", ArticleViewModelPartialList);
+            return PartialView("IndexArticleList", landingView);
         }
 
         [HttpGet]
