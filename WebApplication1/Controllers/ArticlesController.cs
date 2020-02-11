@@ -335,10 +335,11 @@ namespace WebApplication1.Controllers
                         db.Terrains.Add(terrain);
                         db.SaveChanges();
 
+
                         IndividualContributor individualContributor = db.IndividualContributors.FirstOrDefault(i => i.Mail == User.Identity.Name);
                         article.Currency = articleViewModel.Currency;
                         article.Description = articleViewModel.Description;
-                        article.IndividualContributorId = 2;
+                        article.IndividualContributorId = individualContributor.IndividualContributorId;
                         article.UbicationId = articleViewModel.UbicationId;
                         article.Code = "A" + terrain.TerrainId;
                         article.State = false;
@@ -393,6 +394,9 @@ namespace WebApplication1.Controllers
                             AddHouse(aux, HouseAuxFeatures, article.Id);
 
                         }
+
+
+
                         db.SaveChanges();
                         transaction.Commit();
                         return RedirectToAction("Index");
