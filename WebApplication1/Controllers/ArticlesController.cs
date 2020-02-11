@@ -339,7 +339,7 @@ namespace WebApplication1.Controllers
                         IndividualContributor individualContributor = db.IndividualContributors.FirstOrDefault(i => i.Mail == User.Identity.Name);
                         article.Currency = articleViewModel.Currency;
                         article.Description = articleViewModel.Description;
-                        article.IndividualContributorId = individualContributor.IndividualContributorId;
+                        article.IndividualContributorId = 4;
                         article.UbicationId = articleViewModel.UbicationId;
                         article.Code = "A" + terrain.TerrainId;
                         article.State = false;
