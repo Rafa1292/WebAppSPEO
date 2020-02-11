@@ -402,7 +402,7 @@ namespace WebApplication1.Controllers
                     {
                         transaction.Rollback();
                         ReloadViewBags(articleViewModel);
-                        ViewBag.error = ex.Message;
+                        ViewBag.error = ex.InnerException;
                         return View(articleViewModel);
                     }
                 }
