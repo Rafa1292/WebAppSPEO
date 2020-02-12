@@ -22,7 +22,7 @@ namespace WebApplication1.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
 
-        public WebApplication1Context() : base("name=WebApplication1Context")
+        public WebApplication1Context() : base("name=SuPropiedadEnOccidente_db")
         {
         }
 
