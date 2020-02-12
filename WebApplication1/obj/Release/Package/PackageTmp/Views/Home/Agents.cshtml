@@ -1,0 +1,67 @@
+﻿@model WebApplication1.Models.LandingView
+
+
+<div class="col-12  text-center mb-3 d-flex flex-wrap justify-content-center align-items-center ">
+    <h2 class="index-items-title text-dark m-4 col-12">
+        Nuestros agentes
+    </h2>
+    <p class="agents-description">
+        in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    </p>
+</div>
+
+@{ 
+            var i = 1;
+
+}
+
+<div class="container-fluid p-3 d-flex flex-wrap  ">
+
+    @foreach (var item in Model.IndividualContributors)
+    {
+        var imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(item.PictureArray));
+
+    <div class="col-md-4 d-flex flex-wrap ic ic-@i">
+        <div class="col-md-12 ic-shadow" >
+
+        </div>
+        <div class="col-md-12 p-0 d-flex justify-content-center ic-picture-container mb-5">
+            <img class="rounded-circle ic-picture-img" src="@imgSrc" alt="Alternate Text" />
+        </div>
+
+
+        <div class="container flex-wrap d-flex justify-content-center text-center p-2 ic-info-container">
+
+            <div class="col-md-12 p-2 d-flex justify-content-center">
+                <h4>
+                    <strong class="">
+                        @item.Name
+                    </strong>
+                </h4>
+            </div>
+
+            <div class="col-md-12 p-2 d-flex justify-content-center">
+                <h5>
+                    <strong class="index-item-price">
+                        @item.PhoneNumber
+                    </strong>
+                </h5>
+            </div>
+
+            <div class="col-md-12 p-2 d-flex justify-content-center ic-mail">
+                <p>
+                    @item.Mail
+                </p>
+            </div>
+        </div>
+    </div>
+
+        if (i == 3)
+        {
+            i = 1;
+        }
+                i++;
+
+    }
+
+</div>

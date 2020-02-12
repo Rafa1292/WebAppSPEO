@@ -1,0 +1,122 @@
+﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="p-4">
+    <div class="justify-content-center d-flex">
+        <h3 class="url-label">Articulos</h3>
+    </div>
+
+    <div class="d-flex mb-2 create-article-btn">
+        @Html.ActionLink("Agregar articulo", "Create", null, new { @class = "btn btn-outline-primary" })
+    </div>
+    <hr />
+    <div class="container-fluid flex-wrap d-flex">
+
+        <div class="col-md-12 d-flex text-center justify-content-center">
+            <label>Filtros:</label>
+        </div>
+
+        <div class="col-md-12 p-2 d-flex  align-items-center article-filter">  
+                <select class="form-control" id="type" onchange="getParamsList(this.value)">
+                    <option selected disabled value="0">Seleccione un tipo</option>
+                    <option value="Ubicacion">Ubicacion</option>
+                    <option value="Estado">Estado</option>
+                    <option value="Asesor">Asesor</option>
+                    <option value="Categoria">Categoria</option>
+                    <option value="Disponibilidad">Disponibilidad</option>
+                </select>
+        </div>
+
+        <div class="col-md-12 p-2 d-flex align-items-center article-filter-option" id="paramFilterContainer">
+                <select class="form-control" id="param" onchange="Filter(false)">
+                    <option selected disabled value="0">Seleccione una opcion</option>
+                </select>
+        </div>
+
+        <div class="col-xl-12  align-items-center d-flex justify-content-center" id="deleteFilterBtn" >
+            <input class="btn btn-outline-danger" type="button" onclick="Filter(true)" value="Eliminar filtros" />
+        </div>
+
+    </div>
+
+    <hr />
+    <div class="container-fluid d-flex flex-wrap justify-content-center" id="articleListContainer">
+        @Html.Partial("articleList")
+    </div>
+</div>
+<script>
+
+    function getParams(paramsList) {
+
+        document.getElementById("param").innerHTML = paramsList;
+        //document.getElementById("paramFilterContainer").classList.remove("d-none");
+        //document.getElementById("paramFilterContainer").classList.add("d-flex");
+        //document.getElementById("deleteFilterBtn").style= "display:flex";
+
+
+    }
+
+    function getParamsList(type) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetParamsList","Articles")',
+                data: {
+                    type: type
+                },
+                cache: false
+            })
+                .then(function (data) {
+                    getParams(data);
+                })
+                .fail(function (data) {
+                    alert('No hay caracteristicas que mostrar!');
+                })
+               return false;
+    }
+
+    function Filter(clean) {
+
+        if (clean) {
+            getArticles("", "");
+            document.getElementById("param").innerHTML = "";
+            //document.getElementById("paramFilterContainer").classList.add("d-none");
+            //document.getElementById("paramFilterContainer").classList.remove("d-flex");
+            //document.getElementById("deleteFilterBtn").style= "display:none";
+
+            var type = document.getElementById("type").value = 0;
+
+        }
+        else {
+            var type = document.getElementById("type").value;
+            var param = document.getElementById("param").value;
+            getArticles(type, param);
+        }
+    }
+
+        function getArticles(type, param) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetArticles","Articles")',
+                data: {
+                    type: type,
+                    param: param
+                },
+                cache: false
+            })
+                .then(function (data) {
+                    var element = document.getElementById("articleListContainer");
+                    element.innerHTML = data;
+                })
+                .fail(function (data) {
+                    alert('No hay caracteristicas que mostrar!');
+                })
+               return false;
+        }
+
+
+</script>

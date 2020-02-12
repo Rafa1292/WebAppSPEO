@@ -153,5 +153,3 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.Schema.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.Schema.xml
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Owin.Security.Facebook.dll
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Owin.Security.Facebook.xml

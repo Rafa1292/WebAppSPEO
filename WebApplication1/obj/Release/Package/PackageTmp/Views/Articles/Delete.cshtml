@@ -1,0 +1,95 @@
+﻿@model WebApplication1.ViewModel.ArticleViewModel
+
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+
+<div class="p-2">
+    <div class="justify-content-center d-flex">
+        <h3 class="url-label">Articulos</h3>
+    </div>
+
+    <hr />
+    <div class="justify-content-center d-flex text-center">
+        <div class="p-3">
+            <h5>
+                Si eliminas este articulo no sera posible recuperarlo.
+            </h5>
+        </div>
+    </div>
+    <hr />
+
+
+    <div class="justify-content-center container-fluid p-0 d-flex flex-wrap text-center">
+
+        <div class="col-md-2  justify-content-center my-2 p-1">
+            <strong class="col-md-12">
+                Foto
+            </strong>
+            <div class="col-md-12">
+                @{
+                    var base64 = Model.OutstandingPicture;
+                    var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+
+                    <img class="rounded-circle" src="@imgSrc" style="width:90px; height: 90px;">
+                }
+            </div>
+        </div>
+
+        <div class="col-md-2 justify-content-center my-2 p-1">
+            <strong class="col-md-12">
+                Codigo
+            </strong>
+            <div class="col-md-12">
+                @Html.DisplayFor(modelItem => Model.Article.Code)
+
+            </div>
+
+        </div>
+        <div class="col-md-2 justify-content-center my-2 d-flex p-1 flex-wrap">
+            <strong class="col-md-12">
+                @Html.DisplayNameFor(model => model.Article.OwnerName)
+            </strong>
+            <div class="col-md-12">
+                @Html.DisplayFor(modelItem => Model.Article.OwnerName)
+
+            </div>
+
+        </div>
+        <div class="col-md-3 justify-content-center my-2 d-flex p-1 flex-wrap">
+            <strong class="col-md-12">
+                Contacto
+            </strong>
+            <div class="col-md-12">
+                @Html.DisplayFor(modelItem => Model.Article.OwnerPhone)
+
+            </div>
+
+        </div>
+        <div class="col-md-3 justify-content-center my-2 d-flex p-1 flex-wrap">
+            <strong class="col-md-12">
+                Enlistada por:
+            </strong>
+            <div class="col-md-12">
+                @Html.DisplayFor(modelItem => Model.Article.IndividualContributor.Name)
+
+            </div>
+
+        </div>
+    </div>
+    <hr />
+    <div class="justify-content-center container d-flex text-center">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Borrar" class="btn btn-danger" />
+                <a href="/Articles" class="btn btn-outline-secondary">Regresar</a>
+            </div>
+        }
+    </div>
+</div>
