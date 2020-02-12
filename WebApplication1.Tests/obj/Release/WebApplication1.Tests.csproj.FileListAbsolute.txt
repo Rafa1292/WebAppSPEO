@@ -29,7 +29,6 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Releas
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\EntityFramework.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Owin.Security.Cookies.dll
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Owin.Security.Facebook.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\System.Web.Http.WebHost.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Owin.Host.SystemWeb.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\WebGrease.dll
@@ -57,7 +56,6 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Releas
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.AspNet.Identity.EntityFramework.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\EntityFramework.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Owin.Security.Cookies.xml
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Owin.Security.Facebook.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\System.Web.Http.WebHost.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Owin.Host.SystemWeb.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Owin.Security.OAuth.xml
