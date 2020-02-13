@@ -400,6 +400,7 @@
     <Content Include="Content\bootstrap\bootstrap.scss" />
     <Content Include="Content\bootstrap\bootstrap-reboot.scss" />
     <Content Include="Content\bootstrap\bootstrap-grid.scss" />
+    <None Include="Properties\PublishProfiles\SPEOwebApp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\supropiedadenoccidente - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\SuPropiedadEnOccidente - Web Deploy1.pubxml" />
     <None Include="Properties\PublishProfiles\SuPropiedadEnOccidente - Web Deploy2.pubxml" />
