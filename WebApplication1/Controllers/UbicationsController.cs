@@ -15,6 +15,8 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize(Roles = "Create")]
+
     public class UbicationsController : Controller
     {
         private WebApplication1Context db = new WebApplication1Context();
@@ -252,6 +254,7 @@ namespace WebApplication1.Controllers
             return View(ubication);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Ubications/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

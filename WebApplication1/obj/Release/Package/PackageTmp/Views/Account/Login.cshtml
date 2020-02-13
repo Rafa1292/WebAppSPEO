@@ -5,11 +5,12 @@
 }
 
 <div class="d-flex flex-wrap justify-content-center p-3  text-white" style="background-color: black; min-height: 80vh;">
-    <h2 > Iniciar sesión </h2>
-    <div class="col-md-12 ">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
         <section class="d-flex flex-wrap justify-content-center" id="loginForm">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
+                <h2> <strong>Iniciar sesión</strong></h2>
+
                 @Html.AntiForgeryToken()
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -42,9 +43,9 @@
                 </div>
 
                 @* Habilite esta opción una vez tenga la confirmación de la cuenta habilitada para la funcionalidad de restablecimiento de contraseña
-                    <p>
-                        @Html.ActionLink("¿Ha olvidado su contraseña?", "ForgotPassword")
-                    </p>*@
+            <p>
+                @Html.ActionLink("¿Ha olvidado su contraseña?", "ForgotPassword")
+            </p>*@
             }
         </section>
     </div>

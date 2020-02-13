@@ -90,6 +90,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: TerrainFeatures/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -106,6 +107,7 @@ namespace WebApplication1.Controllers
 
         // POST: TerrainFeatures/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
