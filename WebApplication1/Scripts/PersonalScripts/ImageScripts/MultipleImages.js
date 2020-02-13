@@ -105,7 +105,7 @@ function createThumbnail(input, iterator, thumbnail_id) {
 
     var closeButton = createCloseButton(thumbnail_id);
 
-    imageContainer.classList.add('col-xs-2', 'my-2', 'd-flex');// definen estilos de contenedor
+    imageContainer.classList.add('col-md-3', 'my-2', 'd-flex', 'justify-content-center');// definen estilos de contenedor
     imageContainer.setAttribute('name', input.files[iterator].name);// nombre de imagen utilizado para obtener todas las imagenes a la hora de validar.
     imageContainer.setAttribute('id', thumbnail_id);//id utilizado para identificar el contenedor en caso de que se elimine.
     figure.appendChild(thumbnail);

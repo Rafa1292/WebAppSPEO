@@ -7,16 +7,16 @@
 
 
 
-        <ul class="nav navbar-nav navbar-right">
-            <li>
+        <div class="nav navbar-nav navbar-right container flex-nowrap">
+            <div class="col-xs-8">
                 @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "btn-outline-light btn" })
-            </li>
-            <li>
+            </div>
+            <div class="col-xs-4">
                 <a class=" btn-outline-light p-3 m-3" style="font-size: 25px;" href="javascript:document.getElementById('logoutForm').submit()">
                     <i class="fas fa-walking mx-1"></i>
                 </a>
-            </li>
-        </ul>
+            </div>
+        </div>
     }
 }
 else

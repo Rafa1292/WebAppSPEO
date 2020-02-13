@@ -17,8 +17,9 @@ namespace WebApplication1.Controllers
         // GET: Distrits
         public ActionResult Index()
         {
-            var distrits = db.Distrits.Include(d => d.Canton);
-            return View(distrits.ToList());
+            ViewBag.Distrits = db.Distrits.ToList();
+            var Cantons = db.Cantons.ToList();
+            return View(Cantons);
         }
 
         // GET: Distrits/Details/5
