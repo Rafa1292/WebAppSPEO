@@ -3,73 +3,55 @@
 @{
     ViewBag.Title = "Index";
 }
+<div class="p-4">
 
-<div class="justify-content-center d-flex">
-    <h3 class="url-label">Clientes</h3>
+    <div class="justify-content-center d-flex">
+        <h3 class="url-label">Clientes</h3>
+    </div>
+
+    <div class="d-flex mb-2">
+        @*@Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-outline-primary" })*@
+    </div>
+    <hr />
+
+
+
+    <div class="container-fluid d-flex flex-wrap p-2">
+
+        @foreach (var item in Model)
+        {
+            var actualState = 1;
+            var stateName = "Lead";
+
+            <div class="col-md-3 d-flex m-2 flex-wrap p-0  text-center  border-secondary rounded text-center shadow-lg">
+                <div class="col-md-12 p-2 text-white" style="background-color: rgba(0,0,0,.6);">
+                    <strong>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </strong>
+                </div>
+                <div class="col-md-12 p-2 text-break">
+                    @Html.DisplayFor(modelItem => item.Mail)
+                </div>
+                <div class="col-md-12 p-2">
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </div>
+                <div class="col-md-12 p-2">
+                    @foreach (var state in ViewBag.CLientStateAction)
+                    {
+                        if (item.ClientId == state.ClientId && state.StateActionState.ClientStateId > actualState)
+                        {
+                            stateName = state.StateActionState.ClientState.Name;
+                        }
+                    }
+                    <label><strong>@stateName</strong></label>
+
+                </div>
+
+                <div class="col-md-12 d-flex p-4 flex-wrap justify-content-center ">
+                    @Html.ActionLink("Editar", "Edit", new { id = item.ClientId }, new { @class = "btn btn-outline-info" })
+                    @Html.ActionLink("Borrar", "Delete", new { id = item.ClientId }, new { @class = "btn btn-outline-danger delete-button" })
+                </div>
+            </div>
+        }
+    </div>
 </div>
-
-<div class="d-flex mb-2">
-    @Html.ActionLink("Agregar", "Create", null, new { @class = "btn btn-outline-primary" })
-</div>
-<hr />
-
-<div class="container row d-flex text-center">
-    <div class="col-md-2 ">
-        <strong>
-            @Html.DisplayNameFor(model => model.Name)
-        </strong>
-    </div>
-    <div class="col-md-2 ">
-        <strong>
-            @Html.DisplayNameFor(model => model.Mail)
-        </strong>
-    </div>
-    <div class="col-md-2 ">
-        <strong>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </strong>
-    </div>
-    <div class="col-md-2 ">
-        <strong>
-            <label>Estado actual</label>
-        </strong>
-    </div>
-</div>
-<hr />
-
-
-
-@foreach (var item in Model)
-{
-    var actualState = 1;
-    var stateName = "Lead";
-    <div class="container row d-flex mb-3  text-center">
-        <div class="col-md-2 ">
-            @Html.DisplayFor(modelItem => item.Name)
-        </div>
-        <div class="col-md-2 ">
-            @Html.DisplayFor(modelItem => item.Mail)
-        </div>
-        <div class="col-md-2 ">
-            @Html.DisplayFor(modelItem => item.PhoneNumber)
-        </div>
-        <div class="col-md-2 ">
-            @foreach (var state in ViewBag.CLientStateAction)
-            {
-                if (item.ClientId == state.ClientId && state.StateActionState.ClientStateId > actualState)
-                {
-                    stateName = state.StateActionState.ClientState.Name;
-                }
-            }
-            <label><strong>@stateName</strong></label>
-
-        </div>
-
-        <div class="col-md-2 ">
-            @Html.ActionLink("Editar", "Edit", new { id = item.ClientId }, new { @class = "btn btn-outline-info" })
-            @Html.ActionLink("Borrar", "Delete", new { id = item.ClientId }, new { @class = "btn btn-outline-danger delete-button" })
-        </div>
-    </div>
-}
-
-<hr />

@@ -4,13 +4,13 @@
 <h4>Seguimiento</h4>
 <hr />
 <div class="form-group">
-    <div class="col-md-12 d-flex flex-wrap">
+    <div class="col-md-12 d-flex flex-wrap justify-content-center">
         @foreach (var state in ViewBag.States)
         {
             if (state.ClientStateId == ViewBag.ActualState)
             {
-                <label class="col-4">Estado actual: <strong>@state.Name</strong></label>
-                <select class="form-control" onchange='AddAction(this.value)'>
+                <label class="col-12">Estado actual: <strong>@state.Name</strong></label>
+                <select class="form-control m-2" onchange='AddAction(this.value)'>
                     <option selected disabled>Agregar accion</option>
 
                     @foreach (var ActionState in state.StateActionState)
@@ -19,7 +19,7 @@
                         <option class="col-12" value="@ActionState.StateActionStateId">@content</option>
                     }
                 </select>
-                <button type="button" class="btn btn-success ml-3" data-toggle="modal" data-target="#Bitacora">
+                <button type="button" class="btn btn-success m-2" data-toggle="modal" data-target="#Bitacora">
                     Bitacora
                 </button>
                 <table class="table mt-3 text-center">
