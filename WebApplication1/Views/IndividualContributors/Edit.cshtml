@@ -3,88 +3,88 @@
 @{
     ViewBag.Title = "Edit";
 }
+    <div class="p-4">
+        <div class="justify-content-center d-flex">
+            <h3 class="url-label">Colaboradores</h3>
+        </div>
 
-<div class="justify-content-center d-flex">
-    <h3 class="url-label">Colaboradores</h3>
-</div>
+        @using (Html.BeginForm("Edit", "IndividualContributors", FormMethod.Post, new { enctype = "multipart/form-data", @id = "Form" }))
+        {
+            @Html.AntiForgeryToken()
 
-@using (Html.BeginForm("Edit", "IndividualContributors", FormMethod.Post, new { enctype = "multipart/form-data", @id = "Form" }))
-{
-    @Html.AntiForgeryToken()
+            <div class="form-horizontal ">
+                <h4>Editar colaborador</h4>
+                <hr />
 
-    <div class="form-horizontal">
-        <h4>Editar colaborador</h4>
-        <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.IndividualContributorId)
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.IndividualContributorId)
+                <div class="form-group">
+                    <label class="control-label col-md-2 p-0">Foto</label>
+                    <div class="col-md-12 d-flex flex-wrap ">
+                        <div class="col-md-1 d-flex" style="min-width: 120px;">
+                            <label for="pickImage" class="image-label-style mt-0 px-0" style="width:120px !important; height:120px;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
+                            <input id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+                        </div>
+                        <div class="col-md-3 d-flex" id="imagePreview">
+                            @{
+                                var base64 = Convert.ToBase64String(Model.PictureArray);
+                                var imgSrc = String.Format("data:image/jpeg;base64,{0}", base64);
 
-        <div class="form-group">
-            <label class="control-label col-md-2">Foto</label>
-            <div class="col-md-12 row">
-                <div class="col-md-1">
-                    <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
-                    <input id="pickImage" type="file" name="imageload" style="display: none" onchange="showPreview(event)" />
+                            }
+                            <img class="thumbnail foto.jpg" src="@imgSrc" id="foto.jpg">
+                            <i id="foto.jpg" class="fas fa-times-circle close-button-style foto.jpg" aria-hidden="true"></i>
+                            <input name="url" class="input" style="display: none;" id="foto.jpg" type="text" value="@base64">
+
+                        </div>
+                        <div class="col-md-12">
+                            <span class="text-danger field-validation-error" id="ImageError">
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-1 d-flex" id="imagePreview">
-                    @{
-                        var base64 = Convert.ToBase64String(Model.PictureArray);
-                        var imgSrc = String.Format("data:image/jpeg;base64,{0}", base64);
 
-                    }
-                    <img class="thumbnail foto.jpg" src="@imgSrc" id="foto.jpg">
-                    <i id="foto.jpg" class="fas fa-times-circle close-button-style foto.jpg" aria-hidden="true"></i>
-                    <input name="url" class="input" style="display: none;" id="foto.jpg" type="text" value="@base64">
-
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="col-md-12">
-                    <span class="text-danger field-validation-error" id="ImageError">
-                    </span>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Identification, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Identification, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Identification, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" onclick="formValidation()" value="Guardar cambios" class="btn btn-success my-2" />
+                        <a href="/IndividualContributors" class="btn btn-outline-secondary">Regresar</a>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Identification, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Identification, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Identification, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Mail, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Mail, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="button" onclick="formValidation()" value="Guardar cambios" class="btn btn-success" />
-                <a href="/IndividualContributors" class="btn btn-outline-secondary">Regresar</a>
-            </div>
-        </div>
+        }
     </div>
-}
-
 
 
 @section Scripts {
