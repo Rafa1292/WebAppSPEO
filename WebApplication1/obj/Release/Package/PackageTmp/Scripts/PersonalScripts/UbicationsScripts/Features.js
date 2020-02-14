@@ -123,7 +123,7 @@ function drawSelectedOptions() {
     }
 
     for (var i = 0; i < Features.length; i++) {
-        content += "<li class=\"list-group-item-success list-group-item\" id= \"" + Features[i] + "\" >" + Features[i] + "</li>"
+        content += "<li class=\"list-group-item-success m-2 list-group-item\" id= \"" + Features[i] + "\" >" + Features[i] + "</li>"
     }
 
     document.getElementById("featuresContent").innerHTML = content;

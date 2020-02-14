@@ -72,8 +72,8 @@
 
             <div class="form-group col-lg-3">
                 @Html.LabelFor(model => model.Article.Price, htmlAttributes: new { @class = "control-label col-md-6" })
-                <div class="col-md-12 ">
-                    <div class="input-group-prepend">
+                <div class="col-md-12 container-fluid">
+                    <div class="input-group-prepend col-xs-2">
                         <select class="input-group-text" id="Currency" name="Currency">
                             @{
                                 var dollarState = ViewBag.Currency == "$" ? "selected" : "";
@@ -82,7 +82,9 @@
                             <option @dollarState value="$">$</option>
                             <option @colonState value="¢">¢</option>
                         </select>
-                        @Html.EditorFor(model => model.Article.Price, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, 0, `Debes incluir un precio valido`)" } })
+                        <div class="col-xs-8">
+                            @Html.EditorFor(model => model.Article.Price, new { htmlAttributes = new { @class = "form-control", @style = "max-width: 225px;", @onchange = "validateItem(this.id, 0, `Debes incluir un precio valido`)" } })
+                        </div>
                     </div>
                 </div>
                 <span id="errorArticle_Price" class="text-danger col-md-12"></span>
@@ -105,19 +107,19 @@
             </div>
 
             @*<div class="form-group col-lg-3">
-                @Html.LabelFor(model => model.Article.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-8" })
-                <div class="col-md-12">
-                    <select name="IndividualContributorId" id="IndividualContributorId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
-                        <option selected disabled>Seleccione una ubicacion</option>
-                        @foreach (var colaborator in ViewBag.IndividualContributorId)
-                        {
-                            var selectedOption = ViewBag.SelectedColaborator != null && ViewBag.SelectedColaborator == Int32.Parse(colaborator.Value) ? "selected" : "";
-                            <option @selectedOption value="@colaborator.Value">@colaborator.Text</option>
-                        }
-                    </select>
-                </div>
-                <span id="errorIndividualContributorId" class="text-danger col-md-12"></span>
-            </div>*@
+                    @Html.LabelFor(model => model.Article.IndividualContributorId, "Enlistado por:", htmlAttributes: new { @class = "control-label col-md-8" })
+                    <div class="col-md-12">
+                        <select name="IndividualContributorId" id="IndividualContributorId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
+                            <option selected disabled>Seleccione una ubicacion</option>
+                            @foreach (var colaborator in ViewBag.IndividualContributorId)
+                            {
+                                var selectedOption = ViewBag.SelectedColaborator != null && ViewBag.SelectedColaborator == Int32.Parse(colaborator.Value) ? "selected" : "";
+                                <option @selectedOption value="@colaborator.Value">@colaborator.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <span id="errorIndividualContributorId" class="text-danger col-md-12"></span>
+                </div>*@
 
             <div class="form-group col-lg-3">
                 @Html.LabelFor(model => model.Article.OwnerName, htmlAttributes: new { @class = "control-label col-md-12" })

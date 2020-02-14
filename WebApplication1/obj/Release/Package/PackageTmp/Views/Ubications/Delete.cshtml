@@ -4,86 +4,88 @@
     ViewBag.Title = "Delete";
 }
 
-<div class="justify-content-center d-flex">
-    <h3 class="url-label">Ubicaciones</h3>
-</div>
+    <div class="p-4">
+        <div class="justify-content-center d-flex">
+            <h3 class="url-label">Ubicaciones</h3>
+        </div>
 
-<div>
-    <hr />
-    <div class="justify-content-center d-flex ">
         <div>
-            <h5>
-                Si eliminas esta ubicacion no sera posible recuperarla.
-            </h5>
-        </div>
-    </div>
-    <hr />
-
-    <div class="justify-content-center d-flex text-center">
-        <div class="col-md-2">
-            <strong>
-                Foto
-            </strong>
-        </div>
-        <div class="col-md-2">
-            <strong>
-                @Html.DisplayNameFor(model => model.Name)
-            </strong>
-        </div>
-        <div class="col-md-2">
-            <strong>
-                <label>Ubicacion</label>
-            </strong>
-        </div>
-    </div>
-    <hr />
-
-    <div class="justify-content-center d-flex text-center">
-        <div class="col-md-2 ">
-            @foreach (var outstandingPicture in ViewBag.Selectedurl)
-            {
-                if (outstandingPicture.UbicationId == Model.UbicationId)
-                {
-                    var base64 = Convert.ToBase64String(outstandingPicture.PictureArray);
-                    var imgSrc = String.Format("data:image/png;base64,{0}", base64);
-
-                    <img class="rounded" src="@imgSrc" style="max-width:180px; height: 120px;">
-                }
-
-            }
-
-        </div>
-        <div class="col-md-2 icAlignStyle">
-            @Html.DisplayFor(modelItem => Model.Name)
-        </div>
-        <div class="col-md-2 icAlignStyle">
-            @foreach (var Distrit in ViewBag.DistritId)
-            {
-                string content = "";
-
-                if (Distrit.DistritId == Model.DistritId)
-                {
-                    foreach (var Canton in ViewBag.CantonId)
-                    {
-                        content += Canton.CantonId == Distrit.CantonId ? Canton.Name + ", " : "";
-                    }
-                    content += Distrit.Name;
-                    <em>@content</em>
-                    break;
-                }
-            }
-        </div>
-    </div>
-    <hr />
-    <div class="justify-content-center d-flex">
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-
-            <div class="form-actions no-color">
-                <input type="submit" value="Borrar" class="btn btn-danger" />
-                <a href="/Ubications" class="btn btn-outline-secondary">Regresar</a>
+            <hr />
+            <div class="justify-content-center d-flex text-center">
+                <div>
+                    <h5>
+                        Si eliminas esta ubicacion no sera posible recuperarla.
+                    </h5>
+                </div>
             </div>
-        }
+            <hr />
+
+            <div class="justify-content-center d-flex text-center">
+                <div class="col-md-2">
+                    <strong>
+                        Foto
+                    </strong>
+                </div>
+                <div class="col-md-2">
+                    <strong>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </strong>
+                </div>
+                <div class="col-md-2">
+                    <strong>
+                        <label>Ubicacion</label>
+                    </strong>
+                </div>
+            </div>
+            <hr />
+
+            <div class="justify-content-center d-flex text-center">
+                <div class="col-md-2 ">
+                    @foreach (var outstandingPicture in ViewBag.Selectedurl)
+                    {
+                        if (outstandingPicture.UbicationId == Model.UbicationId)
+                        {
+                            var base64 = Convert.ToBase64String(outstandingPicture.PictureArray);
+                            var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+
+                            <img class="rounded" src="@imgSrc" style="max-width:180px; max-height: 120px; width: inherit;">
+                        }
+
+                    }
+
+                </div>
+                <div class="col-md-2 icAlignStyle">
+                    @Html.DisplayFor(modelItem => Model.Name)
+                </div>
+                <div class="col-md-2 icAlignStyle">
+                    @foreach (var Distrit in ViewBag.DistritId)
+                    {
+                        string content = "";
+
+                        if (Distrit.DistritId == Model.DistritId)
+                        {
+                            foreach (var Canton in ViewBag.CantonId)
+                            {
+                                content += Canton.CantonId == Distrit.CantonId ? Canton.Name + ", " : "";
+                            }
+                            content += Distrit.Name;
+                            <em>@content</em>
+                            break;
+                        }
+                    }
+                </div>
+            </div>
+            <hr />
+            <div class="justify-content-center d-flex">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Borrar" class="btn btn-danger" />
+                        <a href="/Ubications" class="btn btn-outline-secondary">Regresar</a>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
-</div>

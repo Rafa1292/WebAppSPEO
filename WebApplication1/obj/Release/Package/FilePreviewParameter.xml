@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="SPEOwebApp" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\rvill\\Source\\Repos\\Rafa1292\\WebAppSPEO\\WebApplication1\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\rvill\\Source\\Repos\\Rafa1292\\WebAppSPEO\\WebApplication1\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="defaultconnection-Web.config Connection String" description="" value="data source=.;initial catalog=webapplication1;integrated security=true" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rvill\\Source\\Repos\\Rafa1292\\WebAppSPEO\\WebApplication1\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='defaultconnection']/@connectionString" />
+  </parameter>
+  <parameter name="webapplication1context-Web.config Connection String" description="" value="data source=.;initial catalog=webapplication1; integrated security=true" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\rvill\\Source\\Repos\\Rafa1292\\WebAppSPEO\\WebApplication1\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='webapplication1context']/@connectionString" />
+  </parameter>
+</parameters>

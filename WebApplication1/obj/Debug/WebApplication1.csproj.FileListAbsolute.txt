@@ -190,6 +190,7 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Microsoft.Ow
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Microsoft.Owin.Security.Twitter.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.Schema.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Owin.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Net.Http.Formatting.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Web.Helpers.dll
@@ -202,6 +203,8 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Web.W
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Web.WebPages.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Web.WebPages.Razor.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\WebGrease.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.Schema.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Web.Helpers.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Web.Mvc.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\System.Web.Optimization.xml
@@ -246,7 +249,4 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\es\Microsoft
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.csproj.CopyComplete
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.pdb
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.Schema.dll
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.xml
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Newtonsoft.Json.Schema.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.csprojAssemblyReference.cache
