@@ -421,10 +421,7 @@ textarea {
 }
 
 @media (max-width: 768px) {
-    .thumbnail {
-        width: 150px;
-        height: 150px;
-    }
+
         .form-mobile {
         display: flex;
     }

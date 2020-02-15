@@ -171,14 +171,14 @@
                     </div>
                 </div>
 
-                <div class="col-xs-2 d-flex mb-2 " style="padding-left: 5px">
+                <div class="col-md-3 d-flex mb-2 justify-content-center" style="padding-left: 5px">
                     <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
                     <input multiple id="pickImage" type="file" name="" style="display: none" onchange='showPreview(event,"imagesPreview","urls[]")' />
                 </div>
 
                 @if (ViewBag.urls != null)
                 {
-                    <div class="col-xs-2 my-2 d-flex" id="0">
+                    <div class="col-md-3 my-2 d-flex justify-content-center" id="0">
                         <figure class="figure-style">
                             <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src="data:image/jpeg;base64,@ViewBag.Selectedurl">
                         </figure>
@@ -189,7 +189,7 @@
                     var i = 1;
                     foreach (var url in ViewBag.urls)
                     {
-                        <div class="col-xs-2 my-2 d-flex" id="@i">
+                        <div class="col-md-3 my-2 d-flex justify-content-center" id="@i">
                             <figure class="figure-style">
                                 <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src="data:image/jpeg;base64,@url">
                             </figure>

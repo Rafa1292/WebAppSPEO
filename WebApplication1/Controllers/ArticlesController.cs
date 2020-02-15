@@ -905,7 +905,7 @@ namespace WebApplication1.Controllers
         public House CreateHouse(House house)
         {
             db.Houses.Add(house);
-
+            db.SaveChanges();
             return house;
         }
 

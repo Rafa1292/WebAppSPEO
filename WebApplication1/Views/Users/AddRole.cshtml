@@ -3,29 +3,31 @@
     ViewBag.Title = "AddRole";
 }
 
-<div class="justify-content-center d-flex">
-    <h3 class="url-label">Agregar rol a: @Model.Name</h3>
-</div>
-
-@using (Html.BeginForm("AddRole", "Users", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-
-    @Html.HiddenFor(model => model.UserID)
-
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(model => model.Role.RoleID, "Roles", htmlAttributes: new { @class = "control-label" })
-            <div class="col-md-10">
-                @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Role.RoleID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        @Html.ActionLink("Regresar", "Roles", new { userId = Model.UserID }, new { @class = "btn btn-secondary" })
-        <input type="submit" class="btn btn-outline-success" value=" Agregar" />
+<div class="p-4">
+    <div class="justify-content-center d-flex text-center ">
+        <h3 class="url-label">Agregar rol a: @Model.Name</h3>
     </div>
 
+    @using (Html.BeginForm("AddRole", "Users", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.UserID)
+
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Role.RoleID, "Roles", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Role.RoleID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.ActionLink("Regresar", "Roles", new { userId = Model.UserID }, new { @class = "btn btn-secondary" })
+            <input type="submit" class="btn btn-outline-success" value=" Agregar" />
+        </div>
 
 
-}
+
+    }
+</div>
