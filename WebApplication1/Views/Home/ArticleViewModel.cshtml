@@ -26,9 +26,9 @@
 
     <div class="col-md-7 mb-5">
         <div class="container-fluid d-flex justify-content-center  flex-wrap">
-            <div class="slider-for mb-5" style="width:600px; height: 500px;">
+            <div class="slider-for mb-5 property-gallery">
                 <div class="">
-                    <img src="@imgPrimary" class="item rounded" />
+                    <img src="@imgPrimary" class="item item-height rounded" />
                 </div>
                 @foreach (var picture in Model.Urls)
                 {
@@ -39,12 +39,11 @@
                 }
             </div>
 
-            <div class="sale-@Model.Article.ArticleKind index-sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">@Model.Article.ArticleKind</span></div>
-            <div class="sale-@Model.Article.ArticleKind index-sale-label-ribbon"></div>
+            <div class="sale-@Model.Article.ArticleKind index-sale-label-body text-capitalize text-center font-weight-bold sale-label-correction"><span class="text-light">@Model.Article.ArticleKind</span></div>
         </div>
 
         <div class="container-fluid d-flex justify-content-center flex-wrap" style="margin-top: -30px;">
-            <div class="slider-nav" style="width: 700px;">
+            <div class="slider-nav slide-gallery" >
 
                 <div class="p-1">
                     <img src="@imgPrimary" class="item-gallery " />
@@ -58,10 +57,10 @@
                 }
             </div>
         </div>
-        <div class="col-12 d-flex flex-wrap mt-5 p-4">
+        <div class="col-12 d-flex flex-wrap mt-5 p-1">
             <div class="text-center col-md-12">
-                <h4 class="p-3 mb-4">
-                    <span class="border-dark border rounded p-2">
+                <h4 class=" mb-4">
+                    <span class="border-dark border rounded p-2 ubication-head-information">
                         @Model.Article.Ubication.UbicationCategory.Name @Model.Article.Ubication.Name
                     </span>
                 </h4>
@@ -89,12 +88,12 @@
             <div class="col-12 p-5 mt-4">
 
                 <div class="container-fluid d-flex justify-content-center  flex-wrap">
-                    <div class="autoplay mb-5" style="width:600px; height: 400px;">
+                    <div class="autoplay mb-5 ubication-gallery">
                         @foreach (var picture in ViewBag.ubicationPictures)
                         {
                             imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(picture.PictureArray));
                             <div class="">
-                                <img src="@imgSrc" class=" rounded" width="600" height="400" />
+                                <img src="@imgSrc" class="item-ubication rounded" width="600" height="400" />
                             </div>
                         }
                     </div>
@@ -109,8 +108,8 @@
     <div class="col-md-5 shadow-lg rounded p-3 flex-wrap d-flex mb-5" style="height:fit-content; background-color: rgba(255, 255, 255, 0.1)">
         <div class="text-center col-md-12">
             <h4 class="border-bottom border-dark p-3 mb-4">
-                <strong>Ficha técnica</strong>
-                <span class="border-dark border rounded p-2">
+                <strong class="property-head-information">Ficha técnica</strong>
+                <span class="border-dark border rounded p-2 property-head-information">
                     @Model.Article.Code
                 </span>
             </h4>

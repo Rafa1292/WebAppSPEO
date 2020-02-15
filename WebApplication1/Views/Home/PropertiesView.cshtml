@@ -3,10 +3,131 @@
 @{
     ViewBag.Title = "PropertiesView";
 }
+<div class="bg-dark position-relative position-fixed" style="z-index:15; width: 100vw; top: 0;">
+    <nav class="navbar navbar-expand-lg navbar-dark nav-style mb-0">
+        <div class="d-flex justify-content-center align-content-center">
+            <div class="bg-light background-brand"></div>
+            <a href="/" class="brand">
 
-<div class="p-4">
+                <img class="brand" src="~/Images/logo2.png" />
+            </a>
+        </div>
 
-    <div class=" d-flex justify-content-center ">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse  navbar-collapse-style" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link label-brand" href="/">SU PROPIEDAD EN OCCIDENTE <span class="sr-only">(current)</span></a>
+                </li>
+                @if (User.IsInRole("Create"))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Ubicaciones
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @Html.ActionLink("Cantones", "Index", "Cantons", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Distritos", "Index", "Distrits", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Categorias de ubicacion", "Index", "UbicationCategories", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Caracteristicas de ubicacion", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
+
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Personas
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @Html.ActionLink("Clientes", "Index", "Clients", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Colaboradores", "Index", "IndividualContributors", null, new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Articulos
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @Html.ActionLink("Caracteristicas de terreno", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Caracteristicas de casa", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Articulos", "Index", "Articles", null, new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+                    if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Seguridad
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Roles", "Index", "Users", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Aprobaciones", "ApproveArticles", "Articles", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                }
+
+            </ul>
+            <div>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-fluid d-flex properties-filter flex-wrap justify-content-center py-3">
+
+    @*<div class="col-12 text-light d-flex justify-content-center mb-2">
+        <label class="px-5 py-2 border border-light rounded font-weight-bold">
+            Filtro
+        </label>
+    </div>*@
+
+    <div class="col-md-3 text-light d-flex flex-nowrap justify-content-center">
+        <div class="col-12 mb-2 justify-content-center d-flex ">
+            <select class="form-control filter-element" id="type" onchange="getParamsList(this.value)">
+                <option selected disabled value="0">Filtrar por</option>
+                <option value="Ubicacion">Ubicacion</option>
+                <option value="Categoria">Categoria</option>
+                <option value="Tamaño">Tamaño</option>
+                <option value="Precio">Precio</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-3 flex-nowrap justify-content-center text-center " style="display: none;" id="currency">
+        <div class="col-12 mb-2 justify-content-center d-flex ">
+            <select class="form-control filter-element" onchange="GetPrices(this.value)">
+                <option selected disabled value="0">Moneda</option>
+                <option value="¢">¢ - Colones</option>
+                <option value="$">$ - Dolares</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-3 text-light d-flex flex-nowrap justify-content-center">
+        <div class="col-12 mb-2 justify-content-center d-flex ">
+            <select class="form-control filter-element" id="option" onchange="Filter(false)">
+                <option selected disabled value="0">Opciones</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-3  d-flex flex-wrap justify-content-center " style="align-content: flex-end;">
+        <div class="mb-2">
+            <button class="btn btn-danger filter-element" type="button" onclick="Filter(true)">
+                Reiniciar filtro
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="p-1">
+
+    <div class=" d-flex justify-content-center properties-head">
         <img class="rounded" src="~/Images/logo2.png" style="height:100px;" />
     </div>
     <div class="justify-content-center text-center p-4 d-flex">
@@ -17,57 +138,9 @@
         </h5>
     </div>
 
-    <div class="container-fluid flex-wrap d-flex">
-        <div class="col-md-2 flex-wrap d-flex p-2 py-4" style="background-color: rgba(0, 0, 0, .4); height: max-content;">
-            <div class="col-12 text-light d-flex justify-content-center mb-2">
-                <label class="px-5 py-2 border border-light rounded font-weight-bold">
-                    Filtro
-                </label>
-            </div>
-            <div class="col-12 text-light d-flex ">
-                <label class="p-2">
-                    Filtrar por:
-                </label>
-            </div>
-            <div class="col-12 mb-2">
-                <select class="form-control" id="type" onchange="getParamsList(this.value)">
-                    <option selected disabled value="0">Seleccionar tipo</option>
-                    <option value="Ubicacion">Ubicacion</option>
-                    <option value="Categoria">Categoria</option>
-                    <option value="Tamaño">Tamaño</option>
-                    <option value="Precio">Precio</option>
-                </select>
-            </div>
-            <div class="col-12 mb-2 " style="display: none;" id="currency">
-                <label class="p-2 col-12 text-light">
-                    Moneda
-                </label>
-                <select class="form-control" onchange="GetPrices(this.value)">
-                    <option selected disabled value="0">Seleccionar moneda</option>
-                    <option value="¢">¢ - Colones</option>
-                    <option value="$">$ - Dolares</option>
+    <div class="container-fluid p-0 flex-wrap d-flex justify-content-center ">
 
-                </select>
-            </div>
-            <div class="col-12 text-light d-flex ">
-                <label class="p-2">
-                    Opciones:
-                </label>
-            </div>
-            <div class="col-12 mb-2">
-                <select class="form-control" id="option" onchange="Filter(false)">
-                    <option selected disabled value="0">Seleccionar Filtro</option>
-                </select>
-            </div>
-
-            <div class="col-12 mb-2 d-flex justify-content-center my-3 p-2 ">
-                <button class="btn btn-danger" type="button" onclick="Filter(true)">
-                    Reiniciar filtro
-                </button>
-            </div>
-        </div>
-
-        <div class="d-flex flex-wrap col-10" id="articleListContainer">
+        <div class="d-flex flex-wrap col-12" id="articleListContainer">
             @Html.Partial("ArticleList")
         </div>
     </div>
@@ -151,6 +224,8 @@
                 })
                     .then(function (data) {
                         getParams(data);
+                                        $('#exampleModal').modal('hide');
+
                     })
                     .fail(function (data) {
                         alert('No hay caracteristicas que mostrar!');
@@ -158,7 +233,7 @@
 
                 return false;
         }
-        
+
                 $('#exampleModal').modal('hide');
 
     }
@@ -168,7 +243,7 @@
 
         if (clean) {
             getArticles("", "");
-            document.getElementById("option").innerHTML = `<option selected disabled value="0">Seleccionar filtro</option>`;
+            document.getElementById("option").innerHTML = `<option selected disabled value="0">Opciones</option>`;
             var type = document.getElementById("type").value = 0;
             document.getElementById("currency").style.display = "none";
         }
