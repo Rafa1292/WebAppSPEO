@@ -48,7 +48,7 @@ namespace WebApplication1.Controllers
 
 
 
-            if (ubication.Name != null && ubication.DistritId > 0 && urls.Length > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
+            if (ubication.Name != null && ubication.DistritId > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
             {
                 using (var transaction = db.Database.BeginTransaction())
                 {
@@ -64,14 +64,18 @@ namespace WebApplication1.Controllers
                         picture.PictureArray = Convert.FromBase64String(outstandingPicture);
                         picture.UbicationId = ubication.UbicationId;
                         Pictures.Add(picture);
-                        foreach (var url in urls)
+                        if (urls != null)
                         {
-                            picture = new UbicationPicture();
-                            picture.OutstandingPicture = false;
-                            picture.PictureArray = Convert.FromBase64String(url);
-                            picture.UbicationId = ubication.UbicationId;
-                            Pictures.Add(picture);
+                            foreach (var url in urls)
+                            {
+                                picture = new UbicationPicture();
+                                picture.OutstandingPicture = false;
+                                picture.PictureArray = Convert.FromBase64String(url);
+                                picture.UbicationId = ubication.UbicationId;
+                                Pictures.Add(picture);
+                            }
                         }
+
 
                         foreach (var feature in ubicationFeatures)
                         {
@@ -127,7 +131,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "UbicationId,Description,Name,DistritId,UbicationCategoryId")] Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
         {
-            if (ubication.Name != null && ubication.DistritId > 0 && urls.Length > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
+            if (ubication.Name != null && ubication.DistritId > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
             {
                 using (var transaction = db.Database.BeginTransaction())
                 {
@@ -139,14 +143,18 @@ namespace WebApplication1.Controllers
 
                         //---------------Pictures section---------------//
                         IQueryable<UbicationPicture> currentPictures = from p in db.UbicationPictures
-                                                                       where p.UbicationId == ubication.UbicationId
+                                                                       where p.UbicationId == ubication.UbicationId 
                                                                        select p;
+
                         //Tenemos la lista de fotos actuales y la foto de portada actual en formato de byte.
                         List<UbicationPicture> currentPicturesList = currentPictures.ToList();
                         UbicationPicture currentOutstandingPicture = currentPicturesList.Find(p => p.OutstandingPicture == true);
 
                         //Tenemos la lista de fotos nuevas y la foto de portada nueva en formato b64.
-                        List<string> newPicturesList = urls.ToList();
+                        
+                            List<string> newPicturesList = urls.ToList();
+
+                        
                         //outstandingPicture = outstandingPicture;
 
                         //<-----------------Foto de portada----------------->//
@@ -174,6 +182,7 @@ namespace WebApplication1.Controllers
                         */
                         DeletePictures(urls, currentPicturesList, outstandingPicture);
                         //---------------End pictures section---------------//
+
 
                         //---------------Features section---------------//
 
@@ -402,28 +411,31 @@ namespace WebApplication1.Controllers
         {
             //Creamos lista que almacenara fotos nuevas para añadirlas a la base de datos
             List<UbicationPicture> picturesToAdd = new List<UbicationPicture>();
-            foreach (var url in urls)
+            if (urls != null)
             {
-                var exists = false;
-                foreach (var currentPicture in currentPicturesList)
+                foreach (var url in urls)
                 {
-                    string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
-                    if (currentPictureBase64 == url)
+                    var exists = false;
+                    foreach (var currentPicture in currentPicturesList)
                     {
-                        exists = true;
+                        string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
+                        if (currentPictureBase64 == url)
+                        {
+                            exists = true;
+                        }
+                    }
+                    if (!exists)
+                    {
+                        UbicationPicture picture = new UbicationPicture();
+                        picture.OutstandingPicture = false;
+                        picture.PictureArray = Convert.FromBase64String(url);
+                        picture.UbicationId = id;
+                        picturesToAdd.Add(picture);
                     }
                 }
-                if (!exists)
-                {
-                    UbicationPicture picture = new UbicationPicture();
-                    picture.OutstandingPicture = false;
-                    picture.PictureArray = Convert.FromBase64String(url);
-                    picture.UbicationId = id;
-                    picturesToAdd.Add(picture);
-                }
+                //Finalizado el ciclo de verificacion procedemos a añadir las nuevas imagenes
+                db.UbicationPictures.AddRange(picturesToAdd);
             }
-            //Finalizado el ciclo de verificacion procedemos a añadir las nuevas imagenes
-            db.UbicationPictures.AddRange(picturesToAdd);
         }
 
         private void DeletePictures(string[] urls, List<UbicationPicture> currentPicturesList, string outstandingPicture)
@@ -435,14 +447,15 @@ namespace WebApplication1.Controllers
                 var noExists = true;
                 //recorremos lista nueva comparando el elemento en ciclo de la lista antigua contra los elementos
                 //de la lista nueva.
-                foreach (var url in urls)
-                {
-                    string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
-                    if (currentPictureBase64 == url || currentPictureBase64 == outstandingPicture)
+
+                    foreach (var url in urls)
                     {
-                        noExists = false;
+                        string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
+                        if (currentPictureBase64 == url || currentPictureBase64 == outstandingPicture)
+                        {
+                            noExists = false;
+                        }
                     }
-                }
                 //si el elemento no existe lo borramos
                 if (noExists)
                 {
