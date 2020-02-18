@@ -153,3 +153,14 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.Schema.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Newtonsoft.Json.Schema.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Azure.KeyVault.Core.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.WindowsAzure.Storage.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Azure.Storage.Common.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Azure.Storage.Blob.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Azure.KeyVault.Core.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.WindowsAzure.Storage.pdb
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.WindowsAzure.Storage.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Azure.Storage.Common.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.Azure.Storage.Blob.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Debug\Microsoft.WindowsAzure.Configuration.xml

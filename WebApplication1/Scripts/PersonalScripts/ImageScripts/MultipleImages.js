@@ -125,6 +125,7 @@ function createThumbnail(input, iterator, thumbnail_id) {
 function createCloseButton(thumbnail_id) {
     var closeButton = document.createElement('i');
     closeButton.setAttribute('id', thumbnail_id);
+    closeButton.setAttribute('onclick', 'deletePicture("'+ thumbnail_id +'");');
     closeButton.classList.add('fas', 'fa-times-circle', 'close-button-style', thumbnail_id);
     return closeButton;
 }
@@ -134,13 +135,9 @@ function createCloseButton(thumbnail_id) {
  * Listener agregado al body que detecta cada click y si este es al boton creado para eliminar la foto
  * toma el id e identifica el elemento que se desea eliminar y lo remueve de la vista.
  */
-document.body.addEventListener('click', function (e) {
-    if (e.target.classList.contains('close-button-style')) {
-        var id = e.target.id;
-        e.target.remove();
-        document.getElementById(id).remove();
-    }
-});
+function deletePicture(id) {
+    document.getElementById(id).remove();
+}
 
 /**
  * Recibe como parametro el archivo tipo file que contiene la imagen y el id del contenedor,

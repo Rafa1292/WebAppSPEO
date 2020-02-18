@@ -1,15 +1,15 @@
-﻿var houseFeatures = new Array();
-var houseAuxFeatures = new Array();
-var terrainFeatures = new Array();
+﻿var Article_houseFeatures = new Array();
+var Article_houseAuxFeatures = new Array();
+var Article_terrainFeatures = new Array();
 
-var selectedTerrainFeatures = document.getElementsByName("TerrainFeatures[]");
-loadFeaturesViewBag(selectedTerrainFeatures, "Terrain");
+var selectedTerrainFeatures = document.getElementsByName("Article_TerrainFeatures[]");
+loadFeaturesViewBag(selectedTerrainFeatures, "Article_Terrain");
 
-var selectedHouseFeatures = document.getElementsByName("HouseFeatures[]");
-loadFeaturesViewBag(selectedHouseFeatures, "House");
+var selectedHouseFeatures = document.getElementsByName("Article_HouseFeatures[]");
+loadFeaturesViewBag(selectedHouseFeatures, "Article_House");
 
-var selectedHouseAuxFeatures = document.getElementsByName("HouseAuxFeatures[]");
-loadFeaturesViewBag(selectedHouseAuxFeatures, "HouseAux");
+var selectedHouseAuxFeatures = document.getElementsByName("Article_HouseAuxFeatures[]");
+loadFeaturesViewBag(selectedHouseAuxFeatures, "Article_HouseAux");
 
 function showFeatures(featureJsonArray) {
 
@@ -54,14 +54,14 @@ function toggleLabel(id, model, name) {
 
 function selectArray(model) {
     switch (model) {
-        case "Terrain":
-            return terrainFeatures;
+        case "Article_Terrain":
+            return Article_terrainFeatures;
             break;
-        case "House":
-            return houseFeatures;
+        case "Article_House":
+            return Article_houseFeatures;
             break;
-        case "HouseAux":
-            return houseAuxFeatures;
+        case "Article_HouseAux":
+            return Article_houseAuxFeatures;
             break;
     }
 }

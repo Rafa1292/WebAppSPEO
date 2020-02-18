@@ -11,7 +11,7 @@ namespace WebApplication1.Models
         [Key]
         public int ArticlePictureId { get; set; }
         public int ArticleId { get; set; }
-        public byte[] PictureArray { get; set; }
+        public string Extension { get; set; }
         public bool OutstandingPicture { get; set; }
     }
 }

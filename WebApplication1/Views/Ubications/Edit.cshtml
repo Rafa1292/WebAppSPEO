@@ -113,20 +113,24 @@
                         </div>
                         @if (ViewBag.urls != null)
                         {
+                            var extension = ViewBag.Selectedurl;
+                            var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", extension);
                             <div class="col-md-3 my-2 justify-content-center d-flex" id="0">
                                 <figure class="figure-style">
-                                    <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src="data:image/jpeg;base64,@ViewBag.Selectedurl">
+                                    <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src="@imgSrc">
                                 </figure>
                                 <i id="0" class="fas fa-times-circle close-button-style 0" aria-hidden="true"></i>
-                                <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="@ViewBag.Selectedurl">
+                                <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="@imgSrc">
                             </div>
 
                             var i = 1;
                             foreach (var url in ViewBag.urls)
                             {
+                                extension = url;
+                                imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", extension);
                                 <div class="col-md-3 my-2 justify-content-center d-flex" id="@i">
                                     <figure class="figure-style">
-                                        <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src="data:image/jpeg;base64,@url">
+                                        <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src="@imgSrc">
                                     </figure>
                                     <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true"></i>
                                     <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@url">

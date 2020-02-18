@@ -34,19 +34,19 @@ function deleteHouseForm(formDeleteBtn) {
 
     if (formDeleteBtn) {
         var form = document.getElementById("houseForm");
-        form.style.display = "none !important";
+        form.style.display = "none";
         var btnInfo = document.getElementById("articleValidateButtonHouse")
         btnInfo.style.display = "none";
-        document.getElementById("HouseFeaturesList").innerHTML = "";
+        document.getElementById("Article_HouseFeaturesList").innerHTML = '<span id="errorArticle_House" class="text-danger col-md-12"></span>';
         houseFeatures = new Array();
         CreateHouseForm = false;
         cleanForm("House");
     } else {
         var form = document.getElementById("houseFormAux");
-        form.style.display = "none !important";
+        form.style.display = "none";
         var btnInfo = document.getElementById("articleValidateButtonHouseAux")
         btnInfo.style.display = "none";
-        document.getElementById("HouseAuxFeaturesList").innerHTML = "";
+        document.getElementById("Article_HouseAuxFeaturesList").innerHTML = '<span id="errorArticle_HouseAux" class="text-danger col-md-12"></span>';
         houseAuxFeatures = new Array();
         CreateHouseFormAux = false;
         cleanForm("HouseAux");

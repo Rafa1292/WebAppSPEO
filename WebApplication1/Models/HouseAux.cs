@@ -8,7 +8,7 @@ namespace WebApplication1.Models
 {
     public class HouseAux
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Debes agregar una Medida de frente")]
         [Display(Name = "Medida de frente")]
@@ -33,5 +33,9 @@ namespace WebApplication1.Models
         [Required(ErrorMessage = "Debes agregar el numero de niveles")]
         [Display(Name = "Niveles")]
         public int LevelsAux { get; set; }
+
+        public int ArticleId { get; set; }
+        public virtual Article Article { get; set; }
+        public ICollection<HouseFeatureHouse> HouseFeaturesHouse { get; set; }
     }
 }

@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Azure.Storage.Blob;
+using Microsoft.Azure.Storage;
+using System.IO;
+using Microsoft.Azure;
+using Newtonsoft.Json;
 using System;
 using System.Activities.Statements;
 using System.Collections.Generic;
@@ -12,6 +16,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Services;
 using WebApplication1.Models;
+
 
 namespace WebApplication1.Controllers
 {
@@ -38,6 +43,25 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        public string AddBlobToStorage(int UbicationId, string b64String)
+        {
+            var fecha = DateTime.Now.ToString("hhmmss");
+            string name = "Foto" + fecha + UbicationId.ToString();
+            byte[] pictureBytes = Convert.FromBase64String(b64String);
+            string keys = CloudConfigurationManager.GetSetting("ConnectionBlob");
+            CloudStorageAccount cuentaAlmacenamiento = CloudStorageAccount.Parse(keys);
+            CloudBlobClient clienteBlob = cuentaAlmacenamiento.CreateCloudBlobClient();
+            CloudBlobContainer container = clienteBlob.GetContainerReference("ubicationpictures");
+            CloudBlockBlob blob = container.GetBlockBlobReference(name);
+
+            using (var stream = new MemoryStream(pictureBytes))
+            {
+                blob.UploadFromStream(stream);
+            }
+            return name;
+
+        }
+
         // POST: Ubications/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -45,9 +69,6 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
         {
-
-
-
             if (ubication.Name != null && ubication.DistritId > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
             {
                 using (var transaction = db.Database.BeginTransaction())
@@ -61,7 +82,7 @@ namespace WebApplication1.Controllers
                         List<UbicationFeatureUbication> Features = new List<UbicationFeatureUbication>();
                         UbicationPicture picture = new UbicationPicture();
                         picture.OutstandingPicture = true;
-                        picture.PictureArray = Convert.FromBase64String(outstandingPicture);
+                        picture.Extension = AddBlobToStorage(ubication.UbicationId, outstandingPicture);
                         picture.UbicationId = ubication.UbicationId;
                         Pictures.Add(picture);
                         if (urls != null)
@@ -70,7 +91,7 @@ namespace WebApplication1.Controllers
                             {
                                 picture = new UbicationPicture();
                                 picture.OutstandingPicture = false;
-                                picture.PictureArray = Convert.FromBase64String(url);
+                                picture.Extension = AddBlobToStorage(ubication.UbicationId, url);
                                 picture.UbicationId = ubication.UbicationId;
                                 Pictures.Add(picture);
                             }
@@ -161,7 +182,7 @@ namespace WebApplication1.Controllers
 
                         /*Comparamos foto actual de portada y foto nueva en caso de que sean iguales no hacemos nada
                          *Para poder comparar necesitamos pasar lo que esta en formato byte a b64.*/
-                        string currentOutstandingPictureBase64 = Convert.ToBase64String(currentOutstandingPicture.PictureArray);
+                        string currentOutstandingPictureBase64 = currentOutstandingPicture.Extension;
 
                         //Procedemos a comparar
                         if (!(outstandingPicture == currentOutstandingPictureBase64))
@@ -339,11 +360,11 @@ namespace WebApplication1.Controllers
             {
                 if (picture.OutstandingPicture)
                 {
-                    outstandingPicture = Convert.ToBase64String(picture.PictureArray);
+                    outstandingPicture = picture.Extension;
                 }
                 else
                 {
-                    var url = Convert.ToBase64String(picture.PictureArray);
+                    var url = picture.Extension;
                     urls.Add(url);
                 }
             }
@@ -383,7 +404,7 @@ namespace WebApplication1.Controllers
             foreach (var currentPicture in currentPicturesList)
             {
                 //Debemos pasar currentPicture a b64 para poder comparar
-                string currentPictureInB64 = Convert.ToBase64String(currentPicture.PictureArray);
+                string currentPictureInB64 = currentPicture.Extension;
                 //comparamos
                 if (currentPictureInB64 == outstandingPicture)
                 {
@@ -401,7 +422,7 @@ namespace WebApplication1.Controllers
             {
                 UbicationPicture picture = new UbicationPicture();
                 picture.OutstandingPicture = true;
-                picture.PictureArray = Convert.FromBase64String(outstandingPicture);
+                picture.Extension = outstandingPicture;
                 picture.UbicationId = id;
                 db.UbicationPictures.Add(picture);
             }
@@ -418,7 +439,7 @@ namespace WebApplication1.Controllers
                     var exists = false;
                     foreach (var currentPicture in currentPicturesList)
                     {
-                        string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
+                        string currentPictureBase64 = currentPicture.Extension;
                         if (currentPictureBase64 == url)
                         {
                             exists = true;
@@ -428,7 +449,7 @@ namespace WebApplication1.Controllers
                     {
                         UbicationPicture picture = new UbicationPicture();
                         picture.OutstandingPicture = false;
-                        picture.PictureArray = Convert.FromBase64String(url);
+                        picture.Extension = url;
                         picture.UbicationId = id;
                         picturesToAdd.Add(picture);
                     }
@@ -450,7 +471,7 @@ namespace WebApplication1.Controllers
 
                     foreach (var url in urls)
                     {
-                        string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
+                        string currentPictureBase64 = currentPicture.Extension;
                         if (currentPictureBase64 == url || currentPictureBase64 == outstandingPicture)
                         {
                             noExists = false;
@@ -469,7 +490,7 @@ namespace WebApplication1.Controllers
         private void reloadViewBags()
         {
             IQueryable<UbicationPicture> OutstandingPictures = from p in db.UbicationPictures
-                                                               where p.OutstandingPicture == true
+                                                               where p.OutstandingPicture == true && p.Extension != null
                                                                select p;
 
 

@@ -303,7 +303,7 @@
             {
                 if (picture.UbicationId == ubication.UbicationId && picture.OutstandingPicture)
                 {
-                    imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(picture.PictureArray));
+                    imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
                 }
             }
 

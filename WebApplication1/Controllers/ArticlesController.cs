@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Microsoft.Azure;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using WebApplication1.Models;
-using System.Web.Script.Serialization;
-using WebApplication1.ViewModel;
 using System.Web.Mvc.Html;
-using System.Web.Helpers;
-using System.Dynamic;
-using Newtonsoft.Json;
-using System.Web.Security;
+using System.Web.Script.Serialization;
+using WebApplication1.Models;
+using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -21,276 +22,16 @@ namespace WebApplication1.Controllers
 
     public class ArticlesController : Controller
     {
-        private WebApplication1Context db = new WebApplication1Context();
+        public WebApplication1Context db = new WebApplication1Context();
 
         // GET: Articles
         public ActionResult Index()
         {
-            var articles = db.Articles.ToList();
 
-
-            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-            foreach (var article in articles)
-            {
-                ArticleViewModel articleViewModel = GetArticleViewModel(article);
-                ArticleViewModelList.Add(articleViewModel);
-            }
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList();
             ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
 
             return View(ArticleViewModelList);
-        }
-
-        public string clasify(int articleId, int kindValue)
-        {
-            Article article = db.Articles.Find(articleId);
-
-            var oportunityListEF = from a in db.Articles
-                                   where a.ArticleKind == EArticleKind.Oportunidad
-                                   select a;
-            var outstandingListEF = from a in db.Articles
-                                    where a.ArticleKind == EArticleKind.Sobresaliente
-                                    select a;
-            var oportunityList = oportunityListEF.ToList();
-            var outstandingList = outstandingListEF.ToList();
-            var previewKind = GetEnumValue(article);
-            var status = false;
-            dynamic result = new ExpandoObject();
-            string newClass = "";
-            switch (kindValue)
-            {
-                case 0:
-                    article.ArticleKind = EArticleKind.Venta;
-                    status = true;
-                    newClass = "Venta";
-                    break;
-                case 1:
-                    if (!(outstandingList.Count() >= 9))
-                    {
-                        article.ArticleKind = EArticleKind.Sobresaliente;
-                        status = true;
-                        newClass = "Sobresaliente";
-
-                    }
-                    break;
-                case 2:
-                    if (!(oportunityList.Count() >= 9))
-                    {
-                        article.ArticleKind = EArticleKind.Oportunidad;
-                        status = true;
-                        newClass = "Oportunidad";
-                    }
-                    break;
-            }
-
-            result.Status = status;
-            result.PreviewKind = previewKind;
-            result.NewClass = newClass;
-            var jsonSerialiser = new JavaScriptSerializer();
-            var json = jsonSerialiser.Serialize(result);
-
-            if (status)
-            {
-                db.Entry(article).State = EntityState.Modified;
-                db.SaveChanges();
-                return json;
-            }
-            else
-            {
-                return json;
-            }
-        }
-
-        public int GetEnumValue(Article article)
-        {
-            EArticleKind eArticleKind = article.ArticleKind;
-            var id = 0;
-
-
-            switch (eArticleKind)
-            {
-                case EArticleKind.Sobresaliente:
-                    id = 1;
-                    break;
-                case EArticleKind.Oportunidad:
-                    id = 2;
-                    break;
-
-            }
-            return id;
-        }
-
-        public List<ArticleViewModel> ArticlesToApprove()
-        {
-            var articlesEF = from a in db.Articles
-                             where !(a.State)
-                             select a;
-            var articles = articlesEF.ToList();
-
-            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-            foreach (var article in articles)
-            {
-                ArticleViewModel articleViewModel = GetArticleViewModel(article);
-                ArticleViewModelList.Add(articleViewModel);
-            }
-            return ArticleViewModelList;
-
-        }
-
-        public ActionResult ApproveArticles()
-        {
-            List<ArticleViewModel> ArticleViewModelList = ArticlesToApprove();
-
-
-            return View(ArticleViewModelList);
-        }
-
-
-        public ActionResult PropertySold(int id, bool state)
-        {
-            Article article = db.Articles.Find(id);
-            article.SoldState = !state;
-            db.Entry(article).State = EntityState.Modified;
-            db.SaveChanges();
-
-            var articles = db.Articles.ToList();
-
-
-            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-            foreach (var item in articles)
-            {
-                ArticleViewModel articleViewModel = GetArticleViewModel(item);
-                ArticleViewModelList.Add(articleViewModel);
-            }
-            ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
-
-            return PartialView("articleList", ArticleViewModelList);
-        }
-
-        public ActionResult ApproveArticle(int id)
-        {
-            Article article = db.Articles.Find(id);
-            article.State = true;
-            db.Entry(article).State = EntityState.Modified;
-            db.SaveChanges();
-            return View("ApproveArticles", ArticlesToApprove());
-        }
-
-        public ActionResult GetArticles(string type, string param)
-        {
-            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-
-            switch (type)
-            {
-                case "Ubicacion":
-                    ArticleViewModelList = FilterUbication(param);
-                    break;
-
-                case "Estado":
-                    ArticleViewModelList = FilterState(param);
-                    break;
-
-                case "Asesor":
-                    ArticleViewModelList = FilterContributor(param);
-                    break;
-
-                case "Categoria":
-                    ArticleViewModelList = FilterCategory(param);
-                    break;
-                case "Disponibilidad":
-                    ArticleViewModelList = Filteravailability(param);
-                    break;
-                default:
-                    var articles = db.Articles.ToList();
-                    ArticleViewModelList = GetArticleViewModelList(articles);
-                    break;
-
-            }
-
-
-            ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
-
-            return PartialView("articleList", ArticleViewModelList);
-        }
-
-        public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
-        {
-
-            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-            foreach (var article in articles)
-            {
-                ArticleViewModel articleViewModel = GetArticleViewModel(article);
-                ArticleViewModelList.Add(articleViewModel);
-            }
-            return ArticleViewModelList;
-
-        }
-
-        public List<ArticleViewModel> FilterUbication(string ubication)
-        {
-
-            var articlesEF = from a in db.Articles
-                             where a.Ubication.Name == ubication
-                             select a;
-            var articles = articlesEF.ToList();
-
-
-            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
-
-            return ArticleViewModelList;
-        }
-
-        public List<ArticleViewModel> Filteravailability(string availability)
-        {
-            var availabilityBool = availability == "Vendida" ? true : false;
-            var articlesEF = from a in db.Articles
-                             where a.SoldState == availabilityBool
-                             select a;
-            var articles = articlesEF.ToList();
-
-            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
-
-            return ArticleViewModelList;
-        }
-
-        public List<ArticleViewModel> FilterState(string state)
-        {
-            var stateBool = state == "Pendiente" ? false : true;
-            var articlesEF = from a in db.Articles
-                             where a.State == stateBool
-                             select a;
-            var articles = articlesEF.ToList();
-
-            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
-
-            return ArticleViewModelList;
-        }
-
-        public List<ArticleViewModel> FilterContributor(string IC)
-        {
-            var articlesEF = from a in db.Articles
-                             where a.IndividualContributor.Name == IC
-                             select a;
-
-            var articles = articlesEF.ToList();
-
-
-            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
-
-            return ArticleViewModelList;
-        }
-
-        public List<ArticleViewModel> FilterCategory(string category)
-        {
-            var articlesEF = from a in db.Articles
-                             where a.Ubication.UbicationCategory.Name == category
-                             select a;
-
-            var articles = articlesEF.ToList();
-
-
-            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
-
-            return ArticleViewModelList;
         }
 
         // GET: Articles/Create
@@ -298,104 +39,128 @@ namespace WebApplication1.Controllers
         {
             ViewBag.houseForm = "none";
             ViewBag.houseAuxForm = "none";
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
-            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
-            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
+            ViewBag.TerrainId = new SelectList(db.Terrains.ToList(), "TerrainId", "Topography");
+            ViewBag.UbicationId = new SelectList(db.Ubications.ToList(), "UbicationId", "Name");
             return View();
         }
-
 
         // POST: Articles/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ArticleViewModel articleViewModel)
+        public ActionResult Create(ArticleViewModel articleViewModel, string[] urls, int[] Article_TerrainFeatures, string outstandingPicture, int[] Article_HouseFeatures,
+            int[] Article_HouseAuxFeatures)
         {
-            HttpFileCollectionBase files = Request.Files;
+            //HttpFileCollectionBase files = Request.Files;
 
 
-            if (articleViewModel.Article != null && articleViewModel.Terrain != null && articleViewModel.Urls.Length > 0
-                && articleViewModel.TerrainFeatures.Length > 0 && articleViewModel.OutstandingPicture != null)
+            if (articleViewModel.Article != null && articleViewModel.Article.Terrain != null && urls.Length > 0
+                && Article_TerrainFeatures.Length > 0 && outstandingPicture != null)
             {
                 Article article = articleViewModel.Article;
-                Terrain terrain = articleViewModel.Terrain;
-                string outstandingPicture = articleViewModel.OutstandingPicture;
-                string[] urls = articleViewModel.Urls;
-                House house = articleViewModel.House;
-                HouseAux houseAux = articleViewModel.HouseAux;
-                int[] terrainFeatures = articleViewModel.TerrainFeatures;
-                int[] HouseFeatures = articleViewModel.HouseFeatures;
-                int[] HouseAuxFeatures = articleViewModel.HouseAuxFeatures;
+                Terrain terrain = article.Terrain;
 
                 using (var transaction = db.Database.BeginTransaction())
                 {
                     try
                     {
-
-                        db.Terrains.Add(terrain);
-                        db.SaveChanges();
-
-
-                        IndividualContributor individualContributor = db.IndividualContributors.FirstOrDefault(i => i.Mail == User.Identity.Name);
-                        article.Currency = articleViewModel.Currency;
-                        article.Description = articleViewModel.Description;
-                        article.IndividualContributorId = individualContributor.IndividualContributorId;
-                        article.UbicationId = articleViewModel.UbicationId;
-                        article.Code = "A" + terrain.TerrainId;
-                        article.State = false;
-                        article.SoldState = false;
-                        article.TerrainId = terrain.TerrainId;
-                        article.CreationDate = DateTime.Now;
-                        article.ArticleKind = EArticleKind.Venta;
-                        db.Articles.Add(article);
-
-                        db.SaveChanges();
-                        AddTerrainFeatures(terrainFeatures, terrain.TerrainId, article.Id);
-
-
-                        for (int i = 0; i < files.Count; i++)
+                        try
                         {
-                            HttpPostedFileBase file = files[i];
-                            if (file != null)
-                            {
-                                SubirArchivo(file, article.Id);
-                            }
+                            db.Terrains.Add(terrain);
+                            db.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            ViewBag.error = "Error al añadir terreno" + ex.InnerException;
+                            return View("ErrorPage");
                         }
 
-                        List<ArticlePicture> Pictures = new List<ArticlePicture>();
-                        ArticlePicture picture = new ArticlePicture();
-                        picture.OutstandingPicture = true;
-                        picture.PictureArray = Convert.FromBase64String(outstandingPicture);
-                        picture.ArticleId = article.Id;
-                        Pictures.Add(picture);
-                        foreach (var url in urls)
+                        try
                         {
-                            picture = new ArticlePicture();
-                            picture.OutstandingPicture = false;
-                            picture.PictureArray = Convert.FromBase64String(url);
+                            IndividualContributor individualContributor = db.IndividualContributors.FirstOrDefault(i => i.Mail == User.Identity.Name);
+                            article.IndividualContributorId = individualContributor.IndividualContributorId;
+                            article.Code = "A" + terrain.TerrainId;
+                            article.State = false;
+                            article.TerrainId = terrain.TerrainId;
+                            article.SoldState = false;
+                            article.CreationDate = DateTime.Now;
+                            article.ArticleKind = EArticleKind.Venta;
+                            db.Articles.Add(article);
+                            db.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            ViewBag.error = "Error al añadir casa" + ex.InnerException;
+                            return View("ErrorPage");
+
+                        }
+
+
+
+                        AddTerrainFeatures(Article_TerrainFeatures, terrain.TerrainId);
+
+
+                        //for (int i = 0; i < files.Count; i++)
+                        //{
+                        //    HttpPostedFileBase file = files[i];
+                        //    if (file != null)
+                        //    {
+                        //        SubirArchivo(file, article.Id);
+                        //    }
+                        //}
+
+                        try
+                        {
+                            List<ArticlePicture> Pictures = new List<ArticlePicture>();
+                            ArticlePicture picture = new ArticlePicture();
+                            picture.OutstandingPicture = true;
+                            picture.Extension = AddBlobToStorage(article.Id, outstandingPicture, 20);
                             picture.ArticleId = article.Id;
                             Pictures.Add(picture);
-                        }
 
-                        db.ArticlePictures.AddRange(Pictures);
-                        if (house.Levels != 0)
+                            var i = 0;
+                            foreach (var url in urls)
+                            {
+                                picture = new ArticlePicture();
+                                picture.OutstandingPicture = false;
+                                picture.Extension = AddBlobToStorage(article.Id, url, i);
+                                picture.ArticleId = article.Id;
+                                Pictures.Add(picture);
+                                i++;
+                            }
+
+
+                            db.ArticlePictures.AddRange(Pictures);
+                            db.SaveChanges();
+                        }
+                        catch (Exception ex)
                         {
-                            AddHouse(house, HouseFeatures, article.Id);
+
+                            ViewBag.error = "Error al añadir fotos" + ex.InnerException;
+                            return View("ErrorPage");
+
                         }
-                        if (houseAux.LevelsAux != 0)
+
+
+
+                        if (articleViewModel.House.HouseForeheadMeasure > 0 && articleViewModel.House.HouseBackgroundMeasure > 0)
                         {
-                            House aux = new House();
-                            aux.Bathrooms = houseAux.BathroomsAux;
-                            aux.Bedrooms = houseAux.BedroomsAux;
-                            aux.Garage = houseAux.GarageAux;
-                            aux.HouseBackgroundMeasure = houseAux.HouseBackgroundMeasureAux;
-                            aux.HouseForeheadMeasure = houseAux.HouseForeheadMeasureAux;
-                            aux.Levels = houseAux.LevelsAux;
-                            AddHouse(aux, HouseAuxFeatures, article.Id);
-
+                            AddHouse(articleViewModel.House, Article_HouseFeatures, article.Id);
                         }
 
+                        if (articleViewModel.HouseAux.HouseForeheadMeasureAux > 0 && articleViewModel.HouseAux.HouseBackgroundMeasureAux > 0)
+                        {
+                            HouseAux houseAux = articleViewModel.HouseAux;
+                            House house = new House();
+                            house.Bathrooms = houseAux.BathroomsAux;
+                            house.Bedrooms = houseAux.BedroomsAux;
+                            house.Garage = houseAux.GarageAux;
+                            house.HouseBackgroundMeasure = houseAux.HouseBackgroundMeasureAux;
+                            house.HouseForeheadMeasure = houseAux.HouseForeheadMeasureAux;
+                            house.Levels = houseAux.LevelsAux;
+                            AddHouse(house, Article_HouseAuxFeatures, article.Id);
+                        }
 
 
                         db.SaveChanges();
@@ -405,6 +170,11 @@ namespace WebApplication1.Controllers
 
                     catch (Exception ex)
                     {
+                        ViewBag.houseForm = "none";
+                        ViewBag.houseAuxForm = "none";
+                        ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
+                        ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
+                        ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
                         transaction.Rollback();
                         ReloadViewBags(articleViewModel);
                         ViewBag.error = ex.InnerException;
@@ -416,219 +186,28 @@ namespace WebApplication1.Controllers
             return View(articleViewModel);
         }
 
-        public void ReloadViewBags(ArticleViewModel model)
-        {
-            ViewBag.houseForm = model.House != null ? "flex" : "none";
-            ViewBag.houseAuxForm = model.HouseAux != null ? "flex" : "none";
-            ViewBag.houseFormBtn = model.House != null && model.HouseAux != null ? "none" : "block";
-            ViewbagFeatures(model.TerrainFeatures, model.HouseFeatures, model.HouseAuxFeatures);
-            ViewBag.Currency = model.Currency;
-            ViewBag.SelectedUbication = model.UbicationId;
-            ViewBag.SelectedColaborator = model.IndividualContributorId;
-            ViewBag.Selectedurl = model.OutstandingPicture;
-            ViewBag.urls = model.Urls;
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
-            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
-            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
-        }
-
-        public void AddHouse(House house, int[] features, int articleId)
-        {
-            house.ArticleId = articleId;
-            db.Houses.Add(house);
-            db.SaveChanges();
-            AddFeatures(features, house.HouseId);
-
-        }
-
-        public void AddFeatures(int[] features, int houseId)
-        {
-            HouseFeatureHouse houseFeatureHouse = new HouseFeatureHouse();
-            foreach (var feature in features)
-            {
-                houseFeatureHouse = new HouseFeatureHouse();
-                houseFeatureHouse.HouseFeatureId = feature;
-                houseFeatureHouse.HouseId = houseId;
-                db.HouseFeatureHouse.Add(houseFeatureHouse);
-            }
-
-        }
-
-        public void AddTerrainFeatures(int[] features, int terrainId, int articleId)
-        {
-            List<TerrainFeatureTerrain> Features = new List<TerrainFeatureTerrain>();
-            foreach (var feature in features)
-            {
-                TerrainFeatureTerrain terrainFeature = new TerrainFeatureTerrain();
-                terrainFeature.TerrainFeatureId = feature;
-                terrainFeature.TerrainId = terrainId;
-                Features.Add(terrainFeature);
-            }
-            db.TerrainFeaturesTerrain.AddRange(Features);
-
-        }
         // GET: Articles/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.error = "El id no es valido";
+                return View("ErrorPage");
             }
             Article article = db.Articles.Find(id);
             if (article == null)
             {
-                return HttpNotFound();
+                ViewBag.error = "El articulo no existe";
+                return View("ErrorPage");
             }
 
-            var filesEF = from f in db.Archivos
-                          where f.ArticleId == id
-                          select f;
-            ViewBag.Files = filesEF.ToList();
+            //var filesEF = from f in db.Archivos
+            //              where f.ArticleId == id
+            //              select f;
+            //ViewBag.Files = filesEF.ToList();
             ArticleViewModel articleViewModel = GetArticleViewModel(article);
             ReloadViewBags(articleViewModel);
             return View(articleViewModel);
-        }
-
-        public ArticleViewModel GetArticleViewModel(Article article)
-        {
-            var pictures = GetPictures(article.Id);
-            string[] urls = pictures.Urls;
-            string outstandingPicture = pictures.OutstandingPicture;
-            var houses = GetHouses(article.Id);
-            House house = houses.House != null ? houses.House : null;
-            HouseAux houseAux = houses.HouseAux != null ? houses.HouseAux : null;
-            ArticleViewModel Features = GetFeatures(article, house, houseAux);
-            int[] terrainFeatures = Features.TerrainFeatures;
-            int[] houseFeatures = Features.HouseFeatures;
-            int[] houseAuxFeatures = Features.HouseAuxFeatures;
-            ArticleViewModel articleViewModel = SetArticleViewModel(article, urls, outstandingPicture, house, houseAux, houseFeatures, houseAuxFeatures, terrainFeatures);
-
-            return articleViewModel;
-        }
-
-        public ArticleViewModel GetFeatures(Article article, House house, HouseAux houseAux)
-        {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-
-            var terrainFeaturesid = from f in db.TerrainFeaturesTerrain
-                                    where f.TerrainId == article.TerrainId
-                                    select f.TerrainFeatureId;
-            ICollection<int> terrainFeatures = new List<int>();
-            foreach (var feature in terrainFeaturesid)
-            {
-                terrainFeatures.Add(feature);
-            }
-
-            articleViewModel.TerrainFeatures = terrainFeatures.ToArray();
-
-
-            var houseFeaturesid = from h in db.HouseFeatureHouse
-                                  where h.HouseId == house.HouseId
-                                  select h.HouseFeatureId;
-
-            if (house != null)
-            {
-                ICollection<int> houseFeatures = new List<int>();
-                foreach (var feature in houseFeaturesid)
-                {
-                    houseFeatures.Add(feature);
-                }
-                articleViewModel.HouseFeatures = houseFeatures.ToArray();
-            }
-
-            var houseAuxFeaturesid = from h in db.HouseFeatureHouse
-                                     where h.HouseId == houseAux.Id
-                                     select h.HouseFeatureId;
-
-            if (houseAux != null)
-            {
-                ICollection<int> houseAuxFeatures = new List<int>();
-                foreach (var feature in houseAuxFeaturesid)
-                {
-                    houseAuxFeatures.Add(feature);
-                }
-                articleViewModel.HouseAuxFeatures = houseAuxFeatures.ToArray();
-
-            }
-
-
-
-            return articleViewModel;
-        }
-
-        public ArticleViewModel GetHouses(int id)
-        {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-
-            IQueryable<House> HouseList = from h in db.Houses
-                                          where h.ArticleId == id
-                                          select h;
-
-            House house = null;
-            HouseAux houseAux = null;
-
-            foreach (var houseResult in HouseList)
-            {
-                if (house == null)
-                {
-                    house = houseResult;
-                }
-                else
-                {
-                    houseAux = new HouseAux();
-                    houseAux.Id = houseResult.HouseId;
-                    houseAux.BathroomsAux = houseResult.Bathrooms;
-                    houseAux.BedroomsAux = houseResult.Bedrooms;
-                    houseAux.GarageAux = houseResult.Garage;
-                    houseAux.HouseBackgroundMeasureAux = houseResult.HouseBackgroundMeasure;
-                    houseAux.HouseForeheadMeasureAux = houseResult.HouseForeheadMeasure;
-                    houseAux.LevelsAux = houseResult.Levels;
-
-                }
-            }
-
-            articleViewModel.House = house;
-            articleViewModel.HouseAux = houseAux;
-
-            return articleViewModel;
-        }
-
-        public ArticleViewModel GetPictures(int id)
-        {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-            List<ArticlePicture> Pictures = db.ArticlePictures.ToList();
-            IEnumerable<string> urls = from p in Pictures
-                                       where p.ArticleId == id && p.OutstandingPicture == false
-                                       select Convert.ToBase64String(p.PictureArray);
-
-            var outstandingPictureModel = Pictures.Find(x => x.OutstandingPicture == true && x.ArticleId == id);
-            string outstandingPicture = Convert.ToBase64String(outstandingPictureModel.PictureArray);
-
-
-            articleViewModel.Urls = urls.ToArray();
-            articleViewModel.OutstandingPicture = outstandingPicture;
-
-            return articleViewModel;
-        }
-
-        public ArticleViewModel SetArticleViewModel(
-            Article article, string[] urls, string outstandingPicture, House house, HouseAux houseAux, int[] houseFeatures, int[] houseAuxFeatures, int[] terrainFeatures)
-        {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-            articleViewModel.Article = article;
-            articleViewModel.Currency = article.Currency;
-            articleViewModel.Description = article.Description;
-            articleViewModel.Terrain = article.Terrain;
-            articleViewModel.UbicationId = article.UbicationId;
-            articleViewModel.IndividualContributorId = article.IndividualContributorId;
-            articleViewModel.Urls = urls;
-            articleViewModel.OutstandingPicture = outstandingPicture;
-            articleViewModel.House = house;
-            articleViewModel.HouseAux = houseAux;
-            articleViewModel.HouseFeatures = houseFeatures;
-            articleViewModel.HouseAuxFeatures = houseAuxFeatures;
-            articleViewModel.TerrainFeatures = terrainFeatures;
-            return articleViewModel;
         }
 
         // POST: Articles/Edit/5
@@ -636,7 +215,8 @@ namespace WebApplication1.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ArticleViewModel articleViewModel)
+        public ActionResult Edit(ArticleViewModel articleViewModel, string[] urls, int[] Article_TerrainFeatures, string outstandingPicture, int[] Article_HouseFeatures,
+            int[] Article_HouseAuxFeatures)
         {
             Article article = db.Articles.Find(articleViewModel.Article.Id);
 
@@ -647,28 +227,27 @@ namespace WebApplication1.Controllers
                 {
                     if (articleViewModel.Article != null)
                     {
+                        article.Currency = articleViewModel.Article.Currency;
+                        article.Description = articleViewModel.Article.Description;
                         article.OwnerName = articleViewModel.Article.OwnerName;
                         article.OwnerPhone = articleViewModel.Article.OwnerPhone;
                         article.Price = articleViewModel.Article.Price;
-                        article.Currency = articleViewModel.Currency;
-                        article.Description = articleViewModel.Description;
-                        article.UbicationId = articleViewModel.UbicationId;
                         article.State = false;
                         db.Entry(article).State = EntityState.Modified;
                     }
 
-                    for (int i = 0; i < files.Count; i++)
+                    //for (int i = 0; i < files.Count; i++)
+                    //{
+                    //    HttpPostedFileBase file = files[i];
+                    //    SubirArchivo(file, article.Id);
+                    //}
+
+                    if (articleViewModel.Article.Terrain != null)
                     {
-                        HttpPostedFileBase file = files[i];
-                        SubirArchivo(file, article.Id);
+                        db.Entry(articleViewModel.Article.Terrain).State = EntityState.Modified;
                     }
 
-                    if (articleViewModel.Terrain != null)
-                    {
-                        db.Entry(articleViewModel.Terrain).State = EntityState.Modified;
-                    }
-
-                    EditTerrainFeatures(articleViewModel.Terrain, articleViewModel.TerrainFeatures);
+                    EditTerrainFeatures(articleViewModel.Article.Terrain, Article_TerrainFeatures);
 
                     articleViewModel.House = articleViewModel.House.Levels > 0 ? articleViewModel.House : null;
                     articleViewModel.HouseAux = articleViewModel.HouseAux.LevelsAux > 0 ? articleViewModel.HouseAux : null;
@@ -696,8 +275,8 @@ namespace WebApplication1.Controllers
                         HouseList.Add(house);
                     }
 
-                    CompareHouses(HouseList, article.Id, articleViewModel.House, house, articleViewModel.HouseFeatures, articleViewModel.HouseAuxFeatures);
-                    UpdatePictures(articleViewModel.Article.Id, articleViewModel.Urls, articleViewModel.OutstandingPicture);
+                    CompareHouses(HouseList, article.Id, articleViewModel.House, house, Article_HouseFeatures, Article_HouseAuxFeatures);
+                    UpdatePictures(articleViewModel.Article.Id, urls, outstandingPicture);
                     db.SaveChanges();
                     transaction.Commit();
 
@@ -712,331 +291,6 @@ namespace WebApplication1.Controllers
             }
 
 
-        }
-
-        public void EditTerrainFeatures(Terrain terrain, int[] terrainFeatures)
-        {
-            //---------------Features section---------------//
-
-            IQueryable<TerrainFeatureTerrain> currentFeatures = from f in db.TerrainFeaturesTerrain
-                                                                where f.TerrainId == terrain.TerrainId
-                                                                select f;
-
-            List<TerrainFeatureTerrain> currentFeaturesList = currentFeatures.ToList();
-
-            foreach (var currentFeature in currentFeaturesList)
-            {
-                var NoExists = true;
-
-                foreach (var feature in terrainFeatures)
-                {
-                    if (currentFeature.TerrainFeatureId == feature)
-                    {
-                        NoExists = false;
-                    }
-                }
-
-                if (NoExists)
-                {
-                    db.TerrainFeaturesTerrain.Remove(currentFeature);
-                }
-            }
-
-
-            foreach (var feature in terrainFeatures)
-            {
-                var Exists = false;
-
-                foreach (var currentFeature in currentFeaturesList)
-                {
-                    if (currentFeature.TerrainFeatureId == feature)
-                    {
-                        Exists = true;
-                    }
-                }
-
-                if (!Exists)
-                {
-                    CreateTerrainFeature(feature, terrain.TerrainId);
-                }
-            }
-        }
-
-        public void CompareHouses(List<House> houseList, int id, House frstHouse, House scndHouse, int[] frstFeatures, int[] scndFeatures)
-        {
-            IQueryable<House> PreviewHouses = from h in db.Houses
-                                              where h.ArticleId == id
-                                              select h;
-
-            List<House> housePreviewList = PreviewHouses.ToList();
-
-            if (housePreviewList.Count() > 0)
-            {
-                foreach (House Previewhouse in housePreviewList)
-                {
-                    var result = houseList.Exists(x => x.HouseId == Previewhouse.HouseId);
-                    if (!result)
-                    {
-                        DeleteHouse(Previewhouse);
-                    }
-
-                }
-            }
-
-            if (frstHouse != null)
-            {
-                if (!(housePreviewList.Exists(x => x.HouseId == frstHouse.HouseId)))
-                {
-                    House house = CreateHouse(frstHouse);
-                    foreach (var feature in frstFeatures)
-                    {
-                        CreateFeature(feature, house.HouseId);
-                    }
-                }
-                else
-                {
-                    EditHouse(frstHouse);
-                    EditFeatures(frstHouse, frstFeatures);
-                }
-            }
-
-            if (scndHouse != null)
-            {
-                if (!(housePreviewList.Contains(scndHouse)))
-                {
-                    House house = CreateHouse(scndHouse);
-                    foreach (var feature in scndFeatures)
-                    {
-                        CreateFeature(feature, house.HouseId);
-                    }
-                }
-                else
-                {
-                    EditHouse(scndHouse);
-                    EditFeatures(scndHouse, scndFeatures);
-                }
-            }
-
-        }
-
-        public void EditFeatures(House house, int[] houseFeatures)
-        {
-            //---------------Features section---------------//
-
-            IQueryable<HouseFeatureHouse> currentFeatures = from f in db.HouseFeatureHouse
-                                                            where f.HouseId == house.HouseId
-                                                            select f;
-
-            List<HouseFeatureHouse> currentFeaturesList = currentFeatures.ToList();
-
-            foreach (var currentFeature in currentFeaturesList)
-            {
-                var NoExists = true;
-
-                foreach (var feature in houseFeatures)
-                {
-                    if (currentFeature.HouseFeatureId == feature)
-                    {
-                        NoExists = false;
-                    }
-                }
-
-                if (NoExists)
-                {
-                    db.HouseFeatureHouse.Remove(currentFeature);
-                }
-            }
-
-            foreach (var feature in houseFeatures)
-            {
-                var Exists = false;
-
-                foreach (var currentFeature in currentFeaturesList)
-                {
-                    if (currentFeature.HouseFeatureId == feature)
-                    {
-                        Exists = true;
-                    }
-                }
-
-                if (!Exists)
-                {
-                    CreateFeature(feature, house.HouseId);
-                }
-            }
-        }
-
-        public void CreateFeature(int houseFeature, int houseId)
-        {
-
-            HouseFeatureHouse houseFeaturehouse = new HouseFeatureHouse();
-            houseFeaturehouse.HouseFeatureId = houseFeature;
-            houseFeaturehouse.HouseId = houseId;
-            db.HouseFeatureHouse.Add(houseFeaturehouse);
-        }
-
-        public void CreateTerrainFeature(int terrainFeature, int terrainId)
-        {
-
-            TerrainFeatureTerrain terrainFeatureTerrain = new TerrainFeatureTerrain();
-            terrainFeatureTerrain.TerrainFeatureId = terrainFeature;
-            terrainFeatureTerrain.TerrainId = terrainId;
-            db.TerrainFeaturesTerrain.Add(terrainFeatureTerrain);
-        }
-
-        public void EditHouse(House house)
-        {
-            House EntityHouse = db.Houses.Find(house.HouseId);
-            EntityHouse.Bathrooms = house.Bathrooms;
-            EntityHouse.Bedrooms = house.Bedrooms;
-            EntityHouse.Garage = house.Garage;
-            EntityHouse.HouseBackgroundMeasure = house.HouseBackgroundMeasure;
-            EntityHouse.HouseForeheadMeasure = house.HouseForeheadMeasure;
-            EntityHouse.Levels = house.Levels;
-
-            db.Entry(EntityHouse).State = EntityState.Modified;
-        }
-
-        public void DeleteHouse(House house)
-        {
-            db.Houses.Remove(house);
-        }
-
-        public House CreateHouse(House house)
-        {
-            db.Houses.Add(house);
-            db.SaveChanges();
-            return house;
-        }
-
-        public void UpdatePictures(int id, string[] urls, string outstandingPicture)
-        {
-            //---------------Pictures section---------------//
-            IQueryable<ArticlePicture> currentPictures = from p in db.ArticlePictures
-                                                         where p.ArticleId == id
-                                                         select p;
-            //Tenemos la lista de fotos actuales y la foto de portada actual en formato de byte.
-            List<ArticlePicture> currentPicturesList = currentPictures.ToList();
-            ArticlePicture currentOutstandingPicture = currentPicturesList.Find(p => p.OutstandingPicture == true);
-
-            //Tenemos la lista de fotos nuevas y la foto de portada nueva en formato b64.
-            List<string> newPicturesList = urls.ToList();
-            //outstandingPicture = outstandingPicture;
-
-            //<-----------------Foto de portada----------------->//
-
-            /*Comparamos foto actual de portada y foto nueva en caso de que sean iguales no hacemos nada
-             *Para poder comparar necesitamos pasar lo que esta en formato byte a b64.*/
-            string currentOutstandingPictureBase64 = Convert.ToBase64String(currentOutstandingPicture.PictureArray);
-
-            //Procedemos a comparar
-            if (!(outstandingPicture == currentOutstandingPictureBase64))
-            {
-                //Metodo que establece datos segun  nueva foto de portada. Mas info en el metodo.
-                SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, outstandingPicture, id);
-            }
-
-            //<-----------------Agregar nuevas fotos----------------->//
-            /*Para agregar nuevas fotos vamos a separar de la lista nueva las fotos que existen en la lista antigua
-             * una vez separadas agregamos las fotos que no existian.
-            */
-            AddNewPictures(urls, currentPicturesList, id);
-
-            //<-----------------Eliminar fotos----------------->//
-            /*Para eliminar  fotos vamos a comparar el contenido de la lista nueva contra las fotos en la lista antigua
-             * si no existen en la  lista nueva se procede a la eliminacion
-            */
-            DeletePictures(urls, currentPicturesList, outstandingPicture);
-            //---------------End pictures section---------------//
-        }
-
-        private void DeletePictures(string[] urls, List<ArticlePicture> currentPicturesList, string outstandingPicture)
-        {
-            //recorremos la lista antigua 
-            foreach (var currentPicture in currentPicturesList)
-            {
-                //variable que nos indicara si el elemento existe
-                var noExists = true;
-                //recorremos lista nueva comparando el elemento en ciclo de la lista antigua contra los elementos
-                //de la lista nueva.
-                foreach (var url in urls)
-                {
-                    string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
-                    if (currentPictureBase64 == url || currentPictureBase64 == outstandingPicture)
-                    {
-                        noExists = false;
-                    }
-                }
-                //si el elemento no existe lo borramos
-                if (noExists)
-                {
-                    db.ArticlePictures.Remove(currentPicture);
-                }
-
-            }
-        }
-
-        private void AddNewPictures(string[] urls, List<ArticlePicture> currentPicturesList, int id)
-        {
-            //Creamos lista que almacenara fotos nuevas para añadirlas a la base de datos
-            List<ArticlePicture> picturesToAdd = new List<ArticlePicture>();
-            foreach (var url in urls)
-            {
-                var exists = false;
-                foreach (var currentPicture in currentPicturesList)
-                {
-                    string currentPictureBase64 = Convert.ToBase64String(currentPicture.PictureArray);
-                    if (currentPictureBase64 == url)
-                    {
-                        exists = true;
-                    }
-                }
-                if (!exists)
-                {
-                    ArticlePicture picture = new ArticlePicture();
-                    picture.OutstandingPicture = false;
-                    picture.PictureArray = Convert.FromBase64String(url);
-                    picture.ArticleId = id;
-                    picturesToAdd.Add(picture);
-                }
-            }
-            //Finalizado el ciclo de verificacion procedemos a añadir las nuevas imagenes
-            db.ArticlePictures.AddRange(picturesToAdd);
-        }
-
-        private void SetOutstandingPicture(ArticlePicture currentOutstandingPicture, List<ArticlePicture> currentPicturesList, string outstandingPicture, int id)
-        {
-            //Si no son iguales primero cambiamos a false la opcion outstandingPicture de la foto actual, ya que esta no es mas la foto de portada
-            currentOutstandingPicture.OutstandingPicture = false;
-            db.Entry(currentOutstandingPicture).State = EntityState.Modified;
-            //Luego verificamos si la nueva foto de portada existe entre las fotos antiguas
-            //Para ello creamos una variable que nos almacenara la imagen completa si existe.
-            ArticlePicture outstandingPictureExists = null;
-            foreach (var currentPicture in currentPicturesList)
-            {
-                //Debemos pasar currentPicture a b64 para poder comparar
-                string currentPictureInB64 = Convert.ToBase64String(currentPicture.PictureArray);
-                //comparamos
-                if (currentPictureInB64 == outstandingPicture)
-                {
-                    outstandingPictureExists = currentPicture;
-                }
-            }
-            // si la nueva foto de portada existe solo se le cambia el valor outstandingPicture a true
-            if (outstandingPictureExists != null)
-            {
-                outstandingPictureExists.OutstandingPicture = true;
-                db.Entry(outstandingPictureExists).State = EntityState.Modified;
-            }
-            //si la foto no existe debemos crearla y agregarla con el valor outstandingPicture en true.
-            else
-            {
-                ArticlePicture picture = new ArticlePicture();
-                picture.OutstandingPicture = true;
-                picture.PictureArray = Convert.FromBase64String(outstandingPicture);
-                picture.ArticleId = id;
-                db.ArticlePictures.Add(picture);
-            }
         }
 
         // GET: Articles/Delete/5
@@ -1068,32 +322,349 @@ namespace WebApplication1.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        //-----------------------------------------------------------------------------------------//
 
-        public void ViewbagFeatures(int[] terrainSelected, int[] houseSelected, int[] houseAuxSelected)
+        //---------------ClasificationSection---------------//        
+        public string clasify(int articleId, int kindValue)
         {
-            var jsonSerialiser = new JavaScriptSerializer();
-            var terrainFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("Terrain"));
-            var houseFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("House"));
-            var houseAuxFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("HouseAux"));
+            try
+            {
+                Article article = db.Articles.Find(articleId);
 
-            ViewBag.terrainFeaturesSelected = FeatureFilter(terrainFeatures, terrainSelected);
-            ViewBag.houseFeaturesSelected = houseSelected != null && houseSelected.Length > 0 ? FeatureFilter(houseFeatures, houseSelected) : null;
-            ViewBag.houseAuxFeaturesSelected = houseAuxSelected != null && houseAuxSelected.Length > 0 ? FeatureFilter(houseAuxFeatures, houseAuxSelected) : null;
+                var oportunityListEF = from a in db.Articles
+                                       where a.ArticleKind == EArticleKind.Oportunidad
+                                       select a;
+                var outstandingListEF = from a in db.Articles
+                                        where a.ArticleKind == EArticleKind.Sobresaliente
+                                        select a;
+                var oportunityList = oportunityListEF.ToList();
+                var outstandingList = outstandingListEF.ToList();
+
+                var previewKind = GetEnumValue(article);
+                var status = false;
+                dynamic result = new ExpandoObject();
+                string newClass = "";
+                switch (kindValue)
+                {
+                    case 0:
+                        article.ArticleKind = EArticleKind.Venta;
+                        status = true;
+                        newClass = "Venta";
+                        break;
+                    case 1:
+                        if (!(outstandingList.Count() >= 9))
+                        {
+                            article.ArticleKind = EArticleKind.Sobresaliente;
+                            status = true;
+                            newClass = "Sobresaliente";
+
+                        }
+                        break;
+                    case 2:
+                        if (!(oportunityList.Count() >= 9))
+                        {
+                            article.ArticleKind = EArticleKind.Oportunidad;
+                            status = true;
+                            newClass = "Oportunidad";
+                        }
+                        break;
+                }
+
+                result.Status = status;
+                result.PreviewKind = previewKind;
+                result.NewClass = newClass;
+                var jsonSerialiser = new JavaScriptSerializer();
+                var json = jsonSerialiser.Serialize(result);
+
+                if (status)
+                {
+                    db.Entry(article).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return json;
+                }
+                else
+                {
+                    return json;
+                }
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
+        public int GetEnumValue(Article article)
+        {
+            var id = 0;
+            try
+            {
+                EArticleKind eArticleKind = article.ArticleKind;
+
+
+                switch (eArticleKind)
+                {
+                    case EArticleKind.Sobresaliente:
+                        id = 1;
+                        break;
+                    case EArticleKind.Oportunidad:
+                        id = 2;
+                        break;
+
+                }
+                return id;
+            }
+            catch (Exception)
+            {
+
+                return id;
+
+            }
+
+        }
+        //-----------------------------------------------------------------------------------------//
+
+        //---------------AjaxSection---------------//        
+        public ActionResult ApproveArticles()
+        {
+            //List<ArticleViewModel> ArticleViewModelList = ArticlesToApprove();
+
+            //return View(ArticleViewModelList);
+            return View("ErrorPage");
+        }
+
+        public ActionResult PropertySold(int id, bool state)
+        {
+            try
+            {
+                Article article = db.Articles.Find(id);
+                article.SoldState = !state;
+                db.Entry(article).State = EntityState.Modified;
+                db.SaveChanges();
+
+                var articles = db.Articles.ToList();
+
+
+                List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+                ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
+
+                return PartialView("articleList", ArticleViewModelList);
+            }
+            catch (Exception)
+            {
+                ViewBag.error = "Error al cambiar el estado de la propiedad";
+                return View("ErrorPage");
+            }
+
+        }
+
+        public ActionResult ApproveArticle(int id)
+        {
+            try
+            {
+                Article article = db.Articles.Find(id);
+                article.State = true;
+                db.Entry(article).State = EntityState.Modified;
+                db.SaveChanges();
+                return View("ApproveArticles", ArticlesToApprove());
+            }
+            catch (Exception)
+            {
+                ViewBag.error = "Error al aprobar articulo";
+                return View("ErrorPage");
+            }
+
+        }
+
+        public List<ArticleViewModel> ArticlesToApprove()
+        {
+            var articlesEF = from a in db.Articles
+                             where !(a.State)
+                             select a;
+            var articles = articlesEF.ToList();
+
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+            return ArticleViewModelList;
+
+        }
+
+        //-----------------------------------------------------------------------------------------//
+
+        //---------------FilterSection---------------//
+        public ActionResult GetfilterArticlesPartialView(string type, string param)
+        {
+            try
+            {
+                List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+
+                switch (type)
+                {
+                    case "Ubicacion":
+                        ArticleViewModelList = FilterUbication(param);
+                        break;
+
+                    case "Estado":
+                        ArticleViewModelList = FilterState(param);
+                        break;
+
+                    case "Asesor":
+                        ArticleViewModelList = FilterContributor(param);
+                        break;
+
+                    case "Categoria":
+                        ArticleViewModelList = FilterCategory(param);
+                        break;
+                    case "Disponibilidad":
+                        ArticleViewModelList = Filteravailability(param);
+                        break;
+                    default:
+                        var articles = db.Articles.ToList();
+                        ArticleViewModelList = GetArticleViewModelList(articles);
+                        break;
+                }
+
+                ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
+                return PartialView("articleList", ArticleViewModelList);
+
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al filtrar articulos";
+                return View("ErrorPage");
+            }
+        }
+
+        public List<ArticleViewModel> FilterUbication(string ubication)
+        {
+            try
+            {
+                var articlesEF = from a in db.Articles
+                                 where a.Ubication.Name == ubication
+                                 select a;
+
+                var articles = articlesEF.ToList();
+                List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+                return ArticleViewModelList;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
+        }
+
+        public List<ArticleViewModel> Filteravailability(string availability)
+        {
+            try
+            {
+                var availabilityBool = availability == "Vendida" ? true : false;
+                var articlesEF = from a in db.Articles
+                                 where a.SoldState == availabilityBool
+                                 select a;
+                var articles = articlesEF.ToList();
+
+                List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+                return ArticleViewModelList;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public List<ArticleViewModel> FilterState(string state)
+        {
+            try
+            {
+                var stateBool = state == "Pendiente" ? false : true;
+                var articlesEF = from a in db.Articles
+                                 where a.State == stateBool
+                                 select a;
+                var articles = articlesEF.ToList();
+
+                List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+                return ArticleViewModelList;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
+        }
+
+        public List<ArticleViewModel> FilterContributor(string IC)
+        {
+            try
+            {
+                var articlesEF = from a in db.Articles
+                                 where a.IndividualContributor.Name == IC
+                                 select a;
+
+                var articles = articlesEF.ToList();
+
+
+                List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+                return ArticleViewModelList;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
+        }
+
+        public List<ArticleViewModel> FilterCategory(string category)
+        {
+            try
+            {
+                var articlesEF = from a in db.Articles
+                                 where a.Ubication.UbicationCategory.Name == category
+                                 select a;
+
+                var articles = articlesEF.ToList();
+
+
+                List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+
+                return ArticleViewModelList;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
         }
 
         public List<Feature> FeatureFilter(List<Feature> featuresList, int[] featuresSelected)
         {
             List<Feature> filterFeatures = new List<Feature>();
 
-            foreach (var feature in featuresList)
+            try
             {
-                if (Array.Exists(featuresSelected, f => f == feature.FeatureId))
+                foreach (var feature in featuresList)
                 {
-                    filterFeatures.Add(feature);
+                    if (Array.Exists(featuresSelected, f => f == feature.FeatureId))
+                    {
+                        filterFeatures.Add(feature);
+                    }
                 }
-            }
 
-            return filterFeatures;
+                return filterFeatures;
+            }
+            catch (Exception)
+            {
+
+                return null; ;
+            }
         }
 
         [HttpPost]
@@ -1111,7 +682,7 @@ namespace WebApplication1.Controllers
                         terrainFeature = new Feature();
                         terrainFeature.FeatureId = feature.TerrainFeatureId;
                         terrainFeature.Description = feature.Description;
-                        terrainFeature.Model = "Terrain";
+                        terrainFeature.Model = "Article_Terrain";
                         features.Add(terrainFeature);
                     }
                     break;
@@ -1124,7 +695,7 @@ namespace WebApplication1.Controllers
                         houseFeature = new Feature();
                         houseFeature.FeatureId = feature.HouseFeatureId;
                         houseFeature.Description = feature.Description;
-                        houseFeature.Model = "House";
+                        houseFeature.Model = "Article_House";
                         features.Add(houseFeature);
                     }
                     break;
@@ -1137,7 +708,7 @@ namespace WebApplication1.Controllers
                         houseAuxFeature = new Feature();
                         houseAuxFeature.FeatureId = feature.HouseFeatureId;
                         houseAuxFeature.Description = feature.Description;
-                        houseAuxFeature.Model = "HouseAux";
+                        houseAuxFeature.Model = "Article_HouseAux";
                         features.Add(houseAuxFeature);
                     }
                     break;
@@ -1192,6 +763,726 @@ namespace WebApplication1.Controllers
             return content;
         }
 
+
+        //-----------------------------------------------------------------------------------------//
+
+        //---------------TerrainSection---------------//
+        public List<TerrainFeatureTerrain> GetTerrainFeatures(Terrain terrain)
+        {
+            try
+            {
+                IQueryable<TerrainFeatureTerrain> TerrainFeatureTerrainEF = from tf in db.TerrainFeaturesTerrain
+                                                                            where tf.TerrainId == terrain.TerrainId
+                                                                            select tf;
+
+                List<TerrainFeatureTerrain> TerrainFeatureTerrainList = TerrainFeatureTerrainEF.ToList();
+
+
+                return TerrainFeatureTerrainList;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error += "Error al obtener las caracteristicas de terreno" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public void AddTerrainFeatures(int[] featuresId, int terrainId)
+        {
+            try
+            {
+                List<TerrainFeatureTerrain> Features = new List<TerrainFeatureTerrain>();
+                foreach (var feature in featuresId)
+                {
+                    TerrainFeatureTerrain terrainFeature = new TerrainFeatureTerrain();
+                    terrainFeature.TerrainFeatureId = feature;
+                    terrainFeature.TerrainId = terrainId;
+                    Features.Add(terrainFeature);
+                }
+                db.TerrainFeaturesTerrain.AddRange(Features);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = "Error al añadir caracteristicas de terreno" + ex.InnerException;
+            }
+        }
+
+        public void EditTerrainFeatures(Terrain terrain, int[] terrainFeatures)
+        {
+            //---------------Features section---------------//
+            try
+            {
+                IQueryable<TerrainFeatureTerrain> currentFeatures = from f in db.TerrainFeaturesTerrain
+                                                                    where f.TerrainId == terrain.TerrainId
+                                                                    select f;
+
+                List<TerrainFeatureTerrain> currentFeaturesList = currentFeatures.ToList();
+
+                foreach (var currentFeature in currentFeaturesList)
+                {
+                    var NoExists = true;
+
+                    foreach (var feature in terrainFeatures)
+                    {
+                        if (currentFeature.TerrainFeatureId == feature)
+                        {
+                            NoExists = false;
+                        }
+                    }
+
+                    if (NoExists)
+                    {
+                        db.TerrainFeaturesTerrain.Remove(currentFeature);
+                    }
+                }
+
+
+                foreach (var feature in terrainFeatures)
+                {
+                    var Exists = false;
+
+                    foreach (var currentFeature in currentFeaturesList)
+                    {
+                        if (currentFeature.TerrainFeatureId == feature)
+                        {
+                            Exists = true;
+                        }
+                    }
+
+                    if (!Exists)
+                    {
+                        CreateTerrainFeature(feature, terrain.TerrainId);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al editar terreno";
+
+            }
+        }
+
+        public void CreateTerrainFeature(int terrainFeature, int terrainId)
+        {
+            try
+            {
+                TerrainFeatureTerrain terrainFeatureTerrain = new TerrainFeatureTerrain();
+                terrainFeatureTerrain.TerrainFeatureId = terrainFeature;
+                terrainFeatureTerrain.TerrainId = terrainId;
+                db.TerrainFeaturesTerrain.Add(terrainFeatureTerrain);
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al crear caracteristicas de terreno";
+            }
+        }
+
+
+        //-----------------------------------------------------------------------------------------//
+
+        //---------------HouseSection---------------//
+        public void AddHouse(House house, int[] features, int articleId)
+        {
+            try
+            {
+                house.ArticleId = articleId;
+                db.Houses.Add(house);
+                db.SaveChanges();
+                AddHouseFeatures(features, house.HouseId);
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = "Error al añadir casa" + ex.InnerException;
+            }
+
+
+        }
+
+        public void AddHouseFeatures(int[] features, int houseId)
+        {
+            try
+            {
+                HouseFeatureHouse houseFeatureHouse = new HouseFeatureHouse();
+                foreach (var feature in features)
+                {
+                    houseFeatureHouse = new HouseFeatureHouse();
+                    houseFeatureHouse.HouseFeatureId = feature;
+                    houseFeatureHouse.HouseId = houseId;
+                    db.HouseFeatureHouse.Add(houseFeatureHouse);
+                }
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error = "Error al añadir caracteristicas de casa" + ex.InnerException;
+
+            }
+
+
+        }
+
+        public ArticleViewModel GetHouses(int id)
+        {
+            ArticleViewModel articleViewModel = new ArticleViewModel();
+
+            try
+            {
+                IQueryable<House> HouseListEF = from h in db.Houses
+                                                where h.ArticleId == id
+                                                select h;
+                List<House> HouseList = HouseListEF.ToList();
+
+                House house = null;
+                HouseAux houseAux = null;
+
+                foreach (var houseResult in HouseList)
+                {
+                    if (house == null)
+                    {
+                        house = houseResult;
+                        house.HouseFeaturesHouse = GetHouseFeatures(house);
+
+                    }
+                    else
+                    {
+                        houseAux = new HouseAux();
+                        houseAux.Id = houseResult.HouseId;
+                        houseAux.BathroomsAux = houseResult.Bathrooms;
+                        houseAux.BedroomsAux = houseResult.Bedrooms;
+                        houseAux.GarageAux = houseResult.Garage;
+                        houseAux.HouseBackgroundMeasureAux = houseResult.HouseBackgroundMeasure;
+                        houseAux.HouseForeheadMeasureAux = houseResult.HouseForeheadMeasure;
+                        houseAux.LevelsAux = houseResult.Levels;
+                        houseAux.HouseFeaturesHouse = GetHouseAuxFeatures(houseAux);
+
+                    }
+                }
+
+                articleViewModel.House = house;
+                articleViewModel.HouseAux = houseAux;
+
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error += "Error al obtener casas";
+            }
+
+            return articleViewModel;
+
+        }
+
+        public List<HouseFeatureHouse> GetHouseFeatures(House house)
+        {
+            try
+            {
+                IQueryable<HouseFeatureHouse> HouseFeatureHouseEF = from hf in db.HouseFeatureHouse
+                                                                    where hf.HouseId == house.HouseId
+                                                                    select hf;
+                List<HouseFeatureHouse> houseFeatureHouseList = HouseFeatureHouseEF.ToList();
+
+
+                return houseFeatureHouseList;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al obtener las caracteristicas de terreno" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public List<HouseFeatureHouse> GetHouseAuxFeatures(HouseAux house)
+        {
+            try
+            {
+                IQueryable<HouseFeatureHouse> HouseFeatureHouseEF = from hf in db.HouseFeatureHouse
+                                                                    where hf.HouseId == house.Id
+                                                                    select hf;
+                List<HouseFeatureHouse> houseFeatureHouseList = HouseFeatureHouseEF.ToList();
+
+
+                return houseFeatureHouseList;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al obtener las caracteristicas de terreno" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public void EditFeatures(House house, int[] houseFeatures)
+        {
+            //---------------Features section---------------//
+
+            try
+            {
+                IQueryable<HouseFeatureHouse> currentFeatures = from f in db.HouseFeatureHouse
+                                                                where f.HouseId == house.HouseId
+                                                                select f;
+
+                List<HouseFeatureHouse> currentFeaturesList = currentFeatures.ToList();
+
+                foreach (var currentFeature in currentFeaturesList)
+                {
+                    var NoExists = true;
+
+                    foreach (var feature in houseFeatures)
+                    {
+                        if (currentFeature.HouseFeatureId == feature)
+                        {
+                            NoExists = false;
+                        }
+                    }
+
+                    if (NoExists)
+                    {
+                        db.HouseFeatureHouse.Remove(currentFeature);
+                    }
+                }
+
+                foreach (var feature in houseFeatures)
+                {
+                    var Exists = false;
+
+                    foreach (var currentFeature in currentFeaturesList)
+                    {
+                        if (currentFeature.HouseFeatureId == feature)
+                        {
+                            Exists = true;
+                        }
+                    }
+
+                    if (!Exists)
+                    {
+                        CreateFeature(feature, house.HouseId);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al editar caracteristicas";
+            }
+
+        }
+
+        public void CompareHouses(List<House> houseList, int id, House frstHouse, House scndHouse, int[] frstFeatures, int[] scndFeatures)
+        {
+            try
+            {
+
+                IQueryable<House> PreviewHouses = from h in db.Houses
+                                                  where h.ArticleId == id
+                                                  select h;
+
+                List<House> housePreviewList = PreviewHouses.ToList();
+
+                if (housePreviewList.Count() > 0)
+                {
+                    foreach (House Previewhouse in housePreviewList)
+                    {
+                        var result = houseList.Exists(x => x.HouseId == Previewhouse.HouseId);
+                        if (!result)
+                        {
+                            DeleteHouse(Previewhouse);
+                        }
+
+                    }
+                }
+
+                if (frstHouse != null)
+                {
+                    if (!(housePreviewList.Exists(x => x.HouseId == frstHouse.HouseId)))
+                    {
+                        House house = CreateHouse(frstHouse);
+                        foreach (var feature in frstFeatures)
+                        {
+                            CreateFeature(feature, house.HouseId);
+                        }
+                    }
+                    else
+                    {
+                        EditHouse(frstHouse);
+                        EditFeatures(frstHouse, frstFeatures);
+                    }
+                }
+
+                if (scndHouse != null)
+                {
+                    if (!(housePreviewList.Contains(scndHouse)))
+                    {
+                        House house = CreateHouse(scndHouse);
+                        foreach (var feature in scndFeatures)
+                        {
+                            CreateFeature(feature, house.HouseId);
+                        }
+                    }
+                    else
+                    {
+                        EditHouse(scndHouse);
+                        EditFeatures(scndHouse, scndFeatures);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al actualizar casas";
+            }
+
+        }
+
+        public void CreateFeature(int houseFeature, int houseId)
+        {
+            try
+            {
+
+                HouseFeatureHouse houseFeaturehouse = new HouseFeatureHouse();
+                houseFeaturehouse.HouseFeatureId = houseFeature;
+                houseFeaturehouse.HouseId = houseId;
+                db.HouseFeatureHouse.Add(houseFeaturehouse);
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al agregar caracteristica de casa";
+            }
+        }
+
+        public void EditHouse(House house)
+        {
+            try
+            {
+                House EntityHouse = db.Houses.Find(house.HouseId);
+                EntityHouse.Bathrooms = house.Bathrooms;
+                EntityHouse.Bedrooms = house.Bedrooms;
+                EntityHouse.Garage = house.Garage;
+                EntityHouse.HouseBackgroundMeasure = house.HouseBackgroundMeasure;
+                EntityHouse.HouseForeheadMeasure = house.HouseForeheadMeasure;
+                EntityHouse.Levels = house.Levels;
+
+                db.Entry(EntityHouse).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al editar casa";
+            }
+        }
+
+        public void DeleteHouse(House house)
+        {
+            try
+            {
+                db.Houses.Remove(house);
+                db.SaveChanges();
+
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al borrar casa";
+            }
+        }
+
+        public House CreateHouse(House house)
+        {
+            try
+            {
+                db.Houses.Add(house);
+                db.SaveChanges();
+                return house;
+
+            }
+            catch (Exception)
+            {
+
+                ViewBag.error = "Error al agregar casa";
+                return null;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------------//
+
+        //---------------PicturesSection---------------//
+        public ArticlePicture GetOutstandingPicture(int id)
+        {
+            try
+            {
+                ArticlePicture OutstandingPicture = new ArticlePicture();
+
+                OutstandingPicture = db.ArticlePictures.FirstOrDefault(a => a.ArticleId == id && a.OutstandingPicture == true);
+
+                return OutstandingPicture;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al obtener la foto de portada" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public List<ArticlePicture> GetOutstandingPictureList()
+        {
+            try
+            {
+                List<ArticlePicture> OutstandingPictureList = new List<ArticlePicture>();
+                IQueryable<ArticlePicture> OutstandingPicturesEF = from p in db.ArticlePictures
+                                                                   where p.OutstandingPicture == true
+                                                                   select p;
+                OutstandingPictureList = OutstandingPicturesEF.ToList();
+                return OutstandingPictureList;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al obtener las fotos de portada" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public List<ArticlePicture> GetPictureList(int id)
+        {
+            try
+            {
+                IQueryable<ArticlePicture> PicturesEF = from p in db.ArticlePictures
+                                                        where p.ArticleId == id && p.OutstandingPicture == false
+                                                        select p;
+
+                List<ArticlePicture> PicturesList = PicturesEF.ToList();
+
+                return PicturesList;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error += "Error al obtener las fotos" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public string AddBlobToStorage(int articleId, string b64String, int iterator)
+        {
+            var fecha = DateTime.Now.ToString("hhmmss");
+            string name = "Foto" + fecha + articleId.ToString() + iterator.ToString();
+            byte[] pictureBytes = Convert.FromBase64String(b64String);
+            string keys = CloudConfigurationManager.GetSetting("ConnectionBlob");
+            CloudStorageAccount cuentaAlmacenamiento = CloudStorageAccount.Parse(keys);
+            CloudBlobClient clienteBlob = cuentaAlmacenamiento.CreateCloudBlobClient();
+            CloudBlobContainer container = clienteBlob.GetContainerReference("ubicationpictures");
+            CloudBlockBlob blob = container.GetBlockBlobReference(name);
+
+            using (var stream = new MemoryStream(pictureBytes))
+            {
+                blob.UploadFromStream(stream);
+            }
+            return name;
+
+        }
+
+        private void SetOutstandingPicture(ArticlePicture currentOutstandingPicture, List<ArticlePicture> currentPicturesList, string outstandingPicture, int id)
+        {
+            if (currentOutstandingPicture.Extension == outstandingPicture)
+            {
+                return;
+            }
+            else
+            {
+                //Si no son iguales primero cambiamos a false la opcion outstandingPicture de la foto actual, ya que esta no es mas la foto de portada
+                currentOutstandingPicture.OutstandingPicture = false;
+                db.Entry(currentOutstandingPicture).State = EntityState.Modified;
+                //Luego verificamos si la nueva foto de portada existe entre las fotos antiguas
+                //Para ello creamos una variable que nos almacenara la imagen completa si existe.
+                ArticlePicture outstandingPictureExists = null;
+                foreach (var currentPicture in currentPicturesList)
+                {
+                    //comparamos
+                    if (currentPicture.Extension == outstandingPicture)
+                    {
+                        outstandingPictureExists = currentPicture;
+                    }
+                }
+                // si la nueva foto de portada existe solo se le cambia el valor outstandingPicture a true
+                if (outstandingPictureExists != null)
+                {
+                    outstandingPictureExists.OutstandingPicture = true;
+                    db.Entry(outstandingPictureExists).State = EntityState.Modified;
+                }
+                //si la foto no existe debemos crearla y agregarla con el valor outstandingPicture en true.
+                else
+                {
+                    ArticlePicture picture = new ArticlePicture();
+                    picture.OutstandingPicture = true;
+                    picture.Extension = AddBlobToStorage(id, outstandingPicture, 20);
+                    picture.ArticleId = id;
+                    db.ArticlePictures.Add(picture);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public string DeletePicture(int id)
+        {
+            var state = "false";
+            try
+            {
+                ArticlePicture articlePicture = db.ArticlePictures.Find(id);
+                if (articlePicture != null)
+                {
+                    db.ArticlePictures.Remove(articlePicture);
+                    db.SaveChanges();
+                    state = "true";
+                    return state;
+                }
+                else
+                {
+                    return state;
+                }
+            }
+            catch (Exception)
+            {
+
+                return state;
+            }
+
+        }
+
+        public void UpdatePictures(int ArticleId, string[] urls, string OutstandingPicture)
+        {
+            ArticlePicture picture = new ArticlePicture();
+            List<ArticlePicture> Pictures = new List<ArticlePicture>();
+            IQueryable<ArticlePicture> currentPicturesEF = from p in db.ArticlePictures
+                                                           where p.ArticleId == ArticleId
+                                                           select p;
+            List<ArticlePicture> currentPicturesList = currentPicturesEF.ToList();
+            ArticlePicture currentOutstandingPicture = currentPicturesList.FirstOrDefault(p => p.OutstandingPicture == true);
+
+            Article article = db.Articles.Find(ArticleId);
+            //ArticlePicture articlePicture = db.ArticlePictures.FirstOrDefault(p => p.Extension == OutstandingPicture);
+
+            SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, OutstandingPicture, ArticleId);
+
+
+            var i = 0;
+            foreach (var url in urls)
+            {                
+                if (!currentPicturesList.Exists(x => x.Extension == url))
+                {
+                    picture = new ArticlePicture();
+                    picture.OutstandingPicture = false;
+                    picture.Extension = AddBlobToStorage(article.Id, url, i);
+                    picture.ArticleId = article.Id;
+                    Pictures.Add(picture);
+                }
+                i++;
+            }
+            db.ArticlePictures.AddRange(Pictures);
+            db.SaveChanges();
+        }
+
+        //-----------------------------------------------------------------------------------------//
+
+        //---------------ArticleViewModelSection---------------//
+        public ArticleViewModel GetArticleViewModel(Article article)
+        {
+            try
+            {
+                List<ArticlePicture> pictures = GetPictureList(article.Id);
+                ArticlePicture outstandingPicture = GetOutstandingPicture(article.Id);
+                var houses = GetHouses(article.Id);
+                article.Terrain.TerrainFeaturesTerrain = GetTerrainFeatures(article.Terrain);
+
+                ArticleViewModel articleViewModel = SetArticleViewModel(pictures, outstandingPicture, houses.House, houses.HouseAux, article);
+
+                return articleViewModel;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al obtener el modelo de articulo" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
+        {
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+            return ArticleViewModelList;
+
+        }
+
+        public ArticleViewModel SetArticleViewModel(List<ArticlePicture> pictures, ArticlePicture outstandingPicture, House house, HouseAux houseAux, Article article)
+        {
+            try
+            {
+                ArticleViewModel articleViewModel = new ArticleViewModel();
+                articleViewModel.Article = article;
+                articleViewModel.Pictures = pictures;
+                articleViewModel.OutstandingPicture = outstandingPicture;
+                articleViewModel.House = house;
+                articleViewModel.HouseAux = houseAux;
+
+                return articleViewModel;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al setear el modelo de articulo" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public List<ArticleViewModel> GetArticleViewModelList()
+        {
+            try
+            {
+                List<Article> articles = db.Articles.ToList();
+                List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+
+                foreach (var article in articles)
+                {
+                    ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                    ArticleViewModelList.Add(articleViewModel);
+                }
+
+                return ArticleViewModelList;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
+        }
+
+        //-----------------------------------------------------------------------------------------//
+
+
+        //---------------FileSection---------------//
         [HttpPost]
         public void SubirArchivo(HttpPostedFileBase file, int id)
         {
@@ -1260,7 +1551,38 @@ namespace WebApplication1.Controllers
 
         }
 
+        //-----------------------------------------------------------------------------------------//
 
+
+        public void ReloadViewBags(ArticleViewModel model)
+        {
+            ViewBag.houseForm = model.House != null ? "flex" : "none";
+            ViewBag.houseAuxForm = model.HouseAux != null ? "flex" : "none";
+            ViewBag.houseFormBtn = model.House != null && model.HouseAux != null ? "none" : "block";
+            ViewBag.SelectedUbication = model.Article.UbicationId;
+            ViewBag.Selectedurl = model.OutstandingPicture;
+            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
+            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
+            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
+        }
+
+        public void ViewbagFeatures(int[] terrainSelected, int[] houseSelected, int[] houseAuxSelected)
+        {
+            var jsonSerialiser = new JavaScriptSerializer();
+            var terrainFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("Terrain"));
+            var houseFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("House"));
+            var houseAuxFeatures = jsonSerialiser.Deserialize<List<Feature>>(GetFeatures("HouseAux"));
+
+            ViewBag.terrainFeaturesSelected = FeatureFilter(terrainFeatures, terrainSelected);
+            ViewBag.houseFeaturesSelected = houseSelected != null && houseSelected.Length > 0 ? FeatureFilter(houseFeatures, houseSelected) : null;
+            ViewBag.houseAuxFeaturesSelected = houseAuxSelected != null && houseAuxSelected.Length > 0 ? FeatureFilter(houseAuxFeatures, houseAuxSelected) : null;
+        }
+
+        public ActionResult ErrorPage(string message)
+        {
+            ViewBag.error = message;
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {

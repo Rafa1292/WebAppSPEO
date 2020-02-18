@@ -29,8 +29,8 @@
                     {
                         if (outstandingPicture.UbicationId == item.UbicationId)
                         {
-                            var base64 = Convert.ToBase64String(outstandingPicture.PictureArray);
-                            var imgSrc = String.Format("data:image/png;base64,{0}", base64);
+                            var extension = outstandingPicture.Extension;
+                            var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", extension);
 
                             <img class="rounded" src="@imgSrc" style="max-width:180px; height: 120px;">
                         }

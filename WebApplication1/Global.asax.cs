@@ -2,6 +2,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,10 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using WebApplication1.Models;
+using Microsoft.Azure;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
+
 
 namespace WebApplication1
 {
@@ -25,11 +30,22 @@ namespace WebApplication1
             CreateSuperUser(db);
             AddPermissionsToSuperUser(db);
             db.Dispose();
+            ConnectionStorage();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        public void ConnectionStorage()
+        {
+            var connectionString = "DefaultEndpointsProtocol=https;AccountName=speoimages;AccountKey=nUklir6bF6Q+PwnA3OUD2dmtl8s3ceIrmMLSVevxObeTX61yplVuK7XRzOeq4TfGtSm+tzCUjVjuIA5ttoGQDA==;EndpointSuffix=core.windows.net";
+            CloudStorageAccount cuentaAlmacenamiento = CloudStorageAccount.Parse(connectionString);
+            CloudBlobClient clienteBlob = cuentaAlmacenamiento.CreateCloudBlobClient();
+            CloudBlobContainer container = clienteBlob.GetContainerReference("ubicationpictures");
+            container.CreateIfNotExists();
+            container.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
         }
 
 

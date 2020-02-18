@@ -21,8 +21,7 @@
 
 function validateArticleForm() {
     var price = validateItem("Article_Price", 0, "");
-    var ubication = validateItem("UbicationId", 0, "");
-    //var enlisted = validateItem("IndividualContributorId", 0, "");
+    var ubication = validateItem("Article_UbicationId", 0, "");
     var ownerName = validateItem("Article_OwnerName", null, "");
     var ownerPhone = validateItem("Article_OwnerPhone", 0, "");
 
@@ -32,10 +31,10 @@ function validateArticleForm() {
 }
 
 function validateTerrainForm() {
-    var foreheadMeasure = validateItem("Terrain_ForeheadMeasure", 0, "");
-    var backgroundMeasure = validateItem("Terrain_BackgroundMeasure", 0, "");
-    var topography = validateItem("Terrain_Topography", null, "");
-    var model = validateFeatures("Terrain");
+    var foreheadMeasure = validateItem("Article_Terrain_ForeheadMeasure", 0, "");
+    var backgroundMeasure = validateItem("Article_Terrain_BackgroundMeasure", 0, "");
+    var topography = validateItem("Article_Terrain_Topography", null, "");
+    var model = validateFeatures("Article_Terrain");
     var validate = foreheadMeasure && backgroundMeasure && topography && model ? true : false;
 
     return validate;
@@ -47,7 +46,7 @@ function validateHouseForm(id) {
     var bedrooms = validateItem(`House${id}_Bedrooms${id}`, 0, "");
     var bathrooms = validateItem(`House${id}_Bathrooms${id}`, 0, "");
     var levels = validateItem(`House${id}_Levels${id}`, 0, "");
-    var model = validateFeatures(`House${id}`);
+    var model = validateFeatures(`Article_House${id}`);
     var validate = foreheadMeasure && backgroundMeasure && bedrooms && bathrooms && levels && model ? true : false;
 
     return validate;

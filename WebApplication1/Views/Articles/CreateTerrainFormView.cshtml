@@ -1,12 +1,29 @@
 ﻿@model WebApplication1.ViewModel.ArticleViewModel
 
+@{
+    var foreheadMeasure = "";
+    var backgroundMeasure = "";
+    var topography = "";
+    var id = "";
+
+    if (Model != null && Model.Article.Terrain != null)
+    {
+
+        foreheadMeasure = Model.Article.Terrain.ForeheadMeasure.ToString();
+        backgroundMeasure = Model.Article.Terrain.BackgroundMeasure.ToString();
+        topography = Model.Article.Terrain.Topography.ToString();
+        id = Model.Article.Terrain.TerrainId.ToString();
+
+    }
+}
+
 <div class="col-md-12 article-container-header d-flex justify-content-between">
     <h3 class="col-xs-11">Informacion del terreno</h3>
     <span class="show-hide-bottom-form col-xs-1">
         <i onclick="showHouseBodyForm('terrain')" class="fas fa-plus " style="display: none;" id="terrainPlusButton"></i>
         <i onclick="hideHouseBodyForm('terrain')" class="fas fa-minus " id="terrainMinusButton"></i>
     </span>
-    @Html.HiddenFor(model => model.Terrain.TerrainId)
+    <input type="hidden" name="articleViewModel.Article.Terrain.TerrainId" value="@id" />
 </div>
 
 <div>
@@ -14,41 +31,41 @@
 
 
         <div class="form-group col-lg-3">
-            @Html.LabelFor(model => model.Terrain.ForeheadMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.LabelFor(model => model.Article.Terrain.ForeheadMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
             <div class="col-md-12 container-fluid">
                 <div class="input-group-prepend col-xs-2">
 
                     <div class="col-xs-8">
-                        @Html.EditorFor(model => model.Terrain.ForeheadMeasure, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de frente valida`)" } })
+                        <input type="text" class="form-control" value="@foreheadMeasure" name="articleViewModel.Article.Terrain.ForeheadMeasure" id="Article_Terrain_ForeheadMeasure" onchange="validateItem(this.id, 0, `Debes incluir una medida de frente valida`)" />
                     </div>
                     <label class="input-group-text">Mts²</label>
                 </div>
             </div>
-            <span id="errorTerrain_ForeheadMeasure" class="text-danger col-md-12"></span>
+            <span id="errorArticle_Terrain_ForeheadMeasure" class="text-danger col-md-12"></span>
         </div>
 
 
 
         <div class="form-group col-lg-3">
-            @Html.LabelFor(model => model.Terrain.BackgroundMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
+            @Html.LabelFor(model => model.Article.Terrain.BackgroundMeasure, htmlAttributes: new { @class = "control-label col-md-12" })
             <div class="col-md-12 container-fluid">
                 <div class="input-group-prepend col-xs-2">
 
                     <div class="col-xs-8">
-                        @Html.EditorFor(model => model.Terrain.BackgroundMeasure, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, 0, `Debes incluir una medida de fondo valida`)" } })
+                        <input type="text" class="form-control" value="@backgroundMeasure" name="articleViewModel.Article.Terrain.BackgroundMeasure" id="Article_Terrain_BackgroundMeasure" onchange="validateItem(this.id, 0, `Debes incluir una medida de fondo valida`)" />
                     </div>
                     <label class="input-group-text">Mts²</label>
                 </div>
             </div>
-            <span id="errorTerrain_BackgroundMeasure" class="text-danger col-md-12"></span>
+            <span id="errorArticle_Terrain_BackgroundMeasure" class="text-danger col-md-12"></span>
         </div>
 
         <div class="form-group col-lg-3">
-            @Html.LabelFor(model => model.Terrain.Topography, htmlAttributes: new { @class = "control-label col-md-6" })
+            @Html.LabelFor(model => model.Article.Terrain.Topography, htmlAttributes: new { @class = "control-label col-md-6" })
             <div class="col-md-12">
-                @Html.EditorFor(model => model.Terrain.Topography, new { htmlAttributes = new { @class = "form-control", @onchange = "validateItem(this.id, null, `Debes incluir una topografia valida`)" } })
+                <input type="text" class="form-control" value="@topography" name="articleViewModel.Article.Terrain.Topography" id="Article_Terrain_Topography" onchange="validateItem(this.id, null, `Debes incluir una topografia valida`)" />
             </div>
-            <span id="errorTerrain_Topography" class="text-danger col-md-12"></span>
+            <span id="errorArticle_Terrain_Topography" class="text-danger col-md-12"></span>
         </div>
 
         <div class="form-group col-lg-3 d-flex align-items-center ">
@@ -59,18 +76,18 @@
                 </button>
             </div>
         </div>
-        <div class="col-md-12 d-flex flex-wrap text-center mb-3" id="TerrainFeaturesList">
+        <div class="col-md-12 d-flex flex-wrap text-center mb-3" id="Article_TerrainFeaturesList">
             <div class="col-md-12">
                 <hr />
             </div>
-            <span id="errorTerrain" class="text-danger col-md-12"></span>
-            @if (ViewBag.terrainFeaturesSelected != null)
+            <span id="errorArticle_Terrain" class="text-danger col-md-12"></span>
+            @if (Model != null)
             {
-                foreach (var feature in ViewBag.terrainFeaturesSelected)
+                foreach (var feature in Model.Article.Terrain.TerrainFeaturesTerrain)
                 {
-                    <div class="list-group-item col-md-2 m-3 @feature.Model list-group-item-success" id='@feature.Model@feature.FeatureId'>
-                        @feature.Description
-                        <input name="TerrainFeatures[]" style="display: none" value="@feature.FeatureId">
+                    <div class="list-group-item col-md-2 m-3 Article_Terrain list-group-item-success" id=@String.Format("Article_Terrain{0}", feature.TerrainFeatureId)>
+                        @feature.TerrainFeature.Description
+                        <input name="Article_TerrainFeatures[]" style="display: none" value="@feature.TerrainFeatureId">
                     </div>
                 }
             }
