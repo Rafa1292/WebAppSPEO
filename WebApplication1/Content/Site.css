@@ -248,7 +248,7 @@ textarea {
     padding-top: 70px;
     margin-top: -70px;
     background-position: top;
-    background-image: url('../Images/shutterstock_363324191.jpg');
+    background-image: url('https://speoimages.blob.core.windows.net/commonimages/shutterstock_363324191.jpg');
     height: 970px;
     object-fit: cover;
     background-size: cover;
@@ -557,7 +557,7 @@ textarea {
     }
 
     .home-template {
-        background-image: url('../Images/shutterstock_363324191vertical.jpg');
+        background-image: url('https://speoimages.blob.core.windows.net/commonimages/shutterstock_363324191vertical.jpg');
         background-size: cover;
     }
 
@@ -679,7 +679,7 @@ textarea {
     }
 
     .home-template {
-        background-image: url('../Images/shutterstock_363324191vertical.jpg');
+        background-image: url('https://speoimages.blob.core.windows.net/commonimages/shutterstock_363324191vertical.jpg');
         background-size: contain;
     }
 

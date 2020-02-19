@@ -163,45 +163,36 @@ namespace WebApplication1.Controllers
 
 
                         //---------------Pictures section---------------//
-                        IQueryable<UbicationPicture> currentPictures = from p in db.UbicationPictures
-                                                                       where p.UbicationId == ubication.UbicationId 
-                                                                       select p;
+
+                        UbicationPicture ubicationPicture = new UbicationPicture();
+                        List<UbicationPicture> ubicationPictures = new List<UbicationPicture>();
+
+                        IQueryable<UbicationPicture> currentPicturesEF = from p in db.UbicationPictures
+                                                                         where p.UbicationId == ubication.UbicationId
+                                                                         select p;
 
                         //Tenemos la lista de fotos actuales y la foto de portada actual en formato de byte.
-                        List<UbicationPicture> currentPicturesList = currentPictures.ToList();
+                        List<UbicationPicture> currentPicturesList = currentPicturesEF.ToList();
                         UbicationPicture currentOutstandingPicture = currentPicturesList.Find(p => p.OutstandingPicture == true);
 
-                        //Tenemos la lista de fotos nuevas y la foto de portada nueva en formato b64.
-                        
-                            List<string> newPicturesList = urls.ToList();
+                        SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, outstandingPicture, ubication.UbicationId);
 
-                        
-                        //outstandingPicture = outstandingPicture;
-
-                        //<-----------------Foto de portada----------------->//
-
-                        /*Comparamos foto actual de portada y foto nueva en caso de que sean iguales no hacemos nada
-                         *Para poder comparar necesitamos pasar lo que esta en formato byte a b64.*/
-                        string currentOutstandingPictureBase64 = currentOutstandingPicture.Extension;
-
-                        //Procedemos a comparar
-                        if (!(outstandingPicture == currentOutstandingPictureBase64))
+                        var i = 0;
+                        foreach (var url in urls)
                         {
-                            //Metodo que establece datos segun  nueva foto de portada. Mas info en el metodo.
-                            SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, outstandingPicture, ubication.UbicationId);
+                            if (!currentPicturesList.Exists(x => x.Extension == url))
+                            {
+                                ubicationPicture = new UbicationPicture();
+                                ubicationPicture.OutstandingPicture = false;
+                                ubicationPicture.Extension = AddBlobToStorage(ubication.UbicationId, url, i);
+                                ubicationPicture.UbicationId = ubication.UbicationId;
+                                ubicationPictures.Add(ubicationPicture);
+                            }
+                            i++;
                         }
 
-                        //<-----------------Agregar nuevas fotos----------------->//
-                        /*Para agregar nuevas fotos vamos a separar de la lista nueva las fotos que existen en la lista antigua
-                         * una vez separadas agregamos las fotos que no existian.
-                        */
-                        AddNewPictures(urls, currentPicturesList, ubication.UbicationId);
-
-                        //<-----------------Eliminar fotos----------------->//
-                        /*Para eliminar  fotos vamos a comparar el contenido de la lista nueva contra las fotos en la lista antigua
-                         * si no existen en la  lista nueva se procede a la eliminacion
-                        */
-                        DeletePictures(urls, currentPicturesList, outstandingPicture);
+                        db.UbicationPictures.AddRange(ubicationPictures);
+                        db.SaveChanges();
                         //---------------End pictures section---------------//
 
 
@@ -348,6 +339,67 @@ namespace WebApplication1.Controllers
             ViewBag.SelectedUbicationFeatures = ubicationFeatures;
         }
 
+        private void SetOutstandingPicture(UbicationPicture currentOutstandingPicture, List<UbicationPicture> currentPicturesList, string outstandingPicture, int id)
+        {
+            if (currentOutstandingPicture.Extension == outstandingPicture)
+            {
+                return;
+            }
+            else
+            {
+                //Si no son iguales primero cambiamos a false la opcion outstandingPicture de la foto actual, ya que esta no es mas la foto de portada
+                currentOutstandingPicture.OutstandingPicture = false;
+                db.Entry(currentOutstandingPicture).State = EntityState.Modified;
+                //Luego verificamos si la nueva foto de portada existe entre las fotos antiguas
+                //Para ello creamos una variable que nos almacenara la imagen completa si existe.
+                UbicationPicture outstandingPictureExists = null;
+                foreach (var currentPicture in currentPicturesList)
+                {
+                    //comparamos
+                    if (currentPicture.Extension == outstandingPicture)
+                    {
+                        outstandingPictureExists = currentPicture;
+                    }
+                }
+                // si la nueva foto de portada existe solo se le cambia el valor outstandingPicture a true
+                if (outstandingPictureExists != null)
+                {
+                    outstandingPictureExists.OutstandingPicture = true;
+                    db.Entry(outstandingPictureExists).State = EntityState.Modified;
+                }
+                //si la foto no existe debemos crearla y agregarla con el valor outstandingPicture en true.
+                else
+                {
+                    UbicationPicture picture = new UbicationPicture();
+                    picture.OutstandingPicture = true;
+                    picture.Extension = AddBlobToStorage(id, outstandingPicture, 20);
+                    picture.UbicationId = id;
+                    db.UbicationPictures.Add(picture);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
+        public string AddBlobToStorage(int ubicationId, string b64String, int iterator)
+        {
+            var fecha = DateTime.Now.ToString("hhmmss");
+            string name = "Foto" + fecha + ubicationId.ToString() + iterator.ToString();
+            byte[] pictureBytes = Convert.FromBase64String(b64String);
+            string keys = CloudConfigurationManager.GetSetting("ConnectionBlob");
+            CloudStorageAccount cuentaAlmacenamiento = CloudStorageAccount.Parse(keys);
+            CloudBlobClient clienteBlob = cuentaAlmacenamiento.CreateCloudBlobClient();
+            CloudBlobContainer container = clienteBlob.GetContainerReference("ubicationpictures");
+            CloudBlockBlob blob = container.GetBlockBlobReference(name);
+
+            using (var stream = new MemoryStream(pictureBytes))
+            {
+                blob.UploadFromStream(stream);
+            }
+            return name;
+
+        }
+
         // Prepara informacion para viewBags  
         private void SetDataToViewBags(Ubication ubication)
         {
@@ -392,97 +444,29 @@ namespace WebApplication1.Controllers
             reloadViewBags(urls, ubicationFeatures, outstandingPicture, CantonId, ubication);
         }
 
-        //En caso de cambiar la foto de portada se ejecuta este bloque de codigo, sabemos si cambia mediante una comparacion previa.
-        private void SetOutstandingPicture(UbicationPicture currentOutstandingPicture, List<UbicationPicture> currentPicturesList, string outstandingPicture, int id)
+        [HttpPost]
+        public string DeletePicture(string extension)
         {
-            //Si no son iguales primero cambiamos a false la opcion outstandingPicture de la foto actual, ya que esta no es mas la foto de portada
-            currentOutstandingPicture.OutstandingPicture = false;
-            db.Entry(currentOutstandingPicture).State = EntityState.Modified;
-            //Luego verificamos si la nueva foto de portada existe entre las fotos antiguas
-            //Para ello creamos una variable que nos almacenara la imagen completa si existe.
-            UbicationPicture outstandingPictureExists = null;
-            foreach (var currentPicture in currentPicturesList)
+            var state = "false";
+            try
             {
-                //Debemos pasar currentPicture a b64 para poder comparar
-                string currentPictureInB64 = currentPicture.Extension;
-                //comparamos
-                if (currentPictureInB64 == outstandingPicture)
+                UbicationPicture ubicationPicture = db.UbicationPictures.FirstOrDefault(p => p.Extension == extension);
+                if (ubicationPicture != null)
                 {
-                    outstandingPictureExists = currentPicture;
+                    db.UbicationPictures.Remove(ubicationPicture);
+                    db.SaveChanges();
+                    state = "true";
+                    return state;
+                }
+                else
+                {
+                    return state;
                 }
             }
-            // si la nueva foto de portada existe solo se le cambia el valor outstandingPicture a true
-            if (outstandingPictureExists != null)
+            catch (Exception)
             {
-                outstandingPictureExists.OutstandingPicture = true;
-                db.Entry(outstandingPictureExists).State = EntityState.Modified;
-            }
-            //si la foto no existe debemos crearla y agregarla con el valor outstandingPicture en true.
-            else
-            {
-                UbicationPicture picture = new UbicationPicture();
-                picture.OutstandingPicture = true;
-                picture.Extension = outstandingPicture;
-                picture.UbicationId = id;
-                db.UbicationPictures.Add(picture);
-            }
-        }
 
-        private void AddNewPictures(string[] urls, List<UbicationPicture> currentPicturesList, int id)
-        {
-            //Creamos lista que almacenara fotos nuevas para añadirlas a la base de datos
-            List<UbicationPicture> picturesToAdd = new List<UbicationPicture>();
-            if (urls != null)
-            {
-                foreach (var url in urls)
-                {
-                    var exists = false;
-                    foreach (var currentPicture in currentPicturesList)
-                    {
-                        string currentPictureBase64 = currentPicture.Extension;
-                        if (currentPictureBase64 == url)
-                        {
-                            exists = true;
-                        }
-                    }
-                    if (!exists)
-                    {
-                        UbicationPicture picture = new UbicationPicture();
-                        picture.OutstandingPicture = false;
-                        picture.Extension = url;
-                        picture.UbicationId = id;
-                        picturesToAdd.Add(picture);
-                    }
-                }
-                //Finalizado el ciclo de verificacion procedemos a añadir las nuevas imagenes
-                db.UbicationPictures.AddRange(picturesToAdd);
-            }
-        }
-
-        private void DeletePictures(string[] urls, List<UbicationPicture> currentPicturesList, string outstandingPicture)
-        {
-            //recorremos la lista antigua 
-            foreach (var currentPicture in currentPicturesList)
-            {
-                //variable que nos indicara si el elemento existe
-                var noExists = true;
-                //recorremos lista nueva comparando el elemento en ciclo de la lista antigua contra los elementos
-                //de la lista nueva.
-
-                    foreach (var url in urls)
-                    {
-                        string currentPictureBase64 = currentPicture.Extension;
-                        if (currentPictureBase64 == url || currentPictureBase64 == outstandingPicture)
-                        {
-                            noExists = false;
-                        }
-                    }
-                //si el elemento no existe lo borramos
-                if (noExists)
-                {
-                    db.UbicationPictures.Remove(currentPicture);
-                }
-
+                return state;
             }
         }
 

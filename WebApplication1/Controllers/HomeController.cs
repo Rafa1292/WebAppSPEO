@@ -21,60 +21,90 @@ namespace WebApplication1.Controllers
 
         public ActionResult Index()
         {
-            return View("ErrorPage");
 
-            //var articlesEF = from a in db.Articles
-            //                 where a.State && !a.SoldState
-            //                 select a;
+            var articlesEF = from a in db.Articles
+                             where a.State && !a.SoldState
+                             select a;
 
-            //var articles = articlesEF.ToList();
+            var articles = articlesEF.ToList();
 
-
-            //List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-            //foreach (var article in articles)
-            //{
-            //    ArticleViewModel articleViewModel = GetArticleViewModel(article);
-            //    ArticleViewModelList.Add(articleViewModel);
-            //}
-
-            //var individualContributors = db.IndividualContributors.ToList();
-            //IQueryable<UbicationPicture> OutstandingPictures = from p in db.UbicationPictures
-            //                                                   where p.OutstandingPicture == true && p.Extension != null
-            //                                                   select p;
-
-            //ViewBag.UbicationPicture = OutstandingPictures.ToList();
-            //var ubicationList = from u in db.Ubications
-            //                    where u.UbicationCategory.Name == "Condominio"
-            //                    select u;
-            //ViewBag.Ubications = ubicationList.ToList();
-            //ViewBag.UbicationCategory = new SelectList(db.UbicationCategory, "UbicationCategoryId", "Name");
+           
 
 
+            List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
+            var individualContributors = db.IndividualContributors.ToList();
+            IQueryable<UbicationPicture> OutstandingPictures = from p in db.UbicationPictures
+                                                               where p.OutstandingPicture == true && p.Extension != null
+                                                               select p;
 
-            //var ArticleViewModelListOrder = ArticleViewModelList.OrderByDescending(a => a.Article.CreationDate).ToList();
+            ViewBag.UbicationPicture = OutstandingPictures.ToList();
+            var ubicationList = from u in db.Ubications
+                                where u.UbicationCategory.Name == "Condominio"
+                                select u;
+            ViewBag.Ubications = ubicationList.ToList();
+            ViewBag.UbicationCategory = new SelectList(db.UbicationCategory, "UbicationCategoryId", "Name");
 
-            //List<ArticleViewModel> ArticleViewModelCutList = new List<ArticleViewModel>();
 
-            //var i = 0;
-            //foreach (var article in ArticleViewModelListOrder)
-            //{
-            //    if (i <= 8 && article.Article.ArticleKind == EArticleKind.Venta)
-            //    {
-            //        ArticleViewModelCutList.Add(article);
-            //        i++;
-            //    }
-            //}
+            var ArticleViewModelListOrder = ArticleViewModelList.OrderByDescending(a => a.Article.CreationDate).ToList();
 
-            ////ArticleViewModelMixedList.AddRange(ListOutstandingEF.ToList());
-            ////ArticleViewModelMixedList.AddRange(ListOportunityEF.ToList());
+            List<ArticleViewModel> ArticleViewModelCutList = new List<ArticleViewModel>();
 
-            //LandingView landingView = new LandingView
-            //{
-            //    ArticleViewModels = ArticleViewModelCutList,
-            //    IndividualContributors = individualContributors
-            //};
+            var i = 0;
+            foreach (var article in ArticleViewModelListOrder)
+            {
+                if (i <= 8 && article.Article.ArticleKind == EArticleKind.Venta)
+                {
+                    ArticleViewModelCutList.Add(article);
+                    i++;
+                }
+            }
 
-            //return View(landingView);
+
+
+            LandingView landingView = new LandingView
+            {
+                ArticleViewModels = ArticleViewModelCutList,
+                IndividualContributors = individualContributors
+            };
+
+            return View(landingView);
+        }
+
+        //---------------ArticleViewModelSection---------------//
+
+        public ArticleViewModel GetArticleViewModel(Article article)
+        {
+            try
+            {
+                List<ArticlePicture> pictures = GetPictureList(article.Id);
+                ArticlePicture outstandingPicture = GetOutstandingPicture(article.Id);
+                var houses = GetHouses(article.Id);
+                article.Terrain.TerrainFeaturesTerrain = GetTerrainFeatures(article.Terrain);
+
+                ArticleViewModel articleViewModel = SetArticleViewModel(pictures, outstandingPicture, houses.House, houses.HouseAux, article);
+
+                return articleViewModel;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al obtener el modelo de articulo" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
+        {
+
+            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+            foreach (var article in articles)
+            {
+                ArticleViewModel articleViewModel = GetArticleViewModel(article);
+                ArticleViewModelList.Add(articleViewModel);
+            }
+            return ArticleViewModelList;
+
         }
 
         public ActionResult ArticleViewModel(int id)
@@ -83,11 +113,11 @@ namespace WebApplication1.Controllers
             ArticleViewModel articleViewModel = GetArticleViewModel(article);
 
             IQueryable<UbicationPicture> ubicationPictures = from p in db.UbicationPictures
-                                                             where p.UbicationId == article.UbicationId && !p.OutstandingPicture 
+                                                             where p.UbicationId == article.UbicationId && !p.OutstandingPicture
                                                              select p;
             IQueryable<int> ubicationFeatureUbication = from u in db.UbicationFeaturesUbication
-                                                             where u.UbicationId == articleViewModel.Article.UbicationId 
-                                                             select u.UbicationFeatureId;
+                                                        where u.UbicationId == articleViewModel.Article.UbicationId
+                                                        select u.UbicationFeatureId;
 
             var filesEF = from f in db.Archivos
                           where f.ArticleId == id
@@ -101,6 +131,104 @@ namespace WebApplication1.Controllers
 
             return View(articleViewModel);
         }
+
+        public ArticleViewModel SetArticleViewModel(List<ArticlePicture> pictures, ArticlePicture outstandingPicture, House house, HouseAux houseAux, Article article)
+        {
+            try
+            {
+                ArticleViewModel articleViewModel = new ArticleViewModel();
+                articleViewModel.Article = article;
+                articleViewModel.Pictures = pictures;
+                articleViewModel.OutstandingPicture = outstandingPicture;
+                articleViewModel.House = house;
+                articleViewModel.HouseAux = houseAux;
+
+                return articleViewModel;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al setear el modelo de articulo" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+
+
+        public List<TerrainFeatureTerrain> GetTerrainFeatures(Terrain terrain)
+        {
+            try
+            {
+                IQueryable<TerrainFeatureTerrain> TerrainFeatureTerrainEF = from tf in db.TerrainFeaturesTerrain
+                                                                            where tf.TerrainId == terrain.TerrainId
+                                                                            select tf;
+
+                List<TerrainFeatureTerrain> TerrainFeatureTerrainList = TerrainFeatureTerrainEF.ToList();
+
+
+                return TerrainFeatureTerrainList;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error += "Error al obtener las caracteristicas de terreno" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+
+        //------------------------------------------------------------------------------------------------------//
+
+
+        //---------------PictureSection---------------//
+
+
+
+        public ArticlePicture GetOutstandingPicture(int id)
+        {
+            try
+            {
+                ArticlePicture OutstandingPicture = new ArticlePicture();
+
+                OutstandingPicture = db.ArticlePictures.FirstOrDefault(a => a.ArticleId == id && a.OutstandingPicture == true);
+
+                return OutstandingPicture;
+            }
+            catch (Exception ex)
+            {
+
+                ViewBag.error += "Error al obtener la foto de portada" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        public List<ArticlePicture> GetPictureList(int id)
+        {
+            try
+            {
+                IQueryable<ArticlePicture> PicturesEF = from p in db.ArticlePictures
+                                                        where p.ArticleId == id && p.OutstandingPicture == false
+                                                        select p;
+
+                List<ArticlePicture> PicturesList = PicturesEF.ToList();
+
+                return PicturesList;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error += "Error al obtener las fotos" + ex.InnerException;
+                return null;
+            }
+
+        }
+
+        //------------------------------------------------------------------------------------------------------//
+
+
+
+
 
         public ActionResult GetIndexArticles(int id)
         {
@@ -155,7 +283,8 @@ namespace WebApplication1.Controllers
             }
 
 
-            LandingView landingView = new LandingView() {
+            LandingView landingView = new LandingView()
+            {
                 ArticleViewModels = ArticleViewModelPartialList
             };
 
@@ -168,7 +297,7 @@ namespace WebApplication1.Controllers
             Archivo _archivo;
             FileContentResult _fileContent;
 
-                _archivo = db.Archivos.FirstOrDefault(x => x.Id == id);
+            _archivo = db.Archivos.FirstOrDefault(x => x.Id == id);
 
             if (_archivo == null)
             {
@@ -196,23 +325,24 @@ namespace WebApplication1.Controllers
                 }
             }
         }
-        public ArticleViewModel GetArticleViewModel(Article article)
-        {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-            //var pictures = GetPictures(article.Id);
-            //string[] urls = pictures.Urls;
-            //string outstandingPicture = pictures.OutstandingPicture;
-            //var houses = GetHouses(article.Id);
-            //House house = houses.House != null ? houses.House : null;
-            //HouseAux houseAux = houses.HouseAux != null ? houses.HouseAux : null;
-            //ArticleViewModel Features = GetFeatures(article, house, houseAux);
-            //int[] terrainFeatures = Features.TerrainFeatures;
-            //int[] houseFeatures = Features.HouseFeatures;
-            //int[] houseAuxFeatures = Features.HouseAuxFeatures;
-            //ArticleViewModel articleViewModel = SetArticleViewModel(article, urls, outstandingPicture, house, houseAux, houseFeatures, houseAuxFeatures, terrainFeatures);
 
-            return articleViewModel;
-        }
+        //public ArticleViewModel GetArticleViewModel(Article article)
+        //{
+        //    ArticleViewModel articleViewModel = new ArticleViewModel();
+        //    //var pictures = GetPictures(article.Id);
+        //    //string[] urls = pictures.Urls;
+        //    //string outstandingPicture = pictures.OutstandingPicture;
+        //    //var houses = GetHouses(article.Id);
+        //    //House house = houses.House != null ? houses.House : null;
+        //    //HouseAux houseAux = houses.HouseAux != null ? houses.HouseAux : null;
+        //    //ArticleViewModel Features = GetFeatures(article, house, houseAux);
+        //    //int[] terrainFeatures = Features.TerrainFeatures;
+        //    //int[] houseFeatures = Features.HouseFeatures;
+        //    //int[] houseAuxFeatures = Features.HouseAuxFeatures;
+        //    //ArticleViewModel articleViewModel = SetArticleViewModel(article, urls, outstandingPicture, house, houseAux, houseFeatures, houseAuxFeatures, terrainFeatures);
+
+        //    return articleViewModel;
+        //}
 
         public ArticleViewModel SetArticleViewModel(
         Article article, string[] urls, string outstandingPicture, House house, HouseAux houseAux, int[] houseFeatures, int[] houseAuxFeatures, int[] terrainFeatures)
@@ -579,18 +709,18 @@ namespace WebApplication1.Controllers
             return PartialView("articleList", ArticleViewModelList);
         }
 
-        public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
-        {
+        //public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
+        //{
 
-            List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-            foreach (var article in articles)
-            {
-                ArticleViewModel articleViewModel = GetArticleViewModel(article);
-                ArticleViewModelList.Add(articleViewModel);
-            }
-            return ArticleViewModelList;
+        //    List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
+        //    foreach (var article in articles)
+        //    {
+        //        ArticleViewModel articleViewModel = GetArticleViewModel(article);
+        //        ArticleViewModelList.Add(articleViewModel);
+        //    }
+        //    return ArticleViewModelList;
 
-        }
+        //}
 
         public List<ArticleViewModel> FilterCategory(string category)
         {
@@ -696,7 +826,7 @@ namespace WebApplication1.Controllers
 
 
             var articlesEF = from a in db.Articles
-                             where (a.Terrain.BackgroundMeasure * a.Terrain.ForeheadMeasure) >= initialSize && 
+                             where (a.Terrain.BackgroundMeasure * a.Terrain.ForeheadMeasure) >= initialSize &&
                              (a.Terrain.BackgroundMeasure * a.Terrain.ForeheadMeasure) <= finalSize
                              select a;
 
@@ -736,7 +866,7 @@ namespace WebApplication1.Controllers
                     break;
                 case "Categoria":
                     var category = from c in db.UbicationCategory
-                                     select c.Name;
+                                   select c.Name;
                     objectList = category.ToList();
                     break;
 

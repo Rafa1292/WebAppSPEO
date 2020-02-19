@@ -113,26 +113,41 @@
                         </div>
                         @if (ViewBag.urls != null)
                         {
-                            var extension = ViewBag.Selectedurl;
-                            var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", extension);
-                            <div class="col-md-3 my-2 justify-content-center d-flex" id="0">
+                            var imgSrc = "";
+                            var extension = "";
+
+                            if (ViewBag.Selectedurl != null)
+                            {
+                                extension = ViewBag.Selectedurl;
+                            }
+                            imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", extension);
+
+
+                            <div class="col-md-3 my-2 justify-content-center d-flex" id="@extension">
                                 <figure class="figure-style">
                                     <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src="@imgSrc">
                                 </figure>
-                                <i id="0" class="fas fa-times-circle close-button-style 0" aria-hidden="true"></i>
-                                <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="@imgSrc">
+                                <i id="0" class="fas fa-times-circle close-button-style 0" aria-hidden="true" onclick='deleteBlob("@extension")'></i>
+                                <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="@extension">
                             </div>
 
                             var i = 1;
+
+                            imgSrc = "";
                             foreach (var url in ViewBag.urls)
                             {
-                                extension = url;
+                                extension = "";
+                                if (url != null)
+                                {
+                                    extension = url;
+                                }
                                 imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", extension);
-                                <div class="col-md-3 my-2 justify-content-center d-flex" id="@i">
+
+                                <div class="col-md-3 my-2 justify-content-center d-flex" id="@extension">
                                     <figure class="figure-style">
                                         <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src="@imgSrc">
                                     </figure>
-                                    <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true"></i>
+                                    <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true" onclick='deleteBlob("@extension")'></i>
                                     <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@url">
                                 </div>
                                 i++;
@@ -318,6 +333,26 @@
                     alert('No');
                 })
             return false;
+        }
+
+        function deleteBlob(extension) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DeletePicture","Ubications")',
+                data: { extension: extension },
+                cache: false
+            })
+                .then(function (data) {
+                    if (data) {
+                        var element = document.getElementById(extension);
+                        element.remove();
+                    }
+                })
+                .fail(function (data) {
+                    alert('No hay caracteristicas que mostrar!');
+                })
+               return false;
         }
     </script>
 
