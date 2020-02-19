@@ -426,10 +426,9 @@ namespace WebApplication1.Controllers
         //---------------AjaxSection---------------//        
         public ActionResult ApproveArticles()
         {
-            //List<ArticleViewModel> ArticleViewModelList = ArticlesToApprove();
+            List<ArticleViewModel> ArticleViewModelList = ArticlesToApprove();
 
-            //return View(ArticleViewModelList);
-            return View("ErrorPage");
+            return View(ArticleViewModelList);
         }
 
         public ActionResult PropertySold(int id, bool state)

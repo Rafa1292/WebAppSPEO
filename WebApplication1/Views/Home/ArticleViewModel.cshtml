@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "ArticleViewModel";
-    var imgPrimary = String.Format("data:image/png;base64,{0}", Model.OutstandingPicture);
+    var imgPrimary = @String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", Model.OutstandingPicture.Extension);
     var areaTotal = Model.Article.Terrain.ForeheadMeasure * Model.Article.Terrain.BackgroundMeasure;
     var mts = "mts";
     var houseLegend = Model.House != null && Model.HouseAux != null ? "2 casas de habitacion" : "1 casa de habitacion";
@@ -12,7 +12,6 @@
     var bedrooms = Model.HouseAux == null ? "" : Model.HouseAux.BedroomsAux.ToString();
     var garage = Model.HouseAux == null ? "" : Model.HouseAux.GarageAux.ToString();
     var levels = Model.HouseAux == null ? "" : Model.HouseAux.LevelsAux.ToString();
-    var features = Model.HouseAux == null ? new int[0] : Model.HouseAuxFeatures;
     var foreheadMeasure = Model.HouseAux == null ? "" : Model.HouseAux.HouseForeheadMeasureAux.ToString();
     var backgroundMeasure = Model.HouseAux == null ? "" : Model.HouseAux.HouseBackgroundMeasureAux.ToString();
 
@@ -30,9 +29,9 @@
                 <div class="">
                     <img src="@imgPrimary" class="item item-height rounded" />
                 </div>
-                @foreach (var picture in Model.Urls)
+                @foreach (var picture in Model.Pictures)
                 {
-                    imgSrc = String.Format("data:image/png;base64,{0}", picture);
+                    imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
                     <div class="">
                         <img src="@imgSrc" class="item rounded" />
                     </div>
@@ -43,14 +42,14 @@
         </div>
 
         <div class="container-fluid d-flex justify-content-center flex-wrap" style="margin-top: -30px;">
-            <div class="slider-nav slide-gallery" >
+            <div class="slider-nav slide-gallery">
 
                 <div class="p-1">
                     <img src="@imgPrimary" class="item-gallery " />
                 </div>
-                @foreach (var picture in Model.Urls)
+                @foreach (var picture in Model.Pictures)
                 {
-                    imgSrc = String.Format("data:image/png;base64,{0}", picture);
+                    imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
                     <div class="p-1">
                         <img src="@imgSrc" class="item-gallery " />
                     </div>
@@ -65,7 +64,7 @@
                     </span>
                 </h4>
 
-                
+
             </div>
             <label><strong>Ubicado en: </strong>@Model.Article.Ubication.Distrit.Canton.Name, @Model.Article.Ubication.Distrit.Name.</label>
             <div class="col-12 text-break">
@@ -73,16 +72,14 @@
             </div>
             <label><strong>Amenidades: </strong></label>
             <div class="col-12">
-                @foreach (var feature in ViewBag.UbicationFeaturesUbication)
+
+                @foreach (var item in Model.Article.Ubication.UbicationFeaturesUbication)
                 {
-                    foreach (var featureName in ViewBag.UbicationFeatures)
-                    {
-                        if (feature == Int32.Parse(featureName.Value))
-                        {
-                            <label class="p-2 bg-success m-2 rounded text-light">@featureName.Text</label>
-                        }
-                    }
+
+                    <label class="p-2 bg-success m-2 rounded text-light">@item.UbicationFeature.Description</label>
+
                 }
+
             </div>
 
             <div class="col-12 p-5 mt-4">
@@ -91,7 +88,7 @@
                     <div class="autoplay mb-5 ubication-gallery">
                         @foreach (var picture in ViewBag.ubicationPictures)
                         {
-                            imgSrc = String.Format("data:image/png;base64,{0}", Convert.ToBase64String(picture.PictureArray));
+                            imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
                             <div class="">
                                 <img src="@imgSrc" class="item-ubication rounded" width="600" height="400" />
                             </div>
@@ -144,15 +141,9 @@
             </div>
             <div class="col-12 border-dark mb-3 p-4 border-bottom">
                 <p class="mb-4">El terreno cuenta con:<br /></p>
-                @foreach (var feature in Model.TerrainFeatures)
+                @foreach (var feature in Model.Article.Terrain.TerrainFeaturesTerrain)
                 {
-                    foreach (var featureName in ViewBag.TerrainFeatures)
-                    {
-                        if (feature == Int32.Parse(featureName.Value))
-                        {
-                            <label class="p-2 bg-success m-2 rounded text-light">@featureName.Text</label>
-                        }
-                    }
+                    <label class="p-2 bg-success m-2 rounded text-light">@feature.TerrainFeature.Description</label>
                 }
             </div>
         </div>
@@ -231,27 +222,17 @@
                             </th>
                             <td>
 
-                                @foreach (var feature in Model.HouseFeatures)
+                                @foreach (var feature in Model.House.HouseFeaturesHouse)
                                 {
-                                    foreach (var featureName in ViewBag.HouseFeatures)
-                                    {
-                                        if (feature == Int32.Parse(featureName.Value))
-                                        {
-                                            <label class="p-2 bg-success m-2 rounded text-light">@featureName.Text</label>
-                                        }
-                                    }
+
+                                    <label class="p-2 bg-success m-2 rounded text-light">@feature.HouseFeature.Description</label>
                                 }
                             </td>
                             <td>
-                                @foreach (var feature in features)
+                                @foreach (var feature in Model.HouseAux.HouseFeaturesHouse)
                                 {
-                                    foreach (var featureName in ViewBag.HouseFeatures)
-                                    {
-                                        if (feature == Int32.Parse(featureName.Value))
-                                        {
-                                            <label class="p-2 bg-success m-2 rounded text-light">@featureName.Text</label>
-                                        }
-                                    }
+                                    <label class="p-2 bg-success m-2 rounded text-light">@feature.HouseFeature.Description</label>
+
                                 }
                             </td>
                         </tr>
@@ -260,7 +241,7 @@
             </div>
         }
 
-        <div class="col-md-12">
+        @*<div class="col-md-12">
             <div class="col-12 mb-3">
                 <h5>Contenido descargable</h5>
             </div>
@@ -273,7 +254,7 @@
                 </a>
 
             }
-        </div>
+        </div>*@
     </div>
 
 

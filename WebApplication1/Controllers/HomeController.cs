@@ -115,9 +115,9 @@ namespace WebApplication1.Controllers
             IQueryable<UbicationPicture> ubicationPictures = from p in db.UbicationPictures
                                                              where p.UbicationId == article.UbicationId && !p.OutstandingPicture
                                                              select p;
-            IQueryable<int> ubicationFeatureUbication = from u in db.UbicationFeaturesUbication
+            IQueryable<UbicationFeatureUbication> ubicationFeatureUbication = from u in db.UbicationFeaturesUbication
                                                         where u.UbicationId == articleViewModel.Article.UbicationId
-                                                        select u.UbicationFeatureId;
+                                                        select u;
 
             var filesEF = from f in db.Archivos
                           where f.ArticleId == id
@@ -126,9 +126,8 @@ namespace WebApplication1.Controllers
             ViewBag.ubicationPictures = ubicationPictures.ToList();
             ViewBag.TerrainFeatures = new SelectList(db.TerrainFeatures, "TerrainFeatureId", "Description");
             ViewBag.HouseFeatures = new SelectList(db.HouseFeatures, "HouseFeatureId", "Description");
-            ViewBag.UbicationFeaturesUbication = ubicationFeatureUbication.ToList();
+            articleViewModel.Article.Ubication.UbicationFeaturesUbication = ubicationFeatureUbication.ToList();
             ViewBag.UbicationFeatures = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
-
             return View(articleViewModel);
         }
 
@@ -154,7 +153,17 @@ namespace WebApplication1.Controllers
 
         }
 
-
+        public void ReloadViewBags(ArticleViewModel model)
+        {
+            ViewBag.houseForm = model.House != null ? "flex" : "none";
+            ViewBag.houseAuxForm = model.HouseAux != null ? "flex" : "none";
+            ViewBag.houseFormBtn = model.House != null && model.HouseAux != null ? "none" : "block";
+            ViewBag.SelectedUbication = model.Article.UbicationId;
+            ViewBag.Selectedurl = model.OutstandingPicture;
+            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
+            ViewBag.TerrainId = new SelectList(db.Terrains, "TerrainId", "Topography");
+            ViewBag.UbicationId = new SelectList(db.Ubications, "UbicationId", "Name");
+        }
 
         public List<TerrainFeatureTerrain> GetTerrainFeatures(Terrain terrain)
         {

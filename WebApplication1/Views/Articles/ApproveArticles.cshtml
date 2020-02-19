@@ -21,12 +21,12 @@
                         <h5><strong>Informacion del articulo</strong></h5>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="backgroundless-list"><strong>Precio:</strong><br /> @item.Currency@item.Article.Price</li>
+                        <li class="backgroundless-list"><strong>Precio:</strong><br /> @item.Article.Currency@item.Article.Price</li>
                         @{
-                            var areaTotalTerreno = item.Terrain.ForeheadMeasure * item.Terrain.BackgroundMeasure;
+                            var areaTotalTerreno = item.Article.Terrain.ForeheadMeasure * item.Article.Terrain.BackgroundMeasure;
                         }
-                        <li class="backgroundless-list"><strong>Medida de fondo:</strong><br /> @item.Terrain.BackgroundMeasure Mts</li>
-                        <li class="backgroundless-list"><strong>Medida de frente:</strong><br /> @item.Terrain.ForeheadMeasure Mts</li>
+                        <li class="backgroundless-list"><strong>Medida de fondo:</strong><br /> @item.Article.Terrain.BackgroundMeasure Mts</li>
+                        <li class="backgroundless-list"><strong>Medida de frente:</strong><br /> @item.Article.Terrain.ForeheadMeasure Mts</li>
                         <li class="backgroundless-list"><strong>Area total:</strong><br /> @areaTotalTerreno Mts²</li>
                     </ul>
                 </div>
@@ -86,7 +86,7 @@
                 }
                 <div class="col-md-3">
                     @{
-                        var imgSrc = String.Format("data:image/png;base64,{0}", item.OutstandingPicture);
+                        var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", item.OutstandingPicture.Extension);
                     }
                     <div class=" col-md-12 d-flex justify-content-center my-2">
                         <div class="rounded approve-articles-image shadow" style="background-image: url(@imgSrc)">

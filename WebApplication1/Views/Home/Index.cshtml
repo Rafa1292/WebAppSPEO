@@ -225,7 +225,10 @@
     <div class="col-md-12 d-flex flex-wrap index-article-container justify-content-center" id="IndexArticleList">
         @Html.Partial("IndexArticleList")
 
-    @Html.ActionLink("Ver más", "PropertiesView", "Home", null, new { @class = "btn btn-outline-success py-2 px-5 mb-3" })
+        <div class="col-md-12 d-flex justify-content-center">
+
+            @Html.ActionLink("Ver más", "PropertiesView", "Home", null, new { @class = "btn btn-outline-success py-2 px-5 mb-3" })
+        </div>
     </div>
 
     <br />
@@ -323,7 +326,7 @@
                     </div>
                     <div class="text-justify">
                         <strong class="p-2   index-ubication-description" style="font-size: 14px;">
-                            @ubication.Description 
+                            @ubication.Description
                         </strong>
                     </div>
 
@@ -336,22 +339,22 @@
 @*blog*@
 @*<div class="col-md-12 p-2 d-flex flex-wrap pt-5 mb-5 bg-white">
 
-    <div class="col-md-3">
-
-    </div>
-
-    <div class="col-md-6 flex-wrap d-flex">
-
-        <div class="col-md-12 text-center">
+        <div class="col-md-3">
 
         </div>
 
-        <div class="col-md-12 text-justify">
+        <div class="col-md-6 flex-wrap d-flex">
+
+            <div class="col-md-12 text-center">
+
+            </div>
+
+            <div class="col-md-12 text-justify">
+
+            </div>
 
         </div>
-
-    </div>
-</div>*@
+    </div>*@
 <!-- Modal -->
 <div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
     <div class="modal-dialog load-gif m-0" role="document">
@@ -432,7 +435,7 @@
         }
 
         //animacion agents
-        // 1024    anm inicia  3400 , 
+        // 1024    anm inicia  3400 ,
         // desktop anm inicia : 3721 , div inicia: 4131
         //mobile    anm inicia : 8072 , div inicia: 8367
 

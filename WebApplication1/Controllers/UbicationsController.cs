@@ -341,42 +341,57 @@ namespace WebApplication1.Controllers
 
         private void SetOutstandingPicture(UbicationPicture currentOutstandingPicture, List<UbicationPicture> currentPicturesList, string outstandingPicture, int id)
         {
-            if (currentOutstandingPicture.Extension == outstandingPicture)
+            if (currentOutstandingPicture != null)
             {
-                return;
+                if (currentOutstandingPicture.Extension == outstandingPicture)
+                {
+                    return;
+                }
+
+                else
+                {
+                    //Si no son iguales primero cambiamos a false la opcion outstandingPicture de la foto actual, ya que esta no es mas la foto de portada
+                    currentOutstandingPicture.OutstandingPicture = false;
+                    db.Entry(currentOutstandingPicture).State = EntityState.Modified;
+                    //Luego verificamos si la nueva foto de portada existe entre las fotos antiguas
+                    //Para ello creamos una variable que nos almacenara la imagen completa si existe.
+                    UbicationPicture outstandingPictureExists = null;
+                    foreach (var currentPicture in currentPicturesList)
+                    {
+                        //comparamos
+                        if (currentPicture.Extension == outstandingPicture)
+                        {
+                            outstandingPictureExists = currentPicture;
+                        }
+                    }
+                    // si la nueva foto de portada existe solo se le cambia el valor outstandingPicture a true
+                    if (outstandingPictureExists != null)
+                    {
+                        outstandingPictureExists.OutstandingPicture = true;
+                        db.Entry(outstandingPictureExists).State = EntityState.Modified;
+                    }
+                    //si la foto no existe debemos crearla y agregarla con el valor outstandingPicture en true.
+                    else
+                    {
+                        UbicationPicture picture = new UbicationPicture();
+                        picture.OutstandingPicture = true;
+                        picture.Extension = AddBlobToStorage(id, outstandingPicture, 20);
+                        picture.UbicationId = id;
+                        db.UbicationPictures.Add(picture);
+                        db.SaveChanges();
+                    }
+                }
             }
             else
             {
-                //Si no son iguales primero cambiamos a false la opcion outstandingPicture de la foto actual, ya que esta no es mas la foto de portada
-                currentOutstandingPicture.OutstandingPicture = false;
-                db.Entry(currentOutstandingPicture).State = EntityState.Modified;
-                //Luego verificamos si la nueva foto de portada existe entre las fotos antiguas
-                //Para ello creamos una variable que nos almacenara la imagen completa si existe.
-                UbicationPicture outstandingPictureExists = null;
-                foreach (var currentPicture in currentPicturesList)
-                {
-                    //comparamos
-                    if (currentPicture.Extension == outstandingPicture)
-                    {
-                        outstandingPictureExists = currentPicture;
-                    }
-                }
-                // si la nueva foto de portada existe solo se le cambia el valor outstandingPicture a true
-                if (outstandingPictureExists != null)
-                {
-                    outstandingPictureExists.OutstandingPicture = true;
-                    db.Entry(outstandingPictureExists).State = EntityState.Modified;
-                }
-                //si la foto no existe debemos crearla y agregarla con el valor outstandingPicture en true.
-                else
-                {
-                    UbicationPicture picture = new UbicationPicture();
-                    picture.OutstandingPicture = true;
-                    picture.Extension = AddBlobToStorage(id, outstandingPicture, 20);
-                    picture.UbicationId = id;
-                    db.UbicationPictures.Add(picture);
-                    db.SaveChanges();
-                }
+
+                UbicationPicture picture = new UbicationPicture();
+                picture.OutstandingPicture = true;
+                picture.Extension = AddBlobToStorage(id, outstandingPicture, 20);
+                picture.UbicationId = id;
+                db.UbicationPictures.Add(picture);
+                db.SaveChanges();
+
             }
         }
 
