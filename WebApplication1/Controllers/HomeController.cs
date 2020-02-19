@@ -17,10 +17,12 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        private WebApplication1Context db = new WebApplication1Context();
+        public WebApplication1Context db = new WebApplication1Context();
 
         public ActionResult Index()
         {
+            List<HouseFeatureHouse> houseFeatureHouseList = db.HouseFeatureHouse.ToList();
+
 
             var articlesEF = from a in db.Articles
                              where a.State && !a.SoldState
@@ -28,7 +30,7 @@ namespace WebApplication1.Controllers
 
             var articles = articlesEF.ToList();
 
-           
+
 
 
             List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
@@ -116,8 +118,8 @@ namespace WebApplication1.Controllers
                                                              where p.UbicationId == article.UbicationId && !p.OutstandingPicture
                                                              select p;
             IQueryable<UbicationFeatureUbication> ubicationFeatureUbication = from u in db.UbicationFeaturesUbication
-                                                        where u.UbicationId == articleViewModel.Article.UbicationId
-                                                        select u;
+                                                                              where u.UbicationId == articleViewModel.Article.UbicationId
+                                                                              select u;
 
             var filesEF = from f in db.Archivos
                           where f.ArticleId == id
@@ -443,39 +445,60 @@ namespace WebApplication1.Controllers
 
         public ArticleViewModel GetHouses(int id)
         {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-
-            IQueryable<House> HouseList = from h in db.Houses
-                                          where h.ArticleId == id
-                                          select h;
-
-            House house = null;
-            HouseAux houseAux = null;
-
-            foreach (var houseResult in HouseList)
+            try
             {
-                if (house == null)
-                {
-                    house = houseResult;
-                }
-                else
-                {
-                    houseAux = new HouseAux();
-                    houseAux.Id = houseResult.HouseId;
-                    houseAux.BathroomsAux = houseResult.Bathrooms;
-                    houseAux.BedroomsAux = houseResult.Bedrooms;
-                    houseAux.GarageAux = houseResult.Garage;
-                    houseAux.HouseBackgroundMeasureAux = houseResult.HouseBackgroundMeasure;
-                    houseAux.HouseForeheadMeasureAux = houseResult.HouseForeheadMeasure;
-                    houseAux.LevelsAux = houseResult.Levels;
 
+
+                ArticleViewModel articleViewModel = new ArticleViewModel();
+
+                IQueryable<House> HouseListEF = from h in db.Houses
+                                              where h.ArticleId == id
+                                              select h;
+                List<House> HouseList = HouseListEF.ToList();
+
+                House house = null;
+                HouseAux houseAux = null;
+
+                foreach (var houseResult in HouseList)
+                {
+                    if (house == null)
+                    {
+                        house = houseResult;
+                        var houseFeatureHouse = from f in db.HouseFeatureHouse
+                                                where f.HouseId == house.HouseId
+                                                select f;
+
+                        house.HouseFeaturesHouse = houseFeatureHouse.ToList();
+                    }
+                    else
+                    {
+                        houseAux = new HouseAux();
+                        houseAux.Id = houseResult.HouseId;
+                        houseAux.BathroomsAux = houseResult.Bathrooms;
+                        houseAux.BedroomsAux = houseResult.Bedrooms;
+                        houseAux.GarageAux = houseResult.Garage;
+                        houseAux.HouseBackgroundMeasureAux = houseResult.HouseBackgroundMeasure;
+                        houseAux.HouseForeheadMeasureAux = houseResult.HouseForeheadMeasure;
+                        houseAux.LevelsAux = houseResult.Levels;
+
+                        var houseFeatureHouseAux = from f in db.HouseFeatureHouse
+                                                   where f.HouseId == houseAux.Id
+                                                   select f;
+
+                        houseAux.HouseFeaturesHouse = houseFeatureHouseAux.ToList();
+                    }
                 }
+
+                articleViewModel.House = house;
+                articleViewModel.HouseAux = houseAux;
+
+                return articleViewModel;
             }
+            catch (Exception ex)
+            {
 
-            articleViewModel.House = house;
-            articleViewModel.HouseAux = houseAux;
-
-            return articleViewModel;
+                throw;
+            }
         }
 
 
