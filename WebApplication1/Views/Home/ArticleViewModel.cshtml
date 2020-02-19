@@ -88,10 +88,14 @@
                     <div class="autoplay mb-5 ubication-gallery">
                         @foreach (var picture in ViewBag.ubicationPictures)
                         {
-                            imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
-                            <div class="">
-                                <img src="@imgSrc" class="item-ubication rounded" width="600" height="400" />
-                            </div>
+                            if (picture.Extension != null)
+                            {
+
+                                imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
+                                <div class="">
+                                    <img src="@imgSrc" class="item-ubication rounded" width="600" height="400" />
+                                </div>
+                            }
                         }
                     </div>
                 </div>
@@ -242,19 +246,19 @@
         }
 
         @*<div class="col-md-12">
-            <div class="col-12 mb-3">
-                <h5>Contenido descargable</h5>
-            </div>
+                <div class="col-12 mb-3">
+                    <h5>Contenido descargable</h5>
+                </div>
 
-            @foreach (var file in ViewBag.Files)
-            {
-                <a class="rounded border border-secondary text-secondary p-2 m-2 " href="@Url.Action("DescargarArchivo", "Home", new { id = file.Id })">
-                    <span>@file.Nombre.@file.Extension</span>
+                @foreach (var file in ViewBag.Files)
+                {
+                    <a class="rounded border border-secondary text-secondary p-2 m-2 " href="@Url.Action("DescargarArchivo", "Home", new { id = file.Id })">
+                        <span>@file.Nombre.@file.Extension</span>
 
-                </a>
+                    </a>
 
-            }
-        </div>*@
+                }
+            </div>*@
     </div>
 
 
