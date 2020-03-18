@@ -235,7 +235,7 @@
                             <td>
                                 @if (Model.HouseAux != null)
                                 {
-                                    @foreach (var feature in Model.HouseAux.HouseFeaturesHouse)
+                                    foreach (var feature in Model.HouseAux.HouseFeaturesHouse)
                                     {
                                         <label class="p-2 bg-success m-2 rounded text-light">@feature.HouseFeature.Description</label>
 
