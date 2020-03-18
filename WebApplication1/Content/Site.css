@@ -893,6 +893,8 @@ a:link {
     transition: 200ms;
     font-family: Montserrat,sans-serif;
     color: rgba(0, 0, 0, .5);
+    max-height: 80px;
+    overflow: hidden;
 }
 
 .index-item-body:hover .index-item-description {
