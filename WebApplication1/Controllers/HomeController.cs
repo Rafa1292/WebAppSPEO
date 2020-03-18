@@ -337,61 +337,9 @@ namespace WebApplication1.Controllers
             }
         }
 
-        //public ArticleViewModel GetArticleViewModel(Article article)
-        //{
-        //    ArticleViewModel articleViewModel = new ArticleViewModel();
-        //    //var pictures = GetPictures(article.Id);
-        //    //string[] urls = pictures.Urls;
-        //    //string outstandingPicture = pictures.OutstandingPicture;
-        //    //var houses = GetHouses(article.Id);
-        //    //House house = houses.House != null ? houses.House : null;
-        //    //HouseAux houseAux = houses.HouseAux != null ? houses.HouseAux : null;
-        //    //ArticleViewModel Features = GetFeatures(article, house, houseAux);
-        //    //int[] terrainFeatures = Features.TerrainFeatures;
-        //    //int[] houseFeatures = Features.HouseFeatures;
-        //    //int[] houseAuxFeatures = Features.HouseAuxFeatures;
-        //    //ArticleViewModel articleViewModel = SetArticleViewModel(article, urls, outstandingPicture, house, houseAux, houseFeatures, houseAuxFeatures, terrainFeatures);
-
-        //    return articleViewModel;
-        //}
-
-        public ArticleViewModel SetArticleViewModel(
-        Article article, string[] urls, string outstandingPicture, House house, HouseAux houseAux, int[] houseFeatures, int[] houseAuxFeatures, int[] terrainFeatures)
-        {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-            //articleViewModel.Article = article;
-            //articleViewModel.Currency = article.Currency;
-            //articleViewModel.Description = article.Description;
-            //articleViewModel.Terrain = article.Terrain;
-            //articleViewModel.UbicationId = article.UbicationId;
-            //articleViewModel.IndividualContributorId = article.IndividualContributorId;
-            //articleViewModel.Urls = urls;
-            //articleViewModel.OutstandingPicture = outstandingPicture;
-            //articleViewModel.House = house;
-            //articleViewModel.HouseAux = houseAux;
-            //articleViewModel.HouseFeatures = houseFeatures;
-            //articleViewModel.HouseAuxFeatures = houseAuxFeatures;
-            //articleViewModel.TerrainFeatures = terrainFeatures;
-            return articleViewModel;
-        }
-
-        public ArticleViewModel GetPictures(int id)
-        {
-            ArticleViewModel articleViewModel = new ArticleViewModel();
-            List<ArticlePicture> Pictures = db.ArticlePictures.ToList();
-            IEnumerable<string> urls = from p in Pictures
-                                       where p.ArticleId == id && p.OutstandingPicture == false
-                                       select p.Extension;
-
-            var outstandingPictureModel = Pictures.Find(x => x.OutstandingPicture == true && x.ArticleId == id);
-            string outstandingPicture = outstandingPictureModel.Extension;
 
 
-            //articleViewModel.Urls = urls.ToArray();
-            //articleViewModel.OutstandingPicture = outstandingPicture;
 
-            return articleViewModel;
-        }
 
         public ArticleViewModel GetFeatures(Article article, House house, HouseAux houseAux)
         {
@@ -741,18 +689,6 @@ namespace WebApplication1.Controllers
             return PartialView("articleList", ArticleViewModelList);
         }
 
-        //public List<ArticleViewModel> GetArticleViewModelList(List<Article> articles)
-        //{
-
-        //    List<ArticleViewModel> ArticleViewModelList = new List<ArticleViewModel>();
-        //    foreach (var article in articles)
-        //    {
-        //        ArticleViewModel articleViewModel = GetArticleViewModel(article);
-        //        ArticleViewModelList.Add(articleViewModel);
-        //    }
-        //    return ArticleViewModelList;
-
-        //}
 
         public List<ArticleViewModel> FilterCategory(string category)
         {
