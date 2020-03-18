@@ -12,7 +12,6 @@ namespace WebApplication1.Models
         public int Id { get; set; }
 
         [Display(Name = "Descripcion")]
-        [StringLength(200,ErrorMessage = "Maximo 200 caracteres")]
         public string Description { get; set; }
 
         [Display(Name = "Propietario")]

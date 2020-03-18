@@ -235,7 +235,6 @@ namespace WebApplication1.Controllers
 
         }
 
-
         public ActionResult GetIndexArticles(int id)
         {
             var articlesEF = from a in db.Articles
