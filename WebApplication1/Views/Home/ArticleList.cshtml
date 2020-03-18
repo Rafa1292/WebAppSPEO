@@ -5,7 +5,7 @@
     foreach (var item in Model)
     {
 
-        var imgSrc = String.Format("data:image/png;base64,{0}", item.OutstandingPicture);
+        var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", item.OutstandingPicture.Extension);
 
         <div class="col-md-4 mb-3 justify-content-center d-flex item ">
             <div class="index-item-body">
