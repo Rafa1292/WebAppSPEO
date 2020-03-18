@@ -21,9 +21,6 @@ namespace WebApplication1.Controllers
 
         public ActionResult Index()
         {
-            List<HouseFeatureHouse> houseFeatureHouseList = db.HouseFeatureHouse.ToList();
-
-
             var articlesEF = from a in db.Articles
                              where a.State && !a.SoldState
                              select a;
@@ -599,7 +596,6 @@ namespace WebApplication1.Controllers
                 if (to != "")
                 {
                     mail.To.Add(to);
-
                 }
                 mail.To.Add("jrvj_1292@hotmail.com");
                 mail.Subject = subject;
