@@ -235,11 +235,6 @@ namespace WebApplication1.Controllers
 
         }
 
-        //------------------------------------------------------------------------------------------------------//
-
-
-
-
 
         public ActionResult GetIndexArticles(int id)
         {
@@ -336,10 +331,6 @@ namespace WebApplication1.Controllers
                 }
             }
         }
-
-
-
-
 
         public ArticleViewModel GetFeatures(Article article, House house, HouseAux houseAux)
         {
