@@ -211,6 +211,7 @@
     <Compile Include="Controllers\HouseFeaturesController.cs" />
     <Compile Include="Controllers\IndividualContributorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\RejectsController.cs" />
     <Compile Include="Controllers\StateActionsController.cs" />
     <Compile Include="Controllers\TerrainFeaturesController.cs" />
     <Compile Include="Controllers\UbicationCategoriesController.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Models\IndividualContributor.cs" />
     <Compile Include="Models\LandingView.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Reject.cs" />
     <Compile Include="Models\StateActions.cs" />
     <Compile Include="Models\StateActionState.cs" />
     <Compile Include="Models\Terrain.cs" />
@@ -627,6 +629,11 @@
     <Content Include="Views\Home\Blog.cshtml" />
     <Content Include="Views\Home\ErrorPage.cshtml" />
     <Content Include="Views\Articles\ErrorPage.cshtml" />
+    <Content Include="Views\Rejects\Create.cshtml" />
+    <Content Include="Views\Rejects\Delete.cshtml" />
+    <Content Include="Views\Rejects\Details.cshtml" />
+    <Content Include="Views\Rejects\Edit.cshtml" />
+    <Content Include="Views\Rejects\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

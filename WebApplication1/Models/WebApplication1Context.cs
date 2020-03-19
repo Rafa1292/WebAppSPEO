@@ -70,8 +70,7 @@ namespace WebApplication1.Models
 
         public System.Data.Entity.DbSet<WebApplication1.Models.Archivo> Archivos { get; set; }
 
-
-
+        public System.Data.Entity.DbSet<WebApplication1.Models.Reject> Rejects { get; set; }
     }
 
     public class ModelBuilder
