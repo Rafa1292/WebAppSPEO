@@ -24,7 +24,7 @@ namespace WebApplication1
     {
         protected void Application_Start()
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<Models.WebApplication1Context, Migrations.Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Models.WebApplication1Context, Migrations.Configuration>());
             ApplicationDbContext db = new ApplicationDbContext();
             CreateRoles(db);
             CreateSuperUser(db);
