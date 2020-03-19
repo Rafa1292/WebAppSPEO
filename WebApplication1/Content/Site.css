@@ -271,6 +271,7 @@ textarea {
     text-overflow: ellipsis;
     overflow: hidden;
     font-size: 14px;
+    height: 60%;
 }
 
 .ic-picture-container {
@@ -582,6 +583,7 @@ textarea {
 
     .index-ubication-description {
         max-width: 210px;
+        font-size: 10px;
     }
 
     .ic-picture-container {

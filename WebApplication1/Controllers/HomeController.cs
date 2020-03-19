@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
 
 
             List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
-            var individualContributors = db.IndividualContributors.ToList();
+            var individualContributors = db.IndividualContributors.ToList().OrderBy(x => x.Name).ToList();
             IQueryable<UbicationPicture> OutstandingPictures = from p in db.UbicationPictures
                                                                where p.OutstandingPicture == true && p.Extension != null
                                                                select p;
