@@ -9,7 +9,7 @@ namespace WebApplication1.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
             AutomaticMigrationDataLossAllowed = false;
             ContextKey = "WebApplication1.Models.WebApplication1Context";
         }
