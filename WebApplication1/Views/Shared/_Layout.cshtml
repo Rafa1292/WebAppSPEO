@@ -65,22 +65,58 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Articulos
+                                @{
+                                    var rejects = Int32.Parse(Session["rejects"].ToString());
+
+                                    if (rejects > 0)
+                                    {
+                                        <span class="badge reject-badge badge-danger">@Session["rejects"]</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge reject-badge"></span>
+                                    }
+                                }
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @Html.ActionLink("Caracteristicas de terreno", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Caracteristicas de casa", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Articulos", "Index", "Articles", null, new { @class = "dropdown-item" })
+                                <a class="dropdown-item" href="/Rejects">
+                                    Rechazos
+                                    @{
+                                        if (rejects > 0)
+                                        {
+                                            <span class="badge reject-badge badge-danger">@Session["rejects"]</span>
+                                        }
+                                    }
+                                </a>
                             </div>
                         </li>
+
                         if (User.IsInRole("Admin"))
                         {
+                            var approves = Int32.Parse(Session["approve"].ToString());
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Seguridad
+                                    @if (approves > 0)
+                                    {
+                                        <span class="badge approve-badge badge-danger">@Session["approve"]</span>
+                                    }
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @Html.ActionLink("Roles", "Index", "Users", null, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Aprobaciones", "ApproveArticles", "Articles", null, new { @class = "dropdown-item" })
+                                    <a class="dropdown-item" href="/Users">
+                                        Roles
+                                    </a>
+                                    <a class="dropdown-item" href="/Articles/ApproveArticles">
+                                        Aprobaciones
+                                        @if (approves > 0)
+                                        {
+                                            <span class="badge approve-badge badge-danger">@Session["approve"]</span>
+                                        }
+                                    </a>
                                 </div>
                             </li>
                         }
@@ -102,7 +138,7 @@
     </div>
 
 
-    <div class="container-fluid body-content p-0" style="min-height: 68vh;">
+    <div class="container-fluid body-content p-0" style="min-height: 68vh;" id="body">
         @RenderBody()
     </div>
 
@@ -163,6 +199,15 @@
                         <img src="images/logoNebulosa.png" alt="logo" style="height: 50px; width: 150px;">
                     </p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
+        <div class="modal-dialog load-gif m-0" role="document">
+            <div class="modal-content load-gif bg-transparent">
+                <img class="house-gif" src="~/Images/home-solid.svg" height="100" id="house-gif" />
+
             </div>
         </div>
     </div>

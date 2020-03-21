@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace WebApplication1.Models
 {
@@ -45,5 +48,35 @@ namespace WebApplication1.Models
         public ICollection<ArticleClient> ArticlesClient { get; set; }
         public ICollection<ArticlePicture> ArticlesPicture { get; set; }
 
+
+        public int RefreshApproves()
+        {
+            using (WebApplication1Context db = new WebApplication1Context())
+            {
+                var rejects = db.Rejects.ToList();
+
+                var approves = from a in db.Articles
+                               where !a.State
+                               select a;
+
+                var result = approves.ToList().Count() - rejects.Count();
+
+                return result;
+            }
+        }
+
+        public int RefreshRejects(string userMail)
+        {
+            using (WebApplication1Context db = new WebApplication1Context())
+            {
+                var rejects = from r in db.Rejects
+                              where r.Article.IndividualContributor.Mail == userMail
+                              select r;
+                var rejectsList = rejects.ToList();
+                var result = rejects.Count();
+
+                return result;
+            }
+        }
     }
 }

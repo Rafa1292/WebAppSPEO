@@ -1,45 +1,68 @@
 ﻿@model IEnumerable<WebApplication1.Models.Reject>
 
-@{
-    ViewBag.Title = "Index";
-}
+<div class="justify-content-center p-2 d-flex">
+    <h3 class="url-label">Rechazos</h3>
+</div>
+<hr />
 
-<h2>Index</h2>
+<div class="d-flex flex-wrap container-fluid p-2">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-12 d-flex p-3 rounded flex-wrap mb-3 align-items-lg-start text-center">
+            <div class="col-md-12 text-center approve-articles-header-container">
+                <strong> @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name</strong>
+                <span class="p-1 rounded border ">
+                    @item.Article.Code
+                </span>
+            </div>
+            <div class="d-flex flex-wrap col-md-12 approve-articles-container p-3">
+                <div class="col-md-3 border-right-gray">
+                    <div class="col-md-12">
+                        <h5><strong>Informacion del articulo</strong></h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="backgroundless-list"><strong>Precio:</strong><br /> @item.Article.Currency@item.Article.Price</li>
+                        @{
+                            var areaTotalTerreno = item.Article.Terrain.ForeheadMeasure * item.Article.Terrain.BackgroundMeasure;
+                        }
+                        <li class="backgroundless-list"><strong>Medida de fondo:</strong><br /> @item.Article.Terrain.BackgroundMeasure Mts</li>
+                        <li class="backgroundless-list"><strong>Medida de frente:</strong><br /> @item.Article.Terrain.ForeheadMeasure Mts</li>
+                        <li class="backgroundless-list"><strong>Area total:</strong><br /> @areaTotalTerreno Mts²</li>
+                    </ul>
+                </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Article.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IndividualContributor.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Reason)
-        </th>
-        <th></th>
-    </tr>
+                <div class="col-md-3">
+                    @{
+                        var imgSrc = "";
+                    }
+                    @foreach (var picture in item.Article.ArticlesPicture)
+                    {
+                        if (picture.OutstandingPicture)
+                        {
+                            imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
+                        }
+                    }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Article.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IndividualContributor.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Reason)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RejectId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RejectId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RejectId })
-        </td>
-    </tr>
-}
+                    <div class=" col-md-12 d-flex justify-content-center my-2">
+                        <div class="rounded approve-articles-image shadow" style="background-image: url(@imgSrc)">
 
-</table>
+                        </div>
+                    </div>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        @Html.ActionLink("Editar", "Edit", "Articles", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary m-1" })
+                    </div>
+                    <div class="col-md-12 text-center mt-2">
+                        <strong>Enlistado por:</strong><br /> @item.Article.IndividualContributor.Name
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex justify-content-center align-items-center">
+                        <h4 class="text-danger">
+                            <strong>
+                                @item.Reason
+                            </strong>
+                        </h4>
+                </div>
+            </div>
+        </div>
+    }
+</div>

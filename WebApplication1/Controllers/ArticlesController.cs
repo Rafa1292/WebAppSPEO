@@ -201,6 +201,14 @@ namespace WebApplication1.Controllers
                 return View("ErrorPage");
             }
 
+            Reject reject = db.Rejects.FirstOrDefault(r => r.ArticleId == id);
+
+            if (reject != null)
+            {
+                ViewBag.error = reject.Reason;
+
+            }
+
             //var filesEF = from f in db.Archivos
             //              where f.ArticleId == id
             //              select f;
@@ -277,6 +285,14 @@ namespace WebApplication1.Controllers
 
                     CompareHouses(HouseList, article.Id, articleViewModel.House, house, Article_HouseFeatures, Article_HouseAuxFeatures);
                     UpdatePictures(articleViewModel.Article.Id, urls, outstandingPicture);
+
+                    Reject reject = db.Rejects.FirstOrDefault(r => r.ArticleId == article.Id);
+
+                    if (reject != null)
+                    {
+                        db.Rejects.Remove(reject);
+                    }
+
                     db.SaveChanges();
                     transaction.Commit();
 
@@ -320,6 +336,7 @@ namespace WebApplication1.Controllers
             Article article = db.Articles.Find(id);
             db.Articles.Remove(article);
             db.SaveChanges();
+            ApprovesBadge();
             return RedirectToAction("Index");
         }
         //-----------------------------------------------------------------------------------------//
@@ -428,7 +445,16 @@ namespace WebApplication1.Controllers
         {
             List<ArticleViewModel> ArticleViewModelList = ArticlesToApprove();
 
+
+
             return View(ArticleViewModelList);
+        }
+
+        public ActionResult ApproveArticlesPartialView()
+        {
+            List<ArticleViewModel> ArticleViewModelList = ArticlesToApprove();
+
+            return PartialView("ApproveArticles", ArticleViewModelList);
         }
 
         public ActionResult PropertySold(int id, bool state)
@@ -465,6 +491,7 @@ namespace WebApplication1.Controllers
                 article.State = true;
                 db.Entry(article).State = EntityState.Modified;
                 db.SaveChanges();
+                ApprovesBadge();
                 return View("ApproveArticles", ArticlesToApprove());
             }
             catch (Exception)
@@ -475,12 +502,34 @@ namespace WebApplication1.Controllers
 
         }
 
+        public void ApprovesBadge()
+        {
+            Article article = new Article();
+
+            Session["rejects"] = article.RefreshRejects(User.Identity.Name);
+            Session["approve"] = article.RefreshApproves();
+
+        }
+
         public List<ArticleViewModel> ArticlesToApprove()
         {
+            var rejects = from r in db.Rejects
+                          select r.Article;
+            var rejectsList = rejects.ToList();
             var articlesEF = from a in db.Articles
-                             where !(a.State)
+                             where !(a.State) 
                              select a;
+
             var articles = articlesEF.ToList();
+
+            foreach (var a in rejects)
+            {
+                if (articles.Contains(a))
+                {
+                    articles.Remove(a);
+                }
+            }
+
 
             List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList(articles);
             return ArticleViewModelList;
@@ -1585,6 +1634,7 @@ namespace WebApplication1.Controllers
 
         protected override void Dispose(bool disposing)
         {
+            ApprovesBadge();
             if (disposing)
             {
                 db.Dispose();

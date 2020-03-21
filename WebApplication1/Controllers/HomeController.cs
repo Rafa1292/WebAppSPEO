@@ -21,6 +21,7 @@ namespace WebApplication1.Controllers
 
         public ActionResult Index()
         {
+            ApprovesBadge();
             var articlesEF = from a in db.Articles
                              where a.State && !a.SoldState
                              select a;
@@ -66,8 +67,21 @@ namespace WebApplication1.Controllers
                 IndividualContributors = individualContributors
             };
 
+
             return View(landingView);
         }
+
+
+        public void ApprovesBadge ()
+        {
+            Article article = new Article();
+
+            Session["rejects"] = article.RefreshRejects(User.Identity.Name);
+            Session["approve"] = article.RefreshApproves();
+
+        }
+
+
 
         //---------------ArticleViewModelSection---------------//
 

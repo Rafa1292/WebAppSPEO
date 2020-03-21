@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
+using WebApplication1.ViewModel;
 
 namespace WebApplication1.Controllers
 {
@@ -17,105 +18,35 @@ namespace WebApplication1.Controllers
         // GET: Rejects
         public ActionResult Index()
         {
-            IndividualContributor individualContributor = db.IndividualContributors.FirstOrDefault(i => i.Mail == User.Identity.Name);
 
             var rejects = from r in db.Rejects
-                          where r.Article.IndividualContributorId == individualContributor.IndividualContributorId
+                          where r.Article.IndividualContributor.Mail == User.Identity.Name
                           select r;
 
-            return View(rejects.ToList());
+            ViewBag.ArticlePictures = GetPictureList();
+            List<Reject> rejectList = rejects.ToList();
+            return View(rejectList);
         }
 
-        // GET: Rejects/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reject reject = db.Rejects.Find(id);
-            if (reject == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reject);
-        }
 
-        // GET: Rejects/Create
-        public ActionResult Create()
+        public bool Create(int ArticleId, string Reason)
         {
-            ViewBag.ArticleId = new SelectList(db.Articles, "Id", "Description");
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name");
-            return View();
-        }
-
-        // POST: Rejects/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RejectId,Reason,ArticleId,IndividualContributorId")] Reject reject)
-        {
-            if (ModelState.IsValid)
+            try
             {
+                Reject reject = new Reject();
+                reject.ArticleId = ArticleId;
+                reject.Reason = Reason;
                 db.Rejects.Add(reject);
                 db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                return true;
 
-            ViewBag.ArticleId = new SelectList(db.Articles, "Id", "Description", reject.ArticleId);
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name", reject.Article.IndividualContributorId);
-            return View(reject);
-        }
+            }
+            catch (Exception)
+            {
 
-        // GET: Rejects/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reject reject = db.Rejects.Find(id);
-            if (reject == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.ArticleId = new SelectList(db.Articles, "Id", "Description", reject.ArticleId);
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name", reject.Article.IndividualContributorId);
-            return View(reject);
-        }
+                return false;
 
-        // POST: Rejects/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
-        // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RejectId,Reason,ArticleId,IndividualContributorId")] Reject reject)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(reject).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            ViewBag.ArticleId = new SelectList(db.Articles, "Id", "Description", reject.ArticleId);
-            ViewBag.IndividualContributorId = new SelectList(db.IndividualContributors, "IndividualContributorId", "Name", reject.Article.IndividualContributorId);
-            return View(reject);
-        }
-
-        // GET: Rejects/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Reject reject = db.Rejects.Find(id);
-            if (reject == null)
-            {
-                return HttpNotFound();
-            }
-            return View(reject);
         }
 
         // POST: Rejects/Delete/5
@@ -129,8 +60,35 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Index");
         }
 
+        public List<ArticlePicture> GetPictureList()
+        {
+            try
+            {
+                List<ArticlePicture> PicturesList = db.ArticlePictures.ToList();
+
+                return PicturesList;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.error += "Error al obtener las fotos" + ex.InnerException;
+                return null;
+            }
+
+        }
+        public void ApprovesBadge()
+        {
+            Article article = new Article();
+
+            Session["rejects"] = article.RefreshRejects(User.Identity.Name);
+            Session["approve"] = article.RefreshApproves();
+
+        }
+
+
         protected override void Dispose(bool disposing)
         {
+            ApprovesBadge();
+
             if (disposing)
             {
                 db.Dispose();
