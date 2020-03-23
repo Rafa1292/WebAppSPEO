@@ -27,12 +27,12 @@
                     <strong class="index-item-description text-dark"> @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name, <br />@item.Article.Ubication.Distrit.Canton.Name @item.Article.Ubication.Distrit.Name</strong>
                     <span class="p-2 m-2 index-item-description">@item.Article.Description</span>
                     <span class="index-item-house-info">
-                        @if (item.HouseAux != null)
+                        @if (item.House != null)
                         {
-                            <i class="fas fa-bath"></i> @item.HouseAux.BathroomsAux
-                            <i class="fas fa-bed"></i> @item.HouseAux.BedroomsAux
-                            <i class="fas fa-warehouse"></i> @item.HouseAux.GarageAux
-                            <i class="fab fa-buffer"></i> @item.HouseAux.LevelsAux
+                            <i class="fas fa-bath"></i> @item.House.Bathrooms
+                            <i class="fas fa-bed"></i> @item.House.Bedrooms
+                            <i class="fas fa-warehouse"></i> @item.House.Garage
+                            <i class="fab fa-buffer"></i> @item.House.Levels
                         }
                     </span>
                     <div class="divider"></div>
