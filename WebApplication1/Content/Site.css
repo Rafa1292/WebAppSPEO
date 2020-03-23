@@ -908,6 +908,8 @@ a:link {
     color: rgba(0, 0, 0, .5);
     height: 80px !important;
     overflow: hidden;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 .index-item-body:hover .index-item-description {
