@@ -121,7 +121,6 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\es\EntityFra
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\es\Microsoft.AspNet.Identity.Core.resources.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\es\Microsoft.AspNet.Identity.Owin.resources.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\es\Microsoft.AspNet.Identity.EntityFramework.resources.dll
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Release\WebApplication1.csprojAssemblyReference.cache
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Release\WebApplication1.csproj.CopyComplete
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Release\WebApplication1.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Release\WebApplication1.pdb

@@ -893,7 +893,7 @@ a:link {
 }
 
 .index-item-btn {
-    opacity: 0;
+    display: none;
 }
 
 .divider {
@@ -938,7 +938,7 @@ a:link {
 }
 
 .index-item-body:hover .index-item-btn {
-    opacity: 1;
+    display: flex;
 }
 
 .index-item-description {
