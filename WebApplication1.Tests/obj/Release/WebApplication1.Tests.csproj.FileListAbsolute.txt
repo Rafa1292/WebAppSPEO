@@ -79,3 +79,14 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Releas
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Release\WebApplication1.Tests.csproj.CopyComplete
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Release\WebApplication1.Tests.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\obj\Release\WebApplication1.Tests.pdb
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Azure.KeyVault.Core.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.WindowsAzure.Storage.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Azure.Storage.Common.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Azure.Storage.Blob.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Azure.KeyVault.Core.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.WindowsAzure.Storage.pdb
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.WindowsAzure.Storage.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Azure.Storage.Common.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.Azure.Storage.Blob.xml
+C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1.Tests\bin\Release\Microsoft.WindowsAzure.Configuration.xml

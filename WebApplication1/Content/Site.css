@@ -449,7 +449,7 @@ textarea {
     }
 
     .item {
-        width: 400px !important;
+       min-width: 450px !important;
     }
 
     .item-height {
@@ -483,25 +483,13 @@ textarea {
         font-size: 14px !important;
     }
 
-    .index-item-container-1 {
-        max-width: 300px;
-    }
 
-    .index-item-container-2 {
-        max-width: 300px;
-    }
 
-    .index-item-container-3 {
-        max-width: 300px;
-    }
 
-    .index-item-link {
-        max-width: 300px;
-    }
 
 
     .index-item-body {
-        width: 300px !important;
+        width: 400px !important;
     }
 
     .index-items-title {
@@ -580,7 +568,7 @@ textarea {
     }
 
     .index-item-body {
-        width: 220px !important;
+        width: 300px !important;
     }
 
     .index-items-title {
@@ -629,6 +617,11 @@ textarea {
     .form-mobile {
         margin-bottom: 160px;
     }
+
+    .item {
+        min-width: 350px !important;
+        width: 300px !important;
+    }
 }
 
 @media (max-width: 426px) {
@@ -673,12 +666,31 @@ textarea {
     .agents {
         margin-top: -120px;
     }
+
+    .index-item-body {
+        width: 370px !important;
+    }
+
+    .index-item-link {
+        max-width: inherit;
+    }
+
+    .item {
+        width: 410px!important;
+    }
+
+    .no-padding-in-mobile {
+        padding: 0 !important;
+    }
+
 }
 
 
 @media (max-width: 425px) {
 
-
+    .no-padding-in-mobile {
+        padding: 0 !important;
+    }
 
     .form-btn-container {
         padding-top: 15px !important;
@@ -711,7 +723,11 @@ textarea {
     }
 
     .item {
-        width: 300px !important;
+        width: 350px !important;
+    }
+
+    .index-item-body {
+        width: 320px !important;
     }
 
     .item-height {
@@ -763,6 +779,10 @@ textarea {
 
 @media (max-width: 320px) {
 
+    .item {
+        width: 310px !important;
+    }
+
     .item-gallery {
         height: 40px !important;
         width: 40px !important;
@@ -784,6 +804,10 @@ textarea {
 
     .form-mobile {
         margin-bottom: 80px;
+    }
+
+    .index-item-body {
+        width: 280px !important;
     }
 }
 
@@ -864,10 +888,19 @@ a:link {
     transition: 500ms;
 }
 
+.no-padding-in-mobile {
+    padding: 1.25rem;
+}
+
+.index-item-btn {
+    opacity: 0;
+}
+
 .divider {
     border-bottom: 2px solid;
     border-color: rgba(0,0,0, .2);
     border-bottom-style: dashed;
+    opacity: 1;
 }
 
 .index-item-body:hover .index-item-hover-img {
@@ -888,6 +921,10 @@ a:link {
     color: #ffc107;
 }
 
+.index-item-body:hover .divider {
+    opacity: 0;
+}
+
 .index-item-house-info {
     position: absolute;
     font-size: 18px;
@@ -900,16 +937,18 @@ a:link {
     opacity: 1;
 }
 
+.index-item-body:hover .index-item-btn {
+    opacity: 1;
+}
+
 .index-item-description {
     opacity: 1;
     font-weight: 800;
     transition: 200ms;
     font-family: Montserrat,sans-serif;
     color: rgba(0, 0, 0, .5);
-    height: 80px !important;
+    /*height: 80px !important;*/
     overflow: hidden;
-    overflow: scroll;
-    -webkit-overflow-scrolling: touch;
 }
 
 .index-item-body:hover .index-item-description {

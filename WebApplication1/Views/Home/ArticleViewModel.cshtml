@@ -21,7 +21,7 @@
 
 
 
-<div class="flex-wrap d-flex p-4">
+<div class="flex-wrap d-flex  no-padding-in-mobile mt-3">
 
     <div class="col-md-7 mb-5">
         <div class="container-fluid d-flex justify-content-center  flex-wrap">
@@ -33,7 +33,7 @@
                 {
                     imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
                     <div class="">
-                        <img src="@imgSrc" class="item rounded" />
+                        <img src="@imgSrc" class="item rounded item-height" />
                     </div>
                 }
             </div>
@@ -106,7 +106,7 @@
         </div>
     </div>
 
-    <div class="col-md-5 shadow-lg rounded p-3 flex-wrap d-flex mb-5" style="height:fit-content; background-color: rgba(255, 255, 255, 0.1)">
+    <div class="col-md-5 shadow-lg rounded p-0 flex-wrap d-flex mb-5" style="height:fit-content; background-color: rgba(255, 255, 255, 0.1)">
         <div class="text-center col-md-12">
             <h4 class="border-bottom border-dark p-3 mb-4">
                 <strong class="property-head-information">Ficha técnica</strong>
@@ -154,7 +154,7 @@
         @if (Model.House != null)
         {
 
-            <div class="col-md-12">
+            <div class="col-md-12 no-padding-in-mobile">
                 <div class="col-12">
                     <h5>Construccion</h5>
                     <p>

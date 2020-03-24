@@ -8,7 +8,7 @@
 
         var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", item.OutstandingPicture.Extension);
 
-        <div class="col-md-4 mb-3 justify-content-center d-flex item index-item-container-@i">
+        <div class="col-md-4 mb-5 p-0 m-1 justify-content-center d-flex item index-item-container-@i ">
             <div class="index-item-body">
                 <div class="index-item-thumbnail">
                     <a class="index-item-link" href="Home/ArticleViewModel?id=@item.Article.Id">
@@ -24,8 +24,19 @@
                 </div>
 
                 <div class="index-item-info text-break">
-                    <strong class="index-item-description text-dark"> @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name, <br />@item.Article.Ubication.Distrit.Canton.Name @item.Article.Ubication.Distrit.Name</strong>
-                    <span class="p-2 m-2 index-item-description">@item.Article.Description</span>
+                    <strong class="index-item-description text-dark">
+                        @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name<br />
+                        <small class="font-italic">
+                            @item.Article.Ubication.Distrit.Canton.Name @item.Article.Ubication.Distrit.Name
+                        </small>
+                    </strong>
+
+                    <span class="p-2 m-2 index-item-description">
+                        @{
+                            string subDescription = item.Article.Description.Substring(0, 70);
+                        }
+                        @subDescription...
+                    </span>
                     <span class="index-item-house-info">
                         @if (item.House != null)
                         {
@@ -35,6 +46,7 @@
                             <i class="fab fa-buffer"></i> @item.House.Levels
                         }
                     </span>
+                    <a class="btn btn-outline-warning index-item-btn " href="Home/ArticleViewModel?id=@item.Article.Id" >Ver mas</a>
                     <div class="divider"></div>
                     @{
                         var initialPrice = item.Article.Price;
