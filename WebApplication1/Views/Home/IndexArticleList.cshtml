@@ -46,8 +46,7 @@
                             <i class="fab fa-buffer"></i> @item.House.Levels
                         }
                     </span>
-                    <a class="btn btn-outline-warning index-item-btn " href="Home/ArticleViewModel?id=@item.Article.Id" >Ver mas</a>
-                    <div class="divider"></div>
+                    <a class="btn btn-outline-secondary index-item-btn " href="Home/ArticleViewModel?id=@item.Article.Id" >Ver mas</a>
                     @{
                         var initialPrice = item.Article.Price;
                         var priceSize = initialPrice.Length - 3;

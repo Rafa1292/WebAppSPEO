@@ -893,7 +893,7 @@ a:link {
 }
 
 .index-item-btn {
-    display: none;
+    color: #6c757d;
 }
 
 .divider {
@@ -938,7 +938,8 @@ a:link {
 }
 
 .index-item-body:hover .index-item-btn {
-    display: flex;
+    color: #ffc107;
+    border-color: #ffc107;
 }
 
 .index-item-description {
