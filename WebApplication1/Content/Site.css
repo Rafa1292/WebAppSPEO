@@ -377,6 +377,7 @@ textarea {
     left: -1px;
     padding: 10px 0;
     border: 1px solid white;
+    border-radius: 0 !important;
 }
 
 .properties-head {
