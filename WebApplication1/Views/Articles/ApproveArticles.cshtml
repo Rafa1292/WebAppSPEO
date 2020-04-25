@@ -96,6 +96,8 @@
                     <div class="col-md-12 d-flex justify-content-center">
                         @Html.ActionLink("Aprobar", "ApproveArticle", new { id = item.Article.Id }, new { @class = "btn btn-success mx-1" })
                         <button class="btn btn-danger mx-1" id="btnReject_@item.Article.Id" onclick="openModal(@item.Article.Id)">Rechazar</button>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-secondary mx-1" })
+
                     </div>
                     <div class="col-md-12 text-center mt-2">
                         <strong>Enlistado por:</strong><br /> @item.Article.IndividualContributor.Name

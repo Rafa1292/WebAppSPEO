@@ -1,58 +1,120 @@
 ﻿@model IEnumerable<WebApplication1.ViewModel.ArticleViewModel>
 
 @{
-
     foreach (var item in Model)
     {
 
         var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", item.OutstandingPicture.Extension);
 
-        <div class="col-md-4 mb-3 justify-content-center d-flex item ">
+        <div class="col-md-4 mb-5 p-0 justify-content-center d-flex">
             <div class="index-item-body">
                 <div class="index-item-thumbnail">
-                    <a class="index-item-link" href="/Home/ArticleViewModel?id=@item.Article.Id">
+                    <a class="index-item-link" href="Home/ArticleViewModel?id=@item.Article.Id">
                         <img class="index-item-img" src="@imgSrc" alt="Alternate Text" />
 
                         <div class="index-item-hover-img">
                             <span class="">Medida de frente: @item.Article.Terrain.ForeheadMeasure mts</span>
                             <span class="">Medida de fondo: @item.Article.Terrain.BackgroundMeasure mts</span>
                             <span class="">Topografia: @item.Article.Terrain.Topography</span>
-                            <span class="">Agregada el: @item.Article.CreationDate</span>
                         </div>
                     </a>
                 </div>
 
                 <div class="index-item-info text-break">
-                    <strong class="index-item-description text-dark"> @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name, <br />@item.Article.Ubication.Distrit.Canton.Name @item.Article.Ubication.Distrit.Name</strong>
-                    <span class="p-2 m-2 index-item-description">@item.Article.Description</span>
+                    <strong class="index-item-description text-dark">
+                        @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name<br />
+                        <small class="font-italic">
+                            @item.Article.Ubication.Distrit.Canton.Name @item.Article.Ubication.Distrit.Name
+                        </small>
+                    </strong>
+
+                    <span class="p-2 m-2 index-item-description">
+                        @{
+                            string subDescription = item.Article.Description.Substring(0, 70);
+                        }
+                        @subDescription...
+                    </span>
                     <span class="index-item-house-info">
-                        @if (item.HouseAux != null)
+                        @if (item.House != null)
                         {
-                            <i class="fas fa-bath"></i> @item.HouseAux.BathroomsAux
-                            <i class="fas fa-bed"></i> @item.HouseAux.BedroomsAux
-                            <i class="fas fa-warehouse"></i> @item.HouseAux.GarageAux
-                            <i class="fab fa-buffer"></i> @item.HouseAux.LevelsAux
+                            <i class="fas fa-bath"></i> @item.House.Bathrooms
+                            <i class="fas fa-bed"></i> @item.House.Bedrooms
+                            <i class="fas fa-warehouse"></i> @item.House.Garage
+                            <i class="fab fa-buffer"></i> @item.House.Levels
                         }
                     </span>
-                    <div class="divider"></div>
-                    @{ 
+                    <a class="btn btn-outline-secondary index-item-btn " href="Home/ArticleViewModel?id=@item.Article.Id">Ver mas</a>
+                    @{
                         var initialPrice = item.Article.Price;
                         var priceSize = initialPrice.Length - 3;
-                        for (int i = priceSize; i > 0; i -= 3)
+                        for (int x = priceSize; x > 0; x -= 3)
                         {
-                            initialPrice = initialPrice.Insert(i, ",");
+                            initialPrice = initialPrice.Insert(x, ",");
                         }
-                        
+
 
                     }
                     <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">@item.Article.Currency@initialPrice</strong>
                 </div>
 
             </div>
-            <div class="sale-@item.Article.ArticleKind sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">@item.Article.ArticleKind</span></div>
+            <div class="sale-@item.Article.ArticleKind px-2 sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">@item.Article.ArticleKind</span></div>
         </div>
 
+
     }
+
+    @*foreach (var item in Model)
+        {
+
+            var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", item.OutstandingPicture.Extension);
+
+            <div class="col-md-4 mb-5 justify-content-center d-flex item ">
+                <div class="index-item-body">
+                    <div class="index-item-thumbnail">
+                        <a class="index-item-link" href="/Home/ArticleViewModel?id=@item.Article.Id">
+                            <img class="index-item-img" src="@imgSrc" alt="Alternate Text" />
+
+                            <div class="index-item-hover-img">
+                                <span class="">Medida de frente: @item.Article.Terrain.ForeheadMeasure mts</span>
+                                <span class="">Medida de fondo: @item.Article.Terrain.BackgroundMeasure mts</span>
+                                <span class="">Topografia: @item.Article.Terrain.Topography</span>
+                                <span class="">Agregada el: @item.Article.CreationDate</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="index-item-info text-break">
+                        <strong class="index-item-description text-dark"> @item.Article.Ubication.UbicationCategory.Name @item.Article.Ubication.Name, <br />@item.Article.Ubication.Distrit.Canton.Name @item.Article.Ubication.Distrit.Name</strong>
+                        <span class="p-2 m-2 index-item-description">@item.Article.Description</span>
+                        <span class="index-item-house-info">
+                            @if (item.HouseAux != null)
+                            {
+                                <i class="fas fa-bath"></i> @item.HouseAux.BathroomsAux
+                                <i class="fas fa-bed"></i> @item.HouseAux.BedroomsAux
+                                <i class="fas fa-warehouse"></i> @item.HouseAux.GarageAux
+                                <i class="fab fa-buffer"></i> @item.HouseAux.LevelsAux
+                            }
+                        </span>
+                        <div class="divider"></div>
+                        @{
+                            var initialPrice = item.Article.Price;
+                            var priceSize = initialPrice.Length - 3;
+                            for (int i = priceSize; i > 0; i -= 3)
+                            {
+                                initialPrice = initialPrice.Insert(i, ",");
+                            }
+
+
+                        }
+                        <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">@item.Article.Currency@initialPrice</strong>
+                    </div>
+
+                </div>
+                <div class="sale-@item.Article.ArticleKind sale-label-body text-capitalize text-center font-weight-bold"><span class="text-light">@item.Article.ArticleKind</span></div>
+            </div>
+
+        }*@
 
 }
 

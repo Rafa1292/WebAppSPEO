@@ -283,7 +283,7 @@ textarea {
     object-fit: cover;
     width: 300px;
     border: 2px solid #17a2b8;
-    overflow:hidden;
+    overflow: hidden;
 }
 
 .ic-info-container {
@@ -371,12 +371,12 @@ textarea {
     position: fixed;
     background-color: rgba(0, 0, 0, .9);
     height: max-content;
+    width: 101vw !important;
     z-index: 15;
-    top: 70px;
-    left: 0px;
+    top: 69px;
+    left: -1px;
     padding: 10px 0;
     border: 1px solid white;
-    border-radius: 31px;
 }
 
 .properties-head {
@@ -400,7 +400,7 @@ textarea {
     margin: 10px 0px 0px 220px !important;
 }
 
-.property-head-information{
+.property-head-information {
     font-size: 20px;
 }
 
@@ -422,7 +422,7 @@ textarea {
     height: inherit;
 }
 
-@media (max-width: 1440px){
+@media (max-width: 1440px) {
     .slide-gallery {
         width: 575px;
     }
@@ -449,7 +449,7 @@ textarea {
     }
 
     .item {
-       min-width: 450px !important;
+        min-width: 450px !important;
     }
 
     .item-height {
@@ -483,11 +483,6 @@ textarea {
         font-size: 14px !important;
     }
 
-
-
-
-
-
     .index-item-body {
         width: 400px !important;
     }
@@ -499,14 +494,23 @@ textarea {
     .index-ubication-description {
         display: block;
         max-width: 300px;
-        /* white-space: nowrap; */
         text-overflow: ellipsis;
         overflow: hidden;
         font-size: 14px;
     }
+
+    .properties-filter {
+        top: 89px;
+
+    }
+
 }
 
 @media (max-width: 768px) {
+
+    .properties-filter {
+        top: 69px;
+    }
 
     .ubication-head-information {
         font-size: 20px;
@@ -676,13 +680,12 @@ textarea {
     }
 
     .item {
-        width: 410px!important;
+        width: 410px !important;
     }
 
     .no-padding-in-mobile {
         padding: 0 !important;
     }
-
 }
 
 
@@ -771,7 +774,7 @@ textarea {
         min-width: 100%;
     }
 
-    .item-gallery{
+    .item-gallery {
         width: 45px !important;
         height: 45px !important;
     }

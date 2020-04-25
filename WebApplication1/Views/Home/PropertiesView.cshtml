@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "PropertiesView";
 }
-<div class="bg-dark position-relative position-fixed" style="z-index:15; width: 100vw; top: 0;">
+<div class="bg-dark position-relative position-fixed" style="z-index:15; width: 100vw; top: 0; z-index:100;">
     <nav class="navbar navbar-expand-lg navbar-dark nav-style mb-0">
         <div class="d-flex justify-content-center align-content-center">
             <div class="bg-light background-brand"></div>
@@ -80,16 +80,10 @@
 
 <div class="container-fluid d-flex properties-filter flex-wrap justify-content-center py-3">
 
-    @*<div class="col-12 text-light d-flex justify-content-center mb-2">
-        <label class="px-5 py-2 border border-light rounded font-weight-bold">
-            Filtro
-        </label>
-    </div>*@
-
     <div class="col-md-3 text-light d-flex flex-nowrap justify-content-center">
         <div class="col-12 mb-2 justify-content-center d-flex ">
-            <select class="form-control filter-element" id="type" onchange="getParamsList(this.value)">
-                <option selected disabled value="0">Filtrar por</option>
+            <select class="form-control filter-element" style="font-size: 15px !important;" id="type" onchange="getParamsList(this.value)">
+                <option selected disabled value="0" >Filtrar por</option>
                 <option value="Ubicacion">Ubicacion</option>
                 <option value="Categoria">Categoria</option>
                 <option value="Tamaño">Tamaño</option>
@@ -100,7 +94,7 @@
 
     <div class="col-md-3 flex-nowrap justify-content-center text-center " style="display: none;" id="currency">
         <div class="col-12 mb-2 justify-content-center d-flex ">
-            <select class="form-control filter-element" onchange="GetPrices(this.value)">
+            <select class="form-control filter-element" style="font-size: 15px !important;" onchange="GetPrices(this.value)">
                 <option selected disabled value="0">Moneda</option>
                 <option value="¢">¢ - Colones</option>
                 <option value="$">$ - Dolares</option>
@@ -110,7 +104,7 @@
 
     <div class="col-md-3 text-light d-flex flex-nowrap justify-content-center">
         <div class="col-12 mb-2 justify-content-center d-flex ">
-            <select class="form-control filter-element" id="option" onchange="Filter(false)">
+            <select class="form-control filter-element" style="font-size: 15px !important;" id="option" onchange="Filter(false)">
                 <option selected disabled value="0">Opciones</option>
             </select>
         </div>
@@ -118,7 +112,7 @@
 
     <div class="col-md-3  d-flex flex-wrap justify-content-center " style="align-content: flex-end;">
         <div class="mb-2">
-            <button class="btn btn-danger filter-element" type="button" onclick="Filter(true)">
+            <button class="btn btn-danger filter-element" type="button" style="font-size: 15px !important;" onclick="Filter(true)">
                 Reiniciar filtro
             </button>
         </div>
