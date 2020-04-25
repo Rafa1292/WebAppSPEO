@@ -113,7 +113,12 @@
 
                         if (User.IsInRole("Admin"))
                         {
-                            var approves = Int32.Parse(Session["approve"].ToString());
+                            var approves = 0;
+
+                            if (Session["approve"] != null)
+                            {
+                                approves = Int32.Parse(Session["approve"].ToString());
+                            }
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -129,6 +134,7 @@
                                     </a>
                                     <a class="dropdown-item" href="/Articles/ApproveArticles">
                                         Aprobaciones
+
                                         @if (approves > 0)
                                         {
                                             <span class="badge approve-badge badge-danger">@Session["approve"]</span>
