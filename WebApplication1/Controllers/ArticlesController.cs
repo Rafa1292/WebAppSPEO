@@ -235,6 +235,7 @@ namespace WebApplication1.Controllers
                 {
                     if (articleViewModel.Article != null)
                     {
+                        article.UbicationId = articleViewModel.Article.UbicationId;
                         article.Currency = articleViewModel.Article.Currency;
                         article.Description = articleViewModel.Article.Description;
                         article.OwnerName = articleViewModel.Article.OwnerName;
