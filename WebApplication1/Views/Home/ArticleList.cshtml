@@ -30,7 +30,15 @@
 
                     <span class="p-2 m-2 index-item-description">
                         @{
-                            string subDescription = item.Article.Description.Substring(0, 70);
+                            string subDescription = "";
+                            if (item.Article.Description.Length > 71)
+                            {
+                                subDescription = item.Article.Description.Substring(0, 70);
+                            }
+                            else
+                            {
+                                subDescription = item.Article.Description;
+                            }
                         }
                         @subDescription...
                     </span>
