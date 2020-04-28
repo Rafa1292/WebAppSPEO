@@ -31,7 +31,7 @@
             <div class="col-md-12">
                 @{
 
-                    var base64 = Model.OutstandingPicture.Extension;
+                    var base64 = "";   /*Model.OutstandingPicture.Extension;*/
                     var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", base64);
 
                     <img class="rounded-circle" src="@imgSrc" style="width:90px; height: 90px;">

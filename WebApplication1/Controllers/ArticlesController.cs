@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
             List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList();
             ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
 
-            return View(ArticleViewModelList);
+            return View(ArticleViewModelList.ToList());
         }
 
         // GET: Articles/Create

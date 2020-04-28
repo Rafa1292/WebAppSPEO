@@ -2,88 +2,93 @@
 
 @foreach (var item in Model)
 {
-    var itemClass = item.Article.ArticleKind + "-item";
-    <div class="col-md-2 card-style @itemClass p-0 shadow rounded d-flex text-center article-create-container">
-        <div class="col-md-12 card-header-style">
-            <strong>@Html.DisplayFor(modelItem => item.Article.Ubication.UbicationCategory.Name)</strong>
-            <label>@item.Article.Ubication.Name</label>
-        </div>
-        <div class="col-md-12 " style="height:140px">
-            <img class="rounded" src="@String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}",@item.OutstandingPicture.Extension)" style="max-width:180px; height: 120px;">
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            <div class="border-dark border rounded p-2">
-                @item.Article.Code
+    if (item != null)
+    {
+
+
+        var itemClass = item.Article.ArticleKind + "-item";
+        <div class="col-md-2 card-style @itemClass p-0 shadow rounded d-flex text-center article-create-container">
+            <div class="col-md-12 card-header-style">
+                <strong>@Html.DisplayFor(modelItem => item.Article.Ubication.UbicationCategory.Name)</strong>
+                <label>@item.Article.Ubication.Name</label>
             </div>
-        </div>
-        @{
-            var state = item.Article.State ? "Aprobada" : "Pendiente";
-        }
-        <div class="col-md-12 icAlignStyle ">
-            @state
-        </div>
-        <div class="col-md-12 icAlignStyle">
-            <strong>Precio:</strong>
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            @item.Article.Currency@item.Article.Price
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            <strong>Enlistado por <br /></strong>
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            @item.Article.IndividualContributor.Name
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            <strong>Propietario <br /></strong>
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            @item.Article.OwnerName
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            <strong>Contacto <br /></strong>
-        </div>
-        <div class="col-md-12 icAlignStyle ">
-            @item.Article.OwnerPhone
-        </div>
-        <div class="form-group col-12">
-            <label><strong>Clasificacion</strong></label>
-            <div class="col-md-12">
-                @{
-                    var itemStyle = @item.Article.ArticleKind.ToString();
-                }
-                <select name="ArticleKindId" id="ArticleKindId-@item.Article.Id" class="form-control @itemStyle" onchange="clasification(@item.Article.Id, this.value)">
-                    @foreach (var clasify in ViewBag.ArticleKindId)
-                    {
-                        var selectedOption = item.Article.ArticleKind.ToString() == clasify.Text ? "selected" : "";
-                        <option class="bg-light" @selectedOption value="@clasify.Value">@clasify.Text</option>
-                    }
-                </select>
+            <div class="col-md-12 " style="height:140px">
+                <img class="rounded" src="@String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", @item.OutstandingPicture.Extension)" style="max-width:180px; height: 120px;">
             </div>
-            <span id="errorUbicationId" class="text-danger col-md-12"></span>
-        </div>
-        <div class="col-md-12 icAlignStyle">
-            @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary m-1" })
+            <div class="col-md-12 icAlignStyle ">
+                <div class="border-dark border rounded p-2">
+                    @item.Article.Code
+                </div>
+            </div>
             @{
-                var stateName = "Vendida";
-                var stateClass = "btn btn-danger m1";
-
-                if (!item.Article.SoldState)
-                {
-                    stateName = "En Venta";
-                    stateClass = "btn btn-success m1";
-
-                }
+                var state = item.Article.State ? "Aprobada" : "Pendiente";
             }
+            <div class="col-md-12 icAlignStyle ">
+                @state
+            </div>
+            <div class="col-md-12 icAlignStyle">
+                <strong>Precio:</strong>
+            </div>
+            <div class="col-md-12 icAlignStyle ">
+                @item.Article.Currency@item.Article.Price
+            </div>
+            <div class="col-md-12 icAlignStyle ">
+                <strong>Enlistado por <br /></strong>
+            </div>
+            <div class="col-md-12 icAlignStyle ">
+                @item.Article.IndividualContributor.Name
+            </div>
+            <div class="col-md-12 icAlignStyle ">
+                <strong>Propietario <br /></strong>
+            </div>
+            <div class="col-md-12 icAlignStyle ">
+                @item.Article.OwnerName
+            </div>
+            <div class="col-md-12 icAlignStyle ">
+                <strong>Contacto <br /></strong>
+            </div>
+            <div class="col-md-12 icAlignStyle ">
+                @item.Article.OwnerPhone
+            </div>
+            <div class="form-group col-12">
+                <label><strong>Clasificacion</strong></label>
+                <div class="col-md-12">
+                    @{
+                        var itemStyle = @item.Article.ArticleKind.ToString();
+                    }
+                    <select name="ArticleKindId" id="ArticleKindId-@item.Article.Id" class="form-control @itemStyle" onchange="clasification(@item.Article.Id, this.value)">
+                        @foreach (var clasify in ViewBag.ArticleKindId)
+                        {
+                            var selectedOption = item.Article.ArticleKind.ToString() == clasify.Text ? "selected" : "";
+                            <option class="bg-light" @selectedOption value="@clasify.Value">@clasify.Text</option>
+                        }
+                    </select>
+                </div>
+                <span id="errorUbicationId" class="text-danger col-md-12"></span>
+            </div>
+            <div class="col-md-12 icAlignStyle">
+                @Html.ActionLink("Editar", "Edit", new { id = item.Article.Id }, new { @class = "btn btn-outline-secondary m-1" })
+                @{
+                    var stateName = "Vendida";
+                    var stateClass = "btn btn-danger m1";
 
-            <button style="font-size: 15px;" id="propertyStateBtn-@item.Article.Id" type="button" class="@stateClass" onclick='propertyState(@item.Article.Id,"@item.Article.SoldState.ToString()","@stateName" )'>@stateName</button>
+                    if (!item.Article.SoldState)
+                    {
+                        stateName = "En Venta";
+                        stateClass = "btn btn-success m1";
+
+                    }
+                }
+
+                <button style="font-size: 15px;" id="propertyStateBtn-@item.Article.Id" type="button" class="@stateClass" onclick='propertyState(@item.Article.Id,"@item.Article.SoldState.ToString()","@stateName" )'>@stateName</button>
 
 
+            </div>
+            <div class="col-md-12">
+                <span><a href="/Articles/Delete/@item.Article.Id"><i class="fas fa-trash-alt trash-button"></i></a></span>
+            </div>
         </div>
-        <div class="col-md-12">
-            <span><a href="/Articles/Delete/@item.Article.Id"><i class="fas fa-trash-alt trash-button"></i></a></span>
-        </div>
-    </div>
+    }
 }
 
 <script>
