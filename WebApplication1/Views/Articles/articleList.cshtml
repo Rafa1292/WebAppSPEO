@@ -30,7 +30,17 @@
                 <strong>Precio:</strong>
             </div>
             <div class="col-md-12 icAlignStyle ">
-                @item.Article.Currency@item.Article.Price
+                @{
+                    var initialPrice = item.Article.Price;
+                    var priceSize = initialPrice.Length - 3;
+                    for (int x = priceSize; x > 0; x -= 3)
+                    {
+                        initialPrice = initialPrice.Insert(x, ",");
+                    }
+
+
+                }
+                @item.Article.Currency@initialPrice
             </div>
             <div class="col-md-12 icAlignStyle ">
                 <strong>Enlistado por <br /></strong>
