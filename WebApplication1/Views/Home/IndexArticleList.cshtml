@@ -32,7 +32,16 @@
 
                     <span class="p-2 m-2 index-item-description">
                         @{
-                            string subDescription = item.Article.Description.Substring(0, 70);
+                            string subDescription = "";
+
+                            if (item.Article.Description.Length < 72)
+                            {
+                                subDescription = item.Article.Description;
+                            }
+                            else
+                            {
+                                subDescription = item.Article.Description.Substring(0, 70);
+                            }
                         }
                         @subDescription...
                     </span>
@@ -45,7 +54,7 @@
                             <i class="fab fa-buffer"></i> @item.House.Levels
                         }
                     </span>
-                    <a class="btn btn-outline-secondary index-item-btn " href="Home/ArticleViewModel?id=@item.Article.Id" >Ver mas</a>
+                    <a class="btn btn-outline-secondary index-item-btn " href="Home/ArticleViewModel?id=@item.Article.Id">Ver mas</a>
                     @{
                         var initialPrice = item.Article.Price;
                         var priceSize = initialPrice.Length - 3;
