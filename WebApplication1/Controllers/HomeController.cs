@@ -606,7 +606,7 @@ namespace WebApplication1.Controllers
             try
             {
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("rvilla3452@gmail.com");
+                mail.From = new MailAddress("Quesada.realty@gmail.com");
                 if (to != "")
                 {
                     mail.To.Add(to);

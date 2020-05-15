@@ -100,7 +100,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetArticles","Articles")',
+                url: '@Url.Action("GetfilterArticlesPartialView","Articles")',
                 data: {
                     type: type,
                     param: param
@@ -112,7 +112,7 @@
                     element.innerHTML = data;
                 })
                 .fail(function (data) {
-                    alert('No hay caracteristicas que mostrar!');
+                    alert('Lo sentimos no se puede filtrar en este momento!');
                 })
                return false;
         }

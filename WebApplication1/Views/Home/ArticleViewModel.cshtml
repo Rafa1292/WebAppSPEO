@@ -24,6 +24,18 @@
 <div class="flex-wrap d-flex  no-padding-in-mobile mt-3">
 
     <div class="col-md-7 mb-5">
+        <div class="col-12 flex-wrap d-flex justify-content-center align-items-center">
+            @{
+                var initialPrice = Model.Article.Price;
+                var priceSize = initialPrice.Length - 3;
+                for (int x = priceSize; x > 0; x -= 3)
+                {
+                    initialPrice = initialPrice.Insert(x, ",");
+                }
+
+            }
+            <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">Precio: @Model.Article.Currency@initialPrice</strong>
+        </div>
         <div class="container-fluid d-flex justify-content-center  flex-wrap">
             <div class="slider-for mb-5 property-gallery">
                 <div class="">
@@ -114,6 +126,12 @@
                     @Model.Article.Code
                 </span>
             </h4>
+            @{
+                if (User.IsInRole("Create"))
+                {
+                    <a href="/Articles/Edit/@Model.Article.Id" class="btn btn-outline-secondary m-1">Editar</a>
+                }
+            }
         </div>
         <div class="col-md-12 flex-wrap d-flex">
             <div class="col-12">
