@@ -12,6 +12,9 @@ using System.IO;
 using System.Drawing;
 using System.Dynamic;
 using System.Web.Script.Serialization;
+using Microsoft.Azure.Storage.Blob;
+using Microsoft.Azure;
+using Microsoft.Azure.Storage;
 
 namespace WebApplication1.Controllers
 {
@@ -141,6 +144,21 @@ namespace WebApplication1.Controllers
             ViewBag.HouseFeatures = new SelectList(db.HouseFeatures, "HouseFeatureId", "Description");
             articleViewModel.Article.Ubication.UbicationFeaturesUbication = ubicationFeatureUbication.ToList();
             ViewBag.UbicationFeatures = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
+
+
+            var picture = db.ArticlePictures.Single(x => x.ArticleId == id && x.OutstandingPicture);
+            string keys = CloudConfigurationManager.GetSetting("ConnectionBlob");
+            CloudStorageAccount cuentaAlmacenamiento = CloudStorageAccount.Parse(keys);
+            CloudBlobClient clienteBlob = cuentaAlmacenamiento.CreateCloudBlobClient();
+            CloudBlobContainer container = clienteBlob.GetContainerReference("ubicationpictures");
+            CloudBlockBlob blob = container.GetBlockBlobReference(picture.Extension);
+            blob.FetchAttributes();
+            long fileByteLength = blob.Properties.Length;
+            byte[] myByteArray = new byte[fileByteLength];
+            blob.DownloadToByteArray(myByteArray, 0);
+            string base64String = Convert.ToBase64String(myByteArray);
+            var url = "data:image/png;base64," + base64String;
+            ViewBag.SharePicture = url;
             return View(articleViewModel);
         }
 
