@@ -265,13 +265,9 @@
             var cantons = cantonValidation();
             var distrits = distritValidation();
             var features = FeatureValidation();
-            var images = ImageValidation();
             var category = categoryValidation();
-            if (images) {
-                var outstandingPicture = outstandingPictureValidation();
-
-            }
-            if (cantons && distrits && images && features && outstandingPicture && category) {
+    
+            if (cantons && distrits && features && category) {
                 document.getElementById("Form").submit();
             }
         }

@@ -30,8 +30,16 @@ namespace WebApplication1.Controllers
 
             List<ArticleViewModel> ArticleViewModelList = GetArticleViewModelList();
             ViewBag.ArticleKindId = EnumHelper.GetSelectList(typeof(EArticleKind));
+            List<ArticleViewModel> NewArticleViewModelList = new List<ArticleViewModel>();
 
-            return View(ArticleViewModelList.ToList());
+            foreach (var item in ArticleViewModelList.ToList())
+            {
+                if (item != null )
+                {
+                    NewArticleViewModelList.Add(item);
+                }
+            }
+            return View(NewArticleViewModelList.ToList());
         }
 
         // GET: Articles/Create

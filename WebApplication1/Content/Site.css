@@ -23,6 +23,17 @@ textarea {
     max-width: 280px;
 }
 
+.signature {
+    position: absolute;
+    font-family: 'Open Sans', sans-serif;
+    left: 9px;
+    bottom: -12px;
+}
+
+.slogan {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+}
 
 .features-label {
     width: 423px;
@@ -435,6 +446,10 @@ textarea {
         height: 300px;
     }
 
+    .signature {
+        font-size: 17px;
+        width: 50vw;
+    }
     .ubication-gallery {
         width: 400px;
         height: 300px;
@@ -508,6 +523,10 @@ textarea {
 }
 
 @media (max-width: 768px) {
+
+    .label-brand{
+        margin-bottom: 30px;
+    }
 
     .properties-filter {
         top: 69px;
@@ -691,6 +710,11 @@ textarea {
 
 
 @media (max-width: 425px) {
+
+    .slogan {
+        display: flex;
+        text-align: center;
+    }
 
     .no-padding-in-mobile {
         padding: 0 !important;

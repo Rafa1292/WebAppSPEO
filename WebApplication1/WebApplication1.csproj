@@ -444,6 +444,7 @@
     <Content Include="Scripts\PersonalScripts\ImageScripts\MultipleImages.js" />
     <Content Include="Scripts\PersonalScripts\ImageScripts\SingleImage.js" />
     <Content Include="Scripts\PersonalScripts\UbicationsScripts\Distrits.js" />
+    <Content Include="Scripts\PersonalScripts\UbicationsScripts\ExpandMenu.js" />
     <Content Include="Scripts\PersonalScripts\UbicationsScripts\Features.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />

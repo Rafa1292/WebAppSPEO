@@ -111,7 +111,7 @@
                             <span class="text-danger field-validation-error" id="OutstandingImageError">
                             </span>
                         </div>
-                        @if (ViewBag.urls != null)
+                        @if (ViewBag.urls.Count > 0)
                         {
                             var imgSrc = "";
                             var extension = "";
@@ -289,13 +289,8 @@
             var cantons = cantonValidation();
             var distrits = distritValidation();
             var features = FeatureValidation();
-            var images = ImageValidation();
 
-            if (images) {
-                var outstandingPicture = outstandingPictureValidation();
-
-            }
-            if (cantons && distrits && images && features && outstandingPicture) {
+            if (cantons && distrits && features ) {
                 document.getElementById("Form").submit();
             }
         }

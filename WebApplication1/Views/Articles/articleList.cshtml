@@ -5,12 +5,23 @@
     if (item != null)
     {
 
-
         var itemClass = item.Article.ArticleKind + "-item";
         <div class="col-md-2 card-style @itemClass p-0 shadow rounded d-flex text-center article-create-container">
             <div class="col-md-12 card-header-style">
-                <strong>@Html.DisplayFor(modelItem => item.Article.Ubication.UbicationCategory.Name)</strong>
-                <label>@item.Article.Ubication.Name</label>
+                @if (item.Article.Ubication != null)
+                    {
+                        try
+                        {
+                            <strong>@Html.DisplayFor(modelItem => item.Article.Ubication.UbicationCategory.Name)</strong>
+                            <label>@item.Article.Ubication.Name</label>
+                        }
+                        catch (Exception e)
+                        {
+
+                           <label>@e.Message</label>
+                        }
+
+                    }
             </div>
             <div class="col-md-12 " style="height:140px">
                 <img class="rounded" src="@String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", @item.OutstandingPicture.Extension)" style="max-width:180px; height: 120px;">

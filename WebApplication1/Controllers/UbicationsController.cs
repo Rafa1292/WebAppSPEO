@@ -29,8 +29,11 @@ namespace WebApplication1.Controllers
         // GET: Ubications
         public ActionResult Index()
         {
-            reloadViewBags();
-            return View(db.Ubications.ToList());
+            var Distrits = db.Distrits.Include(x => x.Ubications).ToList();
+            var Cantons = db.Cantons.Include(x => x.Distrits).ToList();
+            ViewBag.Distrits = Distrits;
+
+            return View(Cantons);
         }
 
         // GET: Ubications/Create
@@ -69,7 +72,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
         {
-            if (ubication.Name != null && ubication.DistritId > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
+            if (ubication.Name != null && ubication.DistritId > 0 && ubicationFeatures.Length > 0)
             {
                 using (var transaction = db.Database.BeginTransaction())
                 {
@@ -81,10 +84,15 @@ namespace WebApplication1.Controllers
                         List<UbicationPicture> Pictures = new List<UbicationPicture>();
                         List<UbicationFeatureUbication> Features = new List<UbicationFeatureUbication>();
                         UbicationPicture picture = new UbicationPicture();
-                        picture.OutstandingPicture = true;
-                        picture.Extension = AddBlobToStorage(ubication.UbicationId, outstandingPicture);
-                        picture.UbicationId = ubication.UbicationId;
-                        Pictures.Add(picture);
+
+                        if (outstandingPicture != null)
+                        {
+                            picture.OutstandingPicture = true;
+                            picture.Extension = AddBlobToStorage(ubication.UbicationId, outstandingPicture);
+                            picture.UbicationId = ubication.UbicationId;
+                            Pictures.Add(picture);
+                        }
+
                         if (urls != null)
                         {
                             foreach (var url in urls)
@@ -118,13 +126,12 @@ namespace WebApplication1.Controllers
                     {
                         transaction.Rollback();
                         ViewBag.Error = ex.Message;
-                        reloadViewBags(urls.ToList(), ubicationFeatures.ToList(), outstandingPicture, CantonId, ubication);
                         return View(ubication);
 
                     }
                 }
             }
-            reloadViewBags(urls.ToList(), ubicationFeatures.ToList(), outstandingPicture, CantonId, ubication);
+
             return View(ubication);
         }
 
@@ -152,7 +159,7 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "UbicationId,Description,Name,DistritId,UbicationCategoryId")] Ubication ubication, string[] urls, int[] ubicationFeatures, string CantonId, string outstandingPicture)
         {
-            if (ubication.Name != null && ubication.DistritId > 0 && ubicationFeatures.Length > 0 && outstandingPicture != null)
+            if (ubication.Name != null && ubication.DistritId > 0 && ubicationFeatures.Length > 0 )
             {
                 using (var transaction = db.Database.BeginTransaction())
                 {
@@ -163,36 +170,44 @@ namespace WebApplication1.Controllers
 
 
                         //---------------Pictures section---------------//
-
-                        UbicationPicture ubicationPicture = new UbicationPicture();
-                        List<UbicationPicture> ubicationPictures = new List<UbicationPicture>();
-
-                        IQueryable<UbicationPicture> currentPicturesEF = from p in db.UbicationPictures
-                                                                         where p.UbicationId == ubication.UbicationId
-                                                                         select p;
-
-                        //Tenemos la lista de fotos actuales y la foto de portada actual en formato de byte.
-                        List<UbicationPicture> currentPicturesList = currentPicturesEF.ToList();
-                        UbicationPicture currentOutstandingPicture = currentPicturesList.Find(p => p.OutstandingPicture == true);
-
-                        SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, outstandingPicture, ubication.UbicationId);
-
-                        var i = 0;
-                        foreach (var url in urls)
+                        if (urls != null)
                         {
-                            if (!currentPicturesList.Exists(x => x.Extension == url))
-                            {
-                                ubicationPicture = new UbicationPicture();
-                                ubicationPicture.OutstandingPicture = false;
-                                ubicationPicture.Extension = AddBlobToStorage(ubication.UbicationId, url, i);
-                                ubicationPicture.UbicationId = ubication.UbicationId;
-                                ubicationPictures.Add(ubicationPicture);
-                            }
-                            i++;
-                        }
 
-                        db.UbicationPictures.AddRange(ubicationPictures);
-                        db.SaveChanges();
+
+
+                            UbicationPicture ubicationPicture = new UbicationPicture();
+                            List<UbicationPicture> ubicationPictures = new List<UbicationPicture>();
+
+                            IQueryable<UbicationPicture> currentPicturesEF = from p in db.UbicationPictures
+                                                                             where p.UbicationId == ubication.UbicationId
+                                                                             select p;
+
+                            //Tenemos la lista de fotos actuales y la foto de portada actual en formato de byte.
+                            List<UbicationPicture> currentPicturesList = currentPicturesEF.ToList();
+                            UbicationPicture currentOutstandingPicture = currentPicturesList.Find(p => p.OutstandingPicture == true);
+                            if (outstandingPicture != null)
+                            {
+
+                                SetOutstandingPicture(currentOutstandingPicture, currentPicturesList, outstandingPicture, ubication.UbicationId);
+                            }
+
+                            var i = 0;
+                            foreach (var url in urls)
+                            {
+                                if (!currentPicturesList.Exists(x => x.Extension == url))
+                                {
+                                    ubicationPicture = new UbicationPicture();
+                                    ubicationPicture.OutstandingPicture = false;
+                                    ubicationPicture.Extension = AddBlobToStorage(ubication.UbicationId, url, i);
+                                    ubicationPicture.UbicationId = ubication.UbicationId;
+                                    ubicationPictures.Add(ubicationPicture);
+                                }
+                                i++;
+                            }
+
+                            db.UbicationPictures.AddRange(ubicationPictures);
+                            db.SaveChanges();
+                        }
                         //---------------End pictures section---------------//
 
 
