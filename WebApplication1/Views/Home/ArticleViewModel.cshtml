@@ -31,13 +31,12 @@
                 {
                     initialPrice = initialPrice.Insert(x, ",");
                 }
+                var facebookShareUrl = String.Format("https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A44315%2FHome%2FArticleViewModel%3Fid%3D{0}&amp;src=sdkpreparse", Model.Article.Id);
 
             }
             <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">Precio: @Model.Article.Currency@initialPrice</strong>
-            <button class="bg-primary btn text-white rounded" onclick="postStory()">
-                Compartir
-            </button>
-
+            <div class="fb-share-button" data-href="@ViewBag.url" data-layout="button_count" data-size="small">
+            <a target="_blank" href="@facebookShareUrl" class="fb-xfbml-parse-ignore">Compartir</a></div>
         </div>
         <div class="container-fluid d-flex justify-content-center  flex-wrap">
             <div class="slider-for mb-5 property-gallery">
@@ -326,14 +325,7 @@
 
     });
 
-    window.onload = function changesMetas() {
-        var metaLink = document.getElementById("metaLink");
-        var metaPicture = document.getElementById("metaPicture");
-        var metaTitle = document.getElementById("metaTitle");
-        var metaDescription = document.getElementById("metaDescription");
-        var description = document.getElementById("Description").innerHTML;
-        metaDescription.content = description;
-    }
+    
 </script>
 
 

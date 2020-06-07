@@ -260,4 +260,3 @@ C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Microsoft.Wi
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Microsoft.WindowsAzure.Storage.xml
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Microsoft.WindowsAzure.Configuration.dll
 C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\bin\Microsoft.WindowsAzure.Configuration.xml
-C:\Users\rvill\Source\Repos\Rafa1292\WebAppSPEO\WebApplication1\obj\Debug\WebApplication1.csprojAssemblyReference.cache

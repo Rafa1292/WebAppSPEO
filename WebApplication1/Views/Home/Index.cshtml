@@ -380,24 +380,7 @@
     </div>*@
 <!-- Modal -->
 
-<script>
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: '832394410565258',
-            autoLogAppEvents: true,
-            xfbml: true,
-            version: 'v7.0'
-        });
-    };
 
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) { return; }
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
 
 <script>
 
@@ -410,26 +393,7 @@
     }
 
 
-    function postStory() {
 
-        FB.ui({
-          method: 'feed',
-            link: 'https://www.andreyquesada.com/Home/ArticleViewModel?id=116',
-            caption: 'SPEO',
-            description: 'bla bla bla',
-            title: "siiii",
-            source: "https://speoimages.blob.core.windows.net/ubicationpictures/Foto02380711620",
-
-        }, function (response) {
-                if (response && !response.error_message) {
-                    alert("si");
-                }
-                else {
-                    alert("no");
-                }
-
-        });
-    }
 
     window.onscroll = function IsInView() {
 
