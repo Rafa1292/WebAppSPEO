@@ -164,6 +164,7 @@ namespace WebApplication1.Controllers
                 }
             }
 
+            ViewBag.description = articleViewModel.Article.Description;
 
             return View(articleViewModel);
         }
