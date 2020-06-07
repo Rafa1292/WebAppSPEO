@@ -166,6 +166,7 @@ namespace WebApplication1.Controllers
 
             ViewBag.description = articleViewModel.Article.Description;
             ViewBag.id = article.Id;
+            ViewBag.extension = picture.Extension;
 
             return View(articleViewModel);
         }

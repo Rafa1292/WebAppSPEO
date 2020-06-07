@@ -2,15 +2,15 @@
 @{
     var slogan = "";
     var id = 0;
-    if ( ViewBag.id != null)
+    var url = "https://www.andreyquesada.com/Home";
+    var picture = "";
+    if (ViewBag.id != null)
     {
         id = ViewBag.id;
+        url = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}", id.ToString());
+        picture = String.Format("https://speoimages.blob.core.windows.net/shareimages/{0}{1}", ViewBag.extension,".jpg");
     }
-    var url = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}",id.ToString());
-    //if (ViewBag.description == null)
-    //{
-    //    ViewBag.description = "Su mejor opcion en occidente" ;
-    //}
+
 
     if (!User.IsInRole("Create"))
     {
@@ -29,10 +29,10 @@
     <title>Propiedades Andrey Quesada</title>
     <link rel="icon" href="~/Images/logo2.png" />
 
-    <meta property="og:url" content="@url" id="metaLink"/>
+    <meta property="og:url" content="@url" id="metaLink" />
     <meta property="og:type" content="article" />
-    <meta property="og:image" content="https://speoimages.blob.core.windows.net/commonimages/shutterstock_363324191.jpg" id="metaPicture"/>
-    <meta property="og:title" content="Andrey Quesada" id="metaTitle">
+    <meta property="og:image" content="@picture" id="metaPicture" />
+    <meta property="og:title" content="Propiedades Andrey Quesada" id="metaTitle">
     <meta property="og:description" content="@ViewBag.description" id="metaDescription">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="600">
