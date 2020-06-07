@@ -1,7 +1,12 @@
 ﻿
 @{
     var slogan = "";
-
+    var id = 0;
+    if ( ViewBag.id != null)
+    {
+        id = ViewBag.id;
+    }
+    var url = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}",id.ToString());
     //if (ViewBag.description == null)
     //{
     //    ViewBag.description = "Su mejor opcion en occidente" ;
@@ -24,7 +29,7 @@
     <title>Propiedades Andrey Quesada</title>
     <link rel="icon" href="~/Images/logo2.png" />
 
-    <meta property="og:url" content="https://www.andreyquesada.com" id="metaLink"/>
+    <meta property="og:url" content="@url" id="metaLink"/>
     <meta property="og:type" content="article" />
     <meta property="og:image" content="https://speoimages.blob.core.windows.net/commonimages/shutterstock_363324191.jpg" id="metaPicture"/>
     <meta property="og:title" content="Andrey Quesada" id="metaTitle">
