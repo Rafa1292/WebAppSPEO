@@ -135,33 +135,63 @@ namespace WebApplication1.Controllers
                                                                               where u.UbicationId == articleViewModel.Article.UbicationId
                                                                               select u;
 
-            var filesEF = from f in db.Archivos
-                          where f.ArticleId == id
-                          select f;
-            ViewBag.Files = filesEF.ToList();
+            //var filesEF = from f in db.Archivos
+            //              where f.ArticleId == id
+            //              select f;
+            ViewBag.Files = "";
             ViewBag.ubicationPictures = ubicationPictures.ToList();
             ViewBag.TerrainFeatures = new SelectList(db.TerrainFeatures, "TerrainFeatureId", "Description");
             ViewBag.HouseFeatures = new SelectList(db.HouseFeatures, "HouseFeatureId", "Description");
             articleViewModel.Article.Ubication.UbicationFeaturesUbication = ubicationFeatureUbication.ToList();
             ViewBag.UbicationFeatures = new SelectList(db.UbicationFeatures, "UbicationFeatureId", "Description");
-
-
             var picture = db.ArticlePictures.Single(x => x.ArticleId == id && x.OutstandingPicture);
-            string keys = CloudConfigurationManager.GetSetting("ConnectionBlob");
-            CloudStorageAccount cuentaAlmacenamiento = CloudStorageAccount.Parse(keys);
-            CloudBlobClient clienteBlob = cuentaAlmacenamiento.CreateCloudBlobClient();
-            CloudBlobContainer container = clienteBlob.GetContainerReference("ubicationpictures");
-            CloudBlockBlob blob = container.GetBlockBlobReference(picture.Extension);
-            blob.FetchAttributes();
-            long fileByteLength = blob.Properties.Length;
-            byte[] myByteArray = new byte[fileByteLength];
-            blob.DownloadToByteArray(myByteArray, 0);
-            string base64String = Convert.ToBase64String(myByteArray);
-            var url = "data:image/png;base64," + base64String;
-            ViewBag.SharePicture = url;
+            if (picture != null)
+            {
+                string keys = CloudConfigurationManager.GetSetting("ConnectionBlob");
+                CloudStorageAccount cuentaAlmacenamiento = CloudStorageAccount.Parse(keys);
+                CloudBlobClient clienteBlob = cuentaAlmacenamiento.CreateCloudBlobClient();
+                CloudBlobContainer container = clienteBlob.GetContainerReference("ubicationpictures");
+                CloudBlockBlob blob = container.GetBlockBlobReference(picture.Extension);
+                blob.FetchAttributes();
+                long fileByteLength = blob.Properties.Length;
+                byte[] myByteArray = new byte[fileByteLength];
+                blob.DownloadToByteArray(myByteArray, 0);
+
+                if (!SharePictureExists(container, picture))
+                {
+                    CloudBlobContainer shareContainer = clienteBlob.GetContainerReference("shareimages");
+                    CreateSharePicture(myByteArray, shareContainer, picture.Extension);
+                }
+            }
+
+
             return View(articleViewModel);
         }
 
+        public bool SharePictureExists(CloudBlobContainer container, ArticlePicture picture)
+        {
+            var name = picture.Extension + ".jpg";
+            CloudBlockBlob blob = container.GetBlockBlobReference(name);
+           
+            if (blob.Properties.Created != null)
+            {
+                return true;
+            }
+
+
+            return false;
+        }
+
+        public void CreateSharePicture(byte[] myByteArray, CloudBlobContainer shareContainer, string extension)
+        {
+            var name = extension + ".jpg";
+            CloudBlockBlob blob = shareContainer.GetBlockBlobReference(name);
+            blob.Properties.ContentType = "image/jpeg";
+            using (var stream = new MemoryStream(myByteArray))
+            {
+                blob.UploadFromStream(stream);
+            }
+        }
         public ArticleViewModel SetArticleViewModel(List<ArticlePicture> pictures, ArticlePicture outstandingPicture, House house, HouseAux houseAux, Article article)
         {
             try

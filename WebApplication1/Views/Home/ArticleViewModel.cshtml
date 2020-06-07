@@ -22,7 +22,6 @@
 
 
 <div class="flex-wrap d-flex  no-padding-in-mobile mt-3">
-    @*<img src="@ViewBag.SharePicture" alt="" width="300" height="300" />*@
     <div class="col-md-7 mb-5">
         <div class="col-12 flex-wrap d-flex justify-content-center align-items-center">
             @{
@@ -35,6 +34,10 @@
 
             }
             <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">Precio: @Model.Article.Currency@initialPrice</strong>
+            <button class="bg-primary btn text-white rounded" onclick="postStory()">
+                Compartir
+            </button>
+
         </div>
         <div class="container-fluid d-flex justify-content-center  flex-wrap">
             <div class="slider-for mb-5 property-gallery">
@@ -67,6 +70,7 @@
                     </div>
                 }
             </div>
+
         </div>
         <div class="col-12 d-flex flex-wrap mt-5 p-1">
             <div class="text-center col-md-12">
@@ -263,9 +267,15 @@
                         </tr>
                     </tbody>
                 </table>
+
             </div>
         }
-
+        <div class="col-12">
+            <h5>Comentarios</h5>
+        </div>
+        <div class="col-12 d-flex flex-wrap justify-content-center ">
+            <h4 class="col-8 text-black-50" id="Description"> @Model.Article.Description</h4>
+        </div>
         @*<div class="col-md-12">
                 <div class="col-12 mb-3">
                     <h5>Contenido descargable</h5>
@@ -315,6 +325,15 @@
         });
 
     });
+
+    window.onload = function changesMetas() {
+        var metaLink = document.getElementById("metaLink");
+        var metaPicture = document.getElementById("metaPicture");
+        var metaTitle = document.getElementById("metaTitle");
+        var metaDescription = document.getElementById("metaDescription");
+        var description = document.getElementById("Description").innerHTML;
+        metaDescription.content = description;
+    }
 </script>
 
 
