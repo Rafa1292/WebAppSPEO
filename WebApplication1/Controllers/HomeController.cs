@@ -164,11 +164,9 @@ namespace WebApplication1.Controllers
                 }
             }
 
-            Session["url"] = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}", id.ToString());
-            Session["picture"] = String.Format("https://speoimages.blob.core.windows.net/shareimages/{0}{1}", picture.Extension, ".jpg");
-            Session["description"] = articleViewModel.Article.Description;
 
-            return View(articleViewModel);
+
+            return PartialView(articleViewModel);
         }
 
         public bool SharePictureExists(CloudBlobContainer container, ArticlePicture picture)

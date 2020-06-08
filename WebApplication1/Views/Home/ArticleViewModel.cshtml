@@ -15,285 +15,533 @@
     var foreheadMeasure = Model.HouseAux == null ? "" : Model.HouseAux.HouseForeheadMeasureAux.ToString();
     var backgroundMeasure = Model.HouseAux == null ? "" : Model.HouseAux.HouseBackgroundMeasureAux.ToString();
 
-
+    var metaUrl = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}", Model.Article.Id.ToString());
+    var metaPicture = String.Format("https://speoimages.blob.core.windows.net/shareimages/{0}{1}", Model.OutstandingPicture.Extension, ".jpg");
+    var metaDescription = Model.Article.Description;
 
 }
 
 
 
-<div class="flex-wrap d-flex  no-padding-in-mobile mt-3">
-    <div class="col-md-7 mb-5">
-        <div class="col-12 flex-wrap d-flex justify-content-center align-items-center">
-            @{
-                var initialPrice = Model.Article.Price;
-                var priceSize = initialPrice.Length - 3;
-                for (int x = priceSize; x > 0; x -= 3)
-                {
-                    initialPrice = initialPrice.Insert(x, ",");
-                }
-                var facebookShareUrl = String.Format("https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A44315%2FHome%2FArticleViewModel%3Fid%3D{0}&amp;src=sdkpreparse", Model.Article.Id);
 
-            }
-            <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">Precio: @Model.Article.Currency@initialPrice</strong>
 
-            <div class="fb-share-button" data-href="@Session["url"]" data-layout="button_count" data-size="small">
-            <a target="_blank" href="@facebookShareUrl" class="fb-xfbml-parse-ignore">Compartir</a></div>
-        </div>
-        <div class="container-fluid d-flex justify-content-center  flex-wrap">
-            <div class="slider-for mb-5 property-gallery">
-                <div class="">
-                    <img src="@imgPrimary" class="item item-height rounded" />
-                </div>
-                @foreach (var picture in Model.Pictures)
-                {
-                    imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
-                    <div class="">
-                        <img src="@imgSrc" class="item rounded item-height" />
-                    </div>
-                }
+
+
+<!DOCTYPE html>
+<html style="min-height: 100%;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propiedades Andrey Quesada</title>
+    <link rel="icon" href="~/Images/logo2.png" />
+    <meta property="og:url" content="@metaUrl" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="@metaPicture" />
+    <meta property="og:title" content="Propiedades Andrey Quesada">
+    <meta property="og:description" content="@metaDescription">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="600">
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.css" />
+    <!-- Add the slick-theme.css if you want default styling -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick-theme.css" />
+    <link href="~/Content/bootstrap-grid.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="body" style="font-family: Montserrat;">
+    <div class="bg-dark position-relative" style="z-index:15; ">
+        <nav class="navbar navbar-expand-lg navbar-dark nav-style mb-0">
+            <div class="d-flex justify-content-center align-content-center">
+                <div class="bg-light background-brand"></div>
+                <a href="/" class="brand">
+                    <img class="brand" src="~/Images/logo2.png" />
+                </a>
             </div>
 
-            <div class="sale-@Model.Article.ArticleKind index-sale-label-body text-capitalize text-center font-weight-bold sale-label-correction"><span class="text-light">@Model.Article.ArticleKind</span></div>
-        </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="container-fluid d-flex justify-content-center flex-wrap" style="margin-top: -30px;">
-            <div class="slider-nav slide-gallery">
+            <div class="collapse navbar-collapse  navbar-collapse-style" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link label-brand pt-0" style="position: relative; font-family:'Open Sans Condensed', sans-serif; width: 15vw;" href="/">
+                            Propiedades
+                            <span class="signature">Andrey Quesada</span>
+                        </a>
 
-                <div class="p-1">
-                    <img src="@imgPrimary" class="item-gallery " />
-                </div>
-                @foreach (var picture in Model.Pictures)
-                {
-                    imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
-                    <div class="p-1">
-                        <img src="@imgSrc" class="item-gallery " />
-                    </div>
-                }
-            </div>
+                    </li>
 
-        </div>
-        <div class="col-12 d-flex flex-wrap mt-5 p-1">
-            <div class="text-center col-md-12">
-                <h4 class=" mb-4">
-                    <span class="border-dark border rounded p-2 ubication-head-information">
-                        @Model.Article.Ubication.UbicationCategory.Name @Model.Article.Ubication.Name
-                    </span>
-                </h4>
+                    @if (User.IsInRole("Create"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ubicaciones
+                            </a>
 
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Cantones", "Index", "Cantons", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Distritos", "Index", "Distrits", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Categorias de ubicacion", "Index", "UbicationCategories", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Caracteristicas de ubicacion", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
 
-            </div>
-            <label><strong>Ubicado en: </strong>@Model.Article.Ubication.Distrit.Canton.Name, @Model.Article.Ubication.Distrit.Name.</label>
-            <div class="col-12 text-break">
-                <p>@Model.Article.Ubication.Description</p>
-            </div>
-            <label><strong>Amenidades: </strong></label>
-            <div class="col-12">
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Personas
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Clientes", "Index", "Clients", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Colaboradores", "Index", "IndividualContributors", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Articulos
+                                @{
+                                    var rejects = 0;
+                                    if (Session["rejects"] != null)
+                                    {
+                                        rejects = Int32.Parse(Session["rejects"].ToString());
+                                    }
 
-                @foreach (var item in Model.Article.Ubication.UbicationFeaturesUbication)
-                {
+                                    if (rejects > 0)
+                                    {
+                                        <span class="badge reject-badge badge-danger">@Session["rejects"]</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge reject-badge"></span>
+                                    }
+                                }
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Caracteristicas de terreno", "Index", "TerrainFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Caracteristicas de casa", "Index", "HouseFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Articulos", "Index", "Articles", null, new { @class = "dropdown-item" })
+                                <a class="dropdown-item" href="/Rejects">
+                                    Rechazos
+                                    @{
+                                        if (rejects > 0)
+                                        {
+                                            <span class="badge reject-badge badge-danger">@Session["rejects"]</span>
+                                        }
+                                    }
+                                </a>
+                            </div>
+                        </li>
 
-                    <label class="p-2 bg-success m-2 rounded text-light">@item.UbicationFeature.Description</label>
-
-                }
-
-            </div>
-
-            <div class="col-12 p-5 mt-4">
-
-                <div class="container-fluid d-flex justify-content-center  flex-wrap">
-                    <div class="autoplay mb-5 ubication-gallery">
-                        @foreach (var picture in ViewBag.ubicationPictures)
+                        if (User.IsInRole("Admin"))
                         {
-                            if (picture.Extension != null)
-                            {
+                            var approves = 0;
 
-                                imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
-                                <div class="">
-                                    <img src="@imgSrc" class="item-ubication rounded" width="600" height="400" />
-                                </div>
+                            if (Session["approve"] != null)
+                            {
+                                approves = Int32.Parse(Session["approve"].ToString());
                             }
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Seguridad
+                                    @if (approves > 0)
+                                    {
+                                        <span class="badge approve-badge badge-danger">@Session["approve"]</span>
+                                    }
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/Users">
+                                        Roles
+                                    </a>
+                                    <a class="dropdown-item" href="/Articles/ApproveArticles">
+                                        Aprobaciones
+
+                                        @if (approves > 0)
+                                        {
+                                            <span class="badge approve-badge badge-danger">@Session["approve"]</span>
+                                        }
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+
+                        <li class="nav-item ">
+                            <span class="slogan"> &nbsp;&nbsp;</span>
+                            @Html.ActionLink("Nuestros productos", "PropertiesView", "Home", null, new { @class = "btn btn-outline-light mx-4 py-2 px-5 " })
+
+                        </li>
+                    }
+
+
+                </ul>
+                <div>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+    <div class="container-fluid body-content p-0" style="min-height: 68vh;" id="body">
+
+
+
+        <div class="flex-wrap d-flex  no-padding-in-mobile mt-3">
+            <div class="col-md-7 mb-5">
+                <div class="col-12 flex-wrap d-flex justify-content-center align-items-center">
+                    @{
+                        var initialPrice = Model.Article.Price;
+                        var priceSize = initialPrice.Length - 3;
+                        for (int x = priceSize; x > 0; x -= 3)
+                        {
+                            initialPrice = initialPrice.Insert(x, ",");
+                        }
+                        var facebookShareUrl = String.Format("https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A44315%2FHome%2FArticleViewModel%3Fid%3D{0}&amp;src=sdkpreparse", Model.Article.Id);
+
+                    }
+                    <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">Precio: @Model.Article.Currency@initialPrice</strong>
+                    @if (User.IsInRole("Create"))
+                    {
+                        <div class="fb-share-button" data-href="@Session["url"]" data-layout="button_count" data-size="small">
+                            <a target="_blank" href="@facebookShareUrl" class="fb-xfbml-parse-ignore">Compartir</a>
+                        </div>
+                    }
+                </div>
+                <div class="container-fluid d-flex justify-content-center  flex-wrap">
+                    <div class="slider-for mb-5 property-gallery">
+                        <div class="">
+                            <img src="@imgPrimary" class="item item-height rounded" />
+                        </div>
+                        @foreach (var picture in Model.Pictures)
+                        {
+                            imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
+                            <div class="">
+                                <img src="@imgSrc" class="item rounded item-height" />
+                            </div>
+                        }
+                    </div>
+
+                    <div class="sale-@Model.Article.ArticleKind index-sale-label-body text-capitalize text-center font-weight-bold sale-label-correction"><span class="text-light">@Model.Article.ArticleKind</span></div>
+                </div>
+
+                <div class="container-fluid d-flex justify-content-center flex-wrap" style="margin-top: -30px;">
+                    <div class="slider-nav slide-gallery">
+
+                        <div class="p-1">
+                            <img src="@imgPrimary" class="item-gallery " />
+                        </div>
+                        @foreach (var picture in Model.Pictures)
+                        {
+                            imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
+                            <div class="p-1">
+                                <img src="@imgSrc" class="item-gallery " />
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <div class="col-12 d-flex flex-wrap mt-5 p-1">
+                    <div class="text-center col-md-12">
+                        <h4 class=" mb-4">
+                            <span class="border-dark border rounded p-2 ubication-head-information">
+                                @Model.Article.Ubication.UbicationCategory.Name @Model.Article.Ubication.Name
+                            </span>
+                        </h4>
+
+
+                    </div>
+                    <label><strong>Ubicado en: </strong>@Model.Article.Ubication.Distrit.Canton.Name, @Model.Article.Ubication.Distrit.Name.</label>
+                    <div class="col-12 text-break">
+                        <p>@Model.Article.Ubication.Description</p>
+                    </div>
+                    <label><strong>Amenidades: </strong></label>
+                    <div class="col-12">
+
+                        @foreach (var item in Model.Article.Ubication.UbicationFeaturesUbication)
+                        {
+
+                            <label class="p-2 bg-success m-2 rounded text-light">@item.UbicationFeature.Description</label>
+
+                        }
+
+                    </div>
+
+                    <div class="col-12 p-5 mt-4">
+
+                        <div class="container-fluid d-flex justify-content-center  flex-wrap">
+                            <div class="autoplay mb-5 ubication-gallery">
+                                @foreach (var picture in ViewBag.ubicationPictures)
+                                {
+                                    if (picture.Extension != null)
+                                    {
+
+                                        imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", picture.Extension);
+                                        <div class="">
+                                            <img src="@imgSrc" class="item-ubication rounded" width="600" height="400" />
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <div class="col-md-5 shadow-lg rounded p-0 flex-wrap d-flex mb-5" style="height:fit-content; background-color: rgba(255, 255, 255, 0.1)">
+                <div class="text-center col-md-12">
+                    <h4 class="border-bottom border-dark p-3 mb-4">
+                        <strong class="property-head-information">Ficha técnica</strong>
+                        <span class="border-dark border rounded p-2 property-head-information">
+                            @Model.Article.Code
+                        </span>
+                    </h4>
+                    @{
+                        if (User.IsInRole("Create"))
+                        {
+                            <a href="/Articles/Edit/@Model.Article.Id" class="btn btn-outline-secondary m-1">Editar</a>
+                        }
+                    }
+                </div>
+                <div class="col-md-12 flex-wrap d-flex">
+                    <div class="col-12">
+                        <h5>Espacios</h5>
+                    </div>
+                    <div class="col-6 p-3">
+                        Medida de frente: <br />
+                        <strong>
+                            @Model.Article.Terrain.ForeheadMeasure@mts
+                        </strong>
+                    </div>
+                    <div class="col-6 p-3">
+                        Medida de fondo <br />
+                        <strong>
+                            @Model.Article.Terrain.BackgroundMeasure@mts
+                        </strong>
+                    </div>
+                    <div class="col-6 p-3">
+                        Area total <br />
+                        <strong>
+                            @areaTotal@mts²
+                        </strong>
+                    </div>
+                    <div class="col-6 p-3">
+                        Topografia <br />
+                        <strong>
+                            @Model.Article.Terrain.Topography.
+                        </strong>
+                    </div>
+                    <div class="col-12 border-dark mb-3 p-4 border-bottom">
+                        <p class="mb-4">El terreno cuenta con:<br /></p>
+                        @foreach (var feature in Model.Article.Terrain.TerrainFeaturesTerrain)
+                        {
+                            <label class="p-2 bg-success m-2 rounded text-light">@feature.TerrainFeature.Description</label>
                         }
                     </div>
                 </div>
+                @if (Model.House != null)
+                {
+
+                    <div class="col-md-12 no-padding-in-mobile">
+                        <div class="col-12">
+                            <h5>Construccion</h5>
+                            <p>
+                                La propiedad tiene @houseLegend
+                            </p>
+                        </div>
+
+                        <table class="table text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">
+                                        <img src="~/Images/home-solid.svg" width="25" height="25" />
+                                    </th>
+                                    @if (Model.HouseAux != null)
+                                    {
+                                        <th scope="col">
+                                            <img src="~/Images/home-solid.svg" width="25" height="25" />
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Medida de frente</strong>
+                                    </th>
+                                    <td>@Model.House.HouseForeheadMeasure</td>
+                                    <td>@foreheadMeasure</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong> Medida de fondo</strong>
+                                    </th>
+                                    <td>@Model.House.HouseBackgroundMeasure</td>
+                                    <td>@backgroundMeasure</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <img src="~/Images/bath-solid.svg" width="25" height="25" />
+                                    </th>
+                                    <td>@Model.House.Bathrooms</td>
+                                    <td>@bathrooms</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <img src="~/Images/bed-solid.svg" width="25" height="25" />
+                                    </th>
+                                    <td>@Model.House.Bedrooms</td>
+                                    <td>@bedrooms</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <img src="~/Images/warehouse-solid.svg" width="25" height="25" />
+                                    </th>
+                                    <td>@Model.House.Garage</td>
+                                    <td>@garage</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <img src="~/Images/layer-group-solid.svg" width="25" height="25" />
+                                    </th>
+                                    <td>@Model.House.Levels</td>
+                                    <td>@levels</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        Cracteristicas
+                                    </th>
+                                    <td>
+
+                                        @foreach (var feature in Model.House.HouseFeaturesHouse)
+                                        {
+
+                                            <label class="p-2 bg-success m-2 rounded text-light">@feature.HouseFeature.Description</label>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Model.HouseAux != null)
+                                        {
+                                            foreach (var feature in Model.HouseAux.HouseFeaturesHouse)
+                                            {
+                                                <label class="p-2 bg-success m-2 rounded text-light">@feature.HouseFeature.Description</label>
+
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                }
+                <div class="col-12">
+                    <h5>Comentarios</h5>
+                </div>
+                <div class="col-12 d-flex flex-wrap justify-content-center ">
+                    <h4 class="col-8 text-black-50" id="Description"> @Model.Article.Description</h4>
+                </div>
+
             </div>
 
 
-
         </div>
+
     </div>
 
-    <div class="col-md-5 shadow-lg rounded p-0 flex-wrap d-flex mb-5" style="height:fit-content; background-color: rgba(255, 255, 255, 0.1)">
-        <div class="text-center col-md-12">
-            <h4 class="border-bottom border-dark p-3 mb-4">
-                <strong class="property-head-information">Ficha técnica</strong>
-                <span class="border-dark border rounded p-2 property-head-information">
-                    @Model.Article.Code
-                </span>
-            </h4>
-            @{
-                if (User.IsInRole("Create"))
-                {
-                    <a href="/Articles/Edit/@Model.Article.Id" class="btn btn-outline-secondary m-1">Editar</a>
-                }
-            }
-        </div>
-        <div class="col-md-12 flex-wrap d-flex">
-            <div class="col-12">
-                <h5>Espacios</h5>
-            </div>
-            <div class="col-6 p-3">
-                Medida de frente: <br />
-                <strong>
-                    @Model.Article.Terrain.ForeheadMeasure@mts
-                </strong>
-            </div>
-            <div class="col-6 p-3">
-                Medida de fondo <br />
-                <strong>
-                    @Model.Article.Terrain.BackgroundMeasure@mts
-                </strong>
-            </div>
-            <div class="col-6 p-3">
-                Area total <br />
-                <strong>
-                    @areaTotal@mts²
-                </strong>
-            </div>
-            <div class="col-6 p-3">
-                Topografia <br />
-                <strong>
-                    @Model.Article.Terrain.Topography.
-                </strong>
-            </div>
-            <div class="col-12 border-dark mb-3 p-4 border-bottom">
-                <p class="mb-4">El terreno cuenta con:<br /></p>
-                @foreach (var feature in Model.Article.Terrain.TerrainFeaturesTerrain)
-                {
-                    <label class="p-2 bg-success m-2 rounded text-light">@feature.TerrainFeature.Description</label>
-                }
-            </div>
-        </div>
-        @if (Model.House != null)
-        {
+    <div class="footer text-center">
 
-            <div class="col-md-12 no-padding-in-mobile">
-                <div class="col-12">
-                    <h5>Construccion</h5>
+        <div class="container-fluid row text-light">
+            <div class="col-lg-3">
+                <div class="col-md-12 ">
+                    <h4> Contactanos</h4>
+                </div>
+                <div class="col-md-12">
                     <p>
-                        La propiedad tiene @houseLegend
+                        <strong>Email</strong>
+                        <br>
+                        <a class="mail" href="mailto:Quesada.realty@gmail.com">Quesada.realty@gmail.com</a>
                     </p>
                 </div>
-
-                <table class="table text-center">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">
-                                <img src="~/Images/home-solid.svg" width="25" height="25" />
-                            </th>
-                            @if (Model.HouseAux != null)
-                            {
-                                <th scope="col">
-                                    <img src="~/Images/home-solid.svg" width="25" height="25" />
-                                </th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                <strong>Medida de frente</strong>
-                            </th>
-                            <td>@Model.House.HouseForeheadMeasure</td>
-                            <td>@foreheadMeasure</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <strong> Medida de fondo</strong>
-                            </th>
-                            <td>@Model.House.HouseBackgroundMeasure</td>
-                            <td>@backgroundMeasure</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <img src="~/Images/bath-solid.svg" width="25" height="25" />
-                            </th>
-                            <td>@Model.House.Bathrooms</td>
-                            <td>@bathrooms</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <img src="~/Images/bed-solid.svg" width="25" height="25" />
-                            </th>
-                            <td>@Model.House.Bedrooms</td>
-                            <td>@bedrooms</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <img src="~/Images/warehouse-solid.svg" width="25" height="25" />
-                            </th>
-                            <td>@Model.House.Garage</td>
-                            <td>@garage</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <img src="~/Images/layer-group-solid.svg" width="25" height="25" />
-                            </th>
-                            <td>@Model.House.Levels</td>
-                            <td>@levels</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                Cracteristicas
-                            </th>
-                            <td>
-
-                                @foreach (var feature in Model.House.HouseFeaturesHouse)
-                                {
-
-                                    <label class="p-2 bg-success m-2 rounded text-light">@feature.HouseFeature.Description</label>
-                                }
-                            </td>
-                            <td>
-                                @if (Model.HouseAux != null)
-                                {
-                                    foreach (var feature in Model.HouseAux.HouseFeaturesHouse)
-                                    {
-                                        <label class="p-2 bg-success m-2 rounded text-light">@feature.HouseFeature.Description</label>
-
-                                    }
-                                }
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-        }
-        <div class="col-12">
-            <h5>Comentarios</h5>
-        </div>
-        <div class="col-12 d-flex flex-wrap justify-content-center ">
-            <h4 class="col-8 text-black-50" id="Description"> @Model.Article.Description</h4>
-        </div>
-        @*<div class="col-md-12">
-                <div class="col-12 mb-3">
-                    <h5>Contenido descargable</h5>
+                <div class="col-md-12 ">
+                    <p>
+                        <strong>Telefono</strong>
+                        <br>
+                        +506-6046-8877<br>
+                        +506-2444-7755
+                    </p>
                 </div>
-
-                @foreach (var file in ViewBag.Files)
-                {
-                    <a class="rounded border border-secondary text-secondary p-2 m-2 " href="@Url.Action("DescargarArchivo", "Home", new { id = file.Id })">
-                        <span>@file.Nombre.@file.Extension</span>
-
-                    </a>
-
-                }
-            </div>*@
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-12 ">
+                    <h4> Siguenos en:</h4>
+                </div>
+                <div class="col-md-12 ">
+                    <p>
+                        <img class="" src="images/facebook.svg" style="height: 50px;">
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-12 ">
+                    <h4> Informacion</h4>
+                </div>
+                <div class="col-md-12 ">
+                    <ul class="p-0">
+                        <li class="list-group">Inicio</li>
+                        <li class="list-group">Comprar</li>
+                        <li class="list-group">alquilar</li>
+                        <li class="list-group">¿Quienes somos?</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="col-md-12">
+                    <h5>
+                        Diseño y desarrollo por:
+                    </h5>
+                </div>
+                <div class="col-md-12">
+                    <p>
+                        <img src="images/logoNebulosa.png" alt="logo" style="height: 50px; width: 150px;">
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
+        <div class="modal-dialog load-gif m-0" role="document">
+            <div class="modal-content load-gif bg-transparent">
+                <img class="house-gif" src="~/Images/home-solid.svg" height="100" id="house-gif" />
 
-</div>
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.8.1/slick/slick.min.js"></script>
+    <script src="https://kit.fontawesome.com/702bfd46b2.js" crossorigin="anonymous" SameSite="None" Secure></script>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v7.0&appId=832394410565258&autoLogAppEvents=1"></script>
+</body>
+</html>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -326,7 +574,7 @@
 
     });
 
-    
+
 </script>
 
 
