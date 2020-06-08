@@ -21,12 +21,6 @@
 
 }
 
-
-
-
-
-
-
 <!DOCTYPE html>
 <html style="min-height: 100%;">
 <head>
@@ -217,6 +211,9 @@
                         <div class="fb-share-button" data-href="@Session["url"]" data-layout="button_count" data-size="small">
                             <a target="_blank" href="@facebookShareUrl" class="fb-xfbml-parse-ignore">Compartir</a>
                         </div>
+                        <a href="https://api.whatsapp.com/send?text=@metaUrl" data-action="share/whatsapp/share">
+                        <img border="0" src="~/Images/whatsapp.svg" width="35" height="35">
+                        </a>
                     }
                 </div>
                 <div class="container-fluid d-flex justify-content-center  flex-wrap">
@@ -524,6 +521,8 @@
             </div>
         </div>
     </div>
+
+
 
     <div class="modal p-0" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background-color: rgba( 255, 255, 255, .5)">
         <div class="modal-dialog load-gif m-0" role="document">
