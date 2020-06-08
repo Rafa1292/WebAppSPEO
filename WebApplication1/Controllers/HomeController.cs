@@ -166,7 +166,7 @@ namespace WebApplication1.Controllers
 
 
 
-            return PartialView(articleViewModel);
+            return PartialView("ArticleViewModel", articleViewModel);
         }
 
         public bool SharePictureExists(CloudBlobContainer container, ArticlePicture picture)
