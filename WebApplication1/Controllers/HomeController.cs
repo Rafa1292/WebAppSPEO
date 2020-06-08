@@ -164,9 +164,9 @@ namespace WebApplication1.Controllers
                 }
             }
 
-            ViewBag.url = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}", id.ToString());
-            ViewBag.picture = String.Format("https://speoimages.blob.core.windows.net/shareimages/{0}{1}", picture.Extension, ".jpg");
-            ViewBag.description = articleViewModel.Article.Description;
+            Session["url"] = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}", id.ToString());
+            Session["picture"] = String.Format("https://speoimages.blob.core.windows.net/shareimages/{0}{1}", picture.Extension, ".jpg");
+            Session["description"] = articleViewModel.Article.Description;
 
             return View(articleViewModel);
         }
