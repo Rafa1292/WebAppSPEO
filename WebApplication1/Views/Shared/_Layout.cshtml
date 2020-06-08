@@ -6,6 +6,11 @@
     {
         slogan = "Mas de 500 propiedades disponibles...";
     }
+
+    var description = ViewBag.description;
+    var url = ViewBag.url;
+    var picture = ViewBag.picture;
+
 }
 
 
@@ -18,12 +23,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propiedades Andrey Quesada</title>
     <link rel="icon" href="~/Images/logo2.png" />
-
-    <meta property="og:url" content="@ViewBag.url" id="metaLink" />
+    <meta property="og:url" content="@url" id="metaLink" />
     <meta property="og:type" content="article" />
-    <meta property="og:image" content="@ViewBag.picture" id="metaPicture" />
+    <meta property="og:image" content="@picture" id="metaPicture" />
     <meta property="og:title" content="Propiedades Andrey Quesada" id="metaTitle">
-    <meta property="og:description" content="@ViewBag.description" id="metaDescription">
+    <meta property="og:description" content="@description" id="metaDescription">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="600">
     <link href="~/Content/Site.css" rel="stylesheet" />
