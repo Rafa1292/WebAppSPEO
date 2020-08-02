@@ -61,20 +61,20 @@
 
                     @if (User.IsInRole("Create"))
                     {
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Ubicaciones
-                    </a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ubicaciones
+                            </a>
 
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        @Html.ActionLink("Cantones", "Index", "Cantons", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Distritos", "Index", "Distrits", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Categorias de ubicacion", "Index", "UbicationCategories", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Caracteristicas de ubicacion", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
-                        @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Cantones", "Index", "Cantons", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Distritos", "Index", "Distrits", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Categorias de ubicacion", "Index", "UbicationCategories", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Caracteristicas de ubicacion", "Index", "UbicationFeatures", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Ubicaciones", "Index", "Ubications", null, new { @class = "dropdown-item" })
 
-                    </div>
-                </li>
+                            </div>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Personas
@@ -253,6 +253,7 @@
     <script src="https://kit.fontawesome.com/702bfd46b2.js" crossorigin="anonymous" SameSite="None" Secure></script>
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v7.0&appId=832394410565258&autoLogAppEvents=1"></script>
+    <link rel="icon" href="~/Images/logo2.png" />
 </body>
 </html>
 
