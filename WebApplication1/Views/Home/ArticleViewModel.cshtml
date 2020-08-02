@@ -1,6 +1,7 @@
 ﻿@model WebApplication1.ViewModel.ArticleViewModel
 
 @{
+    Layout = "";
     ViewBag.Title = "ArticleViewModel";
     var imgPrimary = @String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", Model.OutstandingPicture.Extension);
     var areaTotal = Model.Article.Terrain.ForeheadMeasure * Model.Article.Terrain.BackgroundMeasure;
