@@ -1,6 +1,12 @@
 ﻿@model WebApplication1.ViewModel.ArticleViewModel
 
 @{
+    var slogan = "";
+
+    if (!User.IsInRole("Create"))
+    {
+        slogan = "Mas de 500 propiedades disponibles...";
+    }
     Layout = "";
     ViewBag.Title = "ArticleViewModel";
     var imgPrimary = @String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", Model.OutstandingPicture.Extension);
@@ -22,7 +28,8 @@
 
 }
 
-
+<!DOCTYPE html>
+<html style="min-height: 100%;">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -533,7 +540,7 @@
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v7.0&appId=832394410565258&autoLogAppEvents=1"></script>
 </body>
 
-
+</html>
 
 
 
