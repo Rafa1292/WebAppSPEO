@@ -211,15 +211,14 @@
 
                     }
                     <strong class="p-2 m-2  index-item-price" style="font-size: 25px;">Precio: @Model.Article.Currency@initialPrice</strong>
-                    @if (User.IsInRole("Create"))
-                    {
+
                         <div class="fb-share-button" data-href="@Session["url"]" data-layout="button_count" data-size="small">
                             <a target="_blank" href="@facebookShareUrl" class="fb-xfbml-parse-ignore">Compartir</a>
                         </div>
                         <a href="https://api.whatsapp.com/send?text=@metaUrl" data-action="share/whatsapp/share">
                             <img border="0" src="~/Images/whatsapp.svg" width="35" height="35">
                         </a>
-                    }
+                    
                 </div>
                 <div class="container-fluid d-flex justify-content-center  flex-wrap">
                     <div class="slider-for mb-5 property-gallery">
