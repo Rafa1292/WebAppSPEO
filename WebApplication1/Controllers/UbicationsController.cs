@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
         public ActionResult Index()
         {
             var Distrits = db.Distrits.Include(x => x.Ubications).ToList();
-            var Cantons = db.Cantons.Include(x => x.Distrits).ToList();
+            var Cantons = db.Cantons.Include(x => x.Distrits);
             ViewBag.Distrits = Distrits;
 
             return View(Cantons);
