@@ -32,6 +32,7 @@ namespace WebApplication1.Controllers
             var Distrits = db.Distrits.Include(x => x.Ubications).ToList();
             var Cantons = db.Cantons.Include(x => x.Distrits).ToList();
             ViewBag.Distrits = Distrits;
+            ViewBag.Cantons = db.Cantons.ToList();
 
             return View(Cantons);
         }
