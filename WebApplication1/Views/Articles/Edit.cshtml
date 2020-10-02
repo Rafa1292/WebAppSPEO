@@ -20,168 +20,171 @@
 
 }
 
-    <div class="p-4">
+<div class="p-4">
 
-        <div class="justify-content-center d-flex">
-            <h3 class="url-label">Articulos</h3>
+    <div class="justify-content-center d-flex">
+        <h3 class="url-label">Articulos</h3>
+    </div>
+    <span class="text-danger field-validation-error justify-content-center d-flex">
+        <span>@ViewBag.error</span>
+    </span>
+
+    <div class="container-fluid flex-wrap d-flex">
+
+        <div class=" d-flex rounded article-validate-button">
+            <div><strong>Articulo</strong></div>
         </div>
-        <span class="text-danger field-validation-error justify-content-center d-flex">
-            <span>@ViewBag.error</span>
-        </span>
-
-        <div class="container-fluid flex-wrap d-flex">
-
-            <div class=" d-flex rounded article-validate-button">
-                <div><strong>Articulo</strong></div>
-            </div>
-            <div class=" d-flex rounded article-validate-button">
-                <div><strong>Terreno</strong></div>
-            </div>
-            <div class=" d-flex rounded article-validate-button">
-                <div><strong>Fotos</strong></div>
-            </div>
-            <div class="rounded article-validate-button" id="articleValidateButtonHouse" style='display: @ViewBag.houseForm'>
-                <div><strong>Casa</strong></div>
-            </div>
-            <div class="rounded article-validate-button" id="articleValidateButtonHouseAux" style='display:@ViewBag.houseAuxForm'>
-                <div><strong>Casa #2</strong></div>
-            </div>
-            <div style="margin-left: 1%;">
-                <button class="btn-outline-success btn rounded" id="containerButton" onclick="showHouseForm()" style='min-width:84px; min-height: 38px; margin-top: 5px; display: @ViewBag.houseFormBtn'>
-                    <i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i>
-                </button>
-            </div>
-
+        <div class=" d-flex rounded article-validate-button">
+            <div><strong>Terreno</strong></div>
         </div>
-        <hr />
+        <div class=" d-flex rounded article-validate-button">
+            <div><strong>Fotos</strong></div>
+        </div>
+        <div class="rounded article-validate-button" id="articleValidateButtonHouse" style='display: @ViewBag.houseForm'>
+            <div><strong>Casa</strong></div>
+        </div>
+        <div class="rounded article-validate-button" id="articleValidateButtonHouseAux" style='display:@ViewBag.houseAuxForm'>
+            <div><strong>Casa #2</strong></div>
+        </div>
+        <div style="margin-left: 1%;">
+            <button class="btn-outline-success btn rounded" id="containerButton" onclick="showHouseForm()" style='min-width:84px; min-height: 38px; margin-top: 5px; display: @ViewBag.houseFormBtn'>
+                <i class="fas fa-home"></i><i class="fas fa-plus" style="font-size:10px;"></i>
+            </button>
+        </div>
+
+    </div>
+    <hr />
 
 
-        @using (Html.BeginForm("Edit", "Articles", null, FormMethod.Post, new { enctype = "multipart/form-data", method = "post", @id = "Form" }))
-        {
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="articleViewModel.Article.Id" value="@Model.Article.Id" />
-            <input type="hidden" name="articleViewModel.Article.Code" value="@Model.Article.Code" />
-            <input type="hidden" name="articleViewModel.Article.TerrainId" value="@Model.Article.TerrainId" />
+    @using (Html.BeginForm("Edit", "Articles", null, FormMethod.Post, new { enctype = "multipart/form-data", method = "post", @id = "Form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="articleViewModel.Article.Id" value="@Model.Article.Id" />
+        <input type="hidden" name="articleViewModel.Article.Code" value="@Model.Article.Code" />
+        <input type="hidden" name="articleViewModel.Article.TerrainId" value="@Model.Article.TerrainId" />
 
+
+        <div class="col-md-12 shadow  p-0 flex-wrap  mb-3">
+
+            <div class="col-md-12 article-container-header justify-content-between  d-flex ">
+                <h3 class="col-xs-11">Informacion del articulo</h3>
+                <span class="show-hide-bottom-form col-xs-1">
+                    <i onclick="showHouseBodyForm('article')" class="fas fa-plus " style="display: none;" id="articlePlusButton"></i>
+                    <i onclick="hideHouseBodyForm('article')" class="fas fa-minus " id="articleMinusButton"></i>
+                </span>
+            </div>
+
+            <div class=" col-md-12 row mt-3 mb-3" name="articleFormBody">
+                <div class="form-group col-lg-3">
+                    @Html.LabelFor(model => model.Article.Description, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-12">
+                        @{
+                            var value = "";
+                            if (Model != null)
+                            {
+                                value = Model.Article.Description;
+                            }
+                        }
+                        <textarea id="Article_Description" name="articleViewModel.Article.Description" rows="3" class="text-area"> @description</textarea>
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-3">
+                    @Html.LabelFor(model => model.Article.Price, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-12 container-fluid">
+                        <div class="input-group-prepend col-xs-2">
+                            <select class="input-group-text" id="Article_Currency" name="articleViewModel.Article.Currency">
+                                @{
+                                    var dollarState = ViewBag.Currency == "$" ? "selected" : "";
+                                    var colonState = ViewBag.Currency == "¢" ? "selected" : "";
+                                }
+                                <option @dollarState value="$">$</option>
+                                <option @colonState value="¢">¢</option>
+                            </select>
+                            <div class="col-xs-8">
+                                <input type="number" name="articleViewModel.Article.Price" value="@price" class="form-control" id="Article_Price" style="max-width: 225px;" onchange="validateItem(this.id, 0, `Debes incluir un precio valido`)" />
+                            </div>
+                        </div>
+                    </div>
+                    <span id="errorArticle_Price" class="text-danger col-md-12"></span>
+                </div>
+
+
+                <div class="form-group col-lg-3">
+                    @Html.LabelFor(model => model.Article.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-12">
+                        <select name="articleViewModel.Article.UbicationId" id="Article_UbicationId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
+                            <option selected disabled>Seleccione una ubicacion</option>
+                            @foreach (var ubication in ViewBag.UbicationId)
+                            {
+                                var selectedOption = ViewBag.SelectedUbication != null && ViewBag.SelectedUbication == Int32.Parse(ubication.Value) ? "selected" : "";
+                                <option @selectedOption value="@ubication.Value">@ubication.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <span id="errorArticle_UbicationId" class="text-danger col-md-12"></span>
+                </div>
+
+                <div class="form-group col-lg-3">
+                    @Html.LabelFor(model => model.Article.OwnerName, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        <input type="text" name="articleViewModel.Article.OwnerName" value="@ownerName" id="Article_OwnerName" class="form-control" style="max-width: 225px;" onchange="validateItem(this.id, null, `Debes incluir un nombre`)" />
+                    </div>
+                    <span id="errorArticle_OwnerName" class="text-danger col-md-12"></span>
+                </div>
+
+                <div class="form-group col-lg-3">
+                    @Html.LabelFor(model => model.Article.OwnerPhone, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        <input type="number" name="articleViewModel.Article.OwnerPhone" value="@ownerPhone" id="Article_OwnerPhone" class="form-control" style="max-width: 225px;" onchange="validateItem(this.id, 0, `Debes incluir un nombre`)" />
+                    </div>
+                    <span id="errorArticle_OwnerPhone" class="text-danger col-md-12"></span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 ">
+            @Html.Partial("CreateTerrainFormView")
+        </div>
+
+
+        <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 " id="houseForm" style="display:@ViewBag.houseForm;">
+            @Html.Partial("CreateHouseFormView")
+        </div>
+
+        <div class="col-md-12 shadow  p-0 flex-wrap  mb-3" id="houseFormAux" style="display: @ViewBag.houseAuxForm;">
+            @Html.Partial("CreateHouseFormAux")
+        </div>
+
+        <div class="form-group">
 
             <div class="col-md-12 shadow  p-0 flex-wrap  mb-3">
-
-                <div class="col-md-12 article-container-header justify-content-between  d-flex ">
-                    <h3 class="col-xs-11">Informacion del articulo</h3>
-                    <span class="show-hide-bottom-form col-xs-1">
-                        <i onclick="showHouseBodyForm('article')" class="fas fa-plus " style="display: none;" id="articlePlusButton"></i>
-                        <i onclick="hideHouseBodyForm('article')" class="fas fa-minus " id="articleMinusButton"></i>
+                <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
+                    <h3 class="">Agregar fotos </h3>
+                    <span class="show-hide-bottom-form">
+                        <i onclick="showHouseBodyForm('picture')" class="fas fa-plus " style="display: none;" id="picturePlusButton"></i>
+                        <i onclick="hideHouseBodyForm('picture')" class="fas fa-minus " id="pictureMinusButton"></i>
                     </span>
                 </div>
-
-                <div class=" col-md-12 row mt-3 mb-3" name="articleFormBody">
-                    <div class="form-group col-lg-3">
-                        @Html.LabelFor(model => model.Article.Description, htmlAttributes: new { @class = "control-label col-md-6" })
-                        <div class="col-md-12">
-                            @{
-                                var value = "";
-                                if (Model != null)
-                                {
-                                    value = Model.Article.Description;
-                                }
-                            }
-                            <textarea id="Article_Description" name="articleViewModel.Article.Description" rows="3" class="text-area"> @description</textarea>
+                <div class="col-md-8 justify-content-center container mb-3 flex-wrap" style="display:flex" name="pictureFormBody" id="imagesPreview">
+                    <div class="col-md-12">
+                        <div class="text-danger field-validation-error text-center" id="ImageError">
+                        </div>
+                        <div class="text-danger field-validation-error text-center" id="OutstandingImageError">
                         </div>
                     </div>
 
-                    <div class="form-group col-lg-3">
-                        @Html.LabelFor(model => model.Article.Price, htmlAttributes: new { @class = "control-label col-md-6" })
-                        <div class="col-md-12 container-fluid">
-                            <div class="input-group-prepend col-xs-2">
-                                <select class="input-group-text" id="Article_Currency" name="articleViewModel.Article.Currency">
-                                    @{
-                                        var dollarState = ViewBag.Currency == "$" ? "selected" : "";
-                                        var colonState = ViewBag.Currency == "¢" ? "selected" : "";
-                                    }
-                                    <option @dollarState value="$">$</option>
-                                    <option @colonState value="¢">¢</option>
-                                </select>
-                                <div class="col-xs-8">
-                                    <input type="number" name="articleViewModel.Article.Price" value="@price" class="form-control" id="Article_Price" style="max-width: 225px;" onchange="validateItem(this.id, 0, `Debes incluir un precio valido`)" />
-                                </div>
-                            </div>
-                        </div>
-                        <span id="errorArticle_Price" class="text-danger col-md-12"></span>
+                    <div class="col-md-3 d-flex mb-2 justify-content-center" style="padding-left: 5px">
+                        <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
+                        <input multiple id="pickImage" type="file" name="" style="display: none" onchange='showPreview(event,"imagesPreview","urls[]")' />
                     </div>
 
-
-                    <div class="form-group col-lg-3">
-                        @Html.LabelFor(model => model.Article.UbicationId, "Ubicacion", htmlAttributes: new { @class = "control-label col-md-6" })
-                        <div class="col-md-12">
-                            <select name="articleViewModel.Article.UbicationId" id="Article_UbicationId" class="form-control" onchange="validateItem(this.id, 0, `Debes seleccionar una opcion valida`)">
-                                <option selected disabled>Seleccione una ubicacion</option>
-                                @foreach (var ubication in ViewBag.UbicationId)
-                                {
-                                    var selectedOption = ViewBag.SelectedUbication != null && ViewBag.SelectedUbication == Int32.Parse(ubication.Value) ? "selected" : "";
-                                    <option @selectedOption value="@ubication.Value">@ubication.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <span id="errorArticle_UbicationId" class="text-danger col-md-12"></span>
-                    </div>
-
-                    <div class="form-group col-lg-3">
-                        @Html.LabelFor(model => model.Article.OwnerName, htmlAttributes: new { @class = "control-label col-md-12" })
-                        <div class="col-md-12">
-                            <input type="text" name="articleViewModel.Article.OwnerName" value="@ownerName" id="Article_OwnerName" class="form-control" style="max-width: 225px;" onchange="validateItem(this.id, null, `Debes incluir un nombre`)" />
-                        </div>
-                        <span id="errorArticle_OwnerName" class="text-danger col-md-12"></span>
-                    </div>
-
-                    <div class="form-group col-lg-3">
-                        @Html.LabelFor(model => model.Article.OwnerPhone, htmlAttributes: new { @class = "control-label col-md-12" })
-                        <div class="col-md-12">
-                            <input type="number" name="articleViewModel.Article.OwnerPhone" value="@ownerPhone" id="Article_OwnerPhone" class="form-control" style="max-width: 225px;" onchange="validateItem(this.id, 0, `Debes incluir un nombre`)" />
-                        </div>
-                        <span id="errorArticle_OwnerPhone" class="text-danger col-md-12"></span>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 ">
-                @Html.Partial("CreateTerrainFormView")
-            </div>
-
-
-            <div class="col-md-12 shadow  p-0 flex-wrap  mb-3 " id="houseForm" style="display:@ViewBag.houseForm;">
-                @Html.Partial("CreateHouseFormView")
-            </div>
-
-            <div class="col-md-12 shadow  p-0 flex-wrap  mb-3" id="houseFormAux" style="display: @ViewBag.houseAuxForm;">
-                @Html.Partial("CreateHouseFormAux")
-            </div>
-
-            <div class="form-group">
-
-                <div class="col-md-12 shadow  p-0 flex-wrap  mb-3">
-                    <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
-                        <h3 class="">Agregar fotos </h3>
-                        <span class="show-hide-bottom-form">
-                            <i onclick="showHouseBodyForm('picture')" class="fas fa-plus " style="display: none;" id="picturePlusButton"></i>
-                            <i onclick="hideHouseBodyForm('picture')" class="fas fa-minus " id="pictureMinusButton"></i>
-                        </span>
-                    </div>
-                    <div class="col-md-8 justify-content-center container mb-3 flex-wrap" style="display:flex" name="pictureFormBody" id="imagesPreview">
-                        <div class="col-md-12">
-                            <div class="text-danger field-validation-error text-center" id="ImageError">
-                            </div>
-                            <div class="text-danger field-validation-error text-center" id="OutstandingImageError">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 d-flex mb-2 justify-content-center" style="padding-left: 5px">
-                            <label for="pickImage" class="image-label-style" style="width:100px !important; height:100px !important;"><i class="fas fa-camera-retro fa-2x" style="color: gray;"></i></label>
-                            <input multiple id="pickImage" type="file" name="" style="display: none" onchange='showPreview(event,"imagesPreview","urls[]")' />
-                        </div>
-
-                        @if (Model != null)
+                    @if (Model != null)
+                    {
+                        if (Model.OutstandingPicture != null)
                         {
+
                             <div class="col-md-3 my-2 d-flex justify-content-center" id="@Model.OutstandingPicture.Extension">
                                 <figure class="figure-style">
                                     <img class="thumbnail 0 figure-selected-style" id="0" onclick="SelectOutstandingPicture(this.id)" src=@String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", Model.OutstandingPicture.Extension)>
@@ -189,25 +192,30 @@
                                 <i class="fas fa-times-circle close-button-style 0" aria-hidden="true" onclick='deleteBlob("@Model.OutstandingPicture.ArticlePictureId","@Model.OutstandingPicture.Extension")'></i>
                                 <input name="outstandingPicture" class="inputs" style="display: none;" id="0" type="text" value="@Model.OutstandingPicture.Extension">
                             </div>
-
-                            var i = 1;
-                            foreach (var Picture in Model.Pictures)
-                            {
-                                <div class="col-md-3 my-2 d-flex justify-content-center" id="@Picture.Extension">
-                                    <figure class="figure-style">
-                                        <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src=@String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", Picture.Extension)>
-                                    </figure>
-                                    <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true" onclick='deleteBlob("@Picture.ArticlePictureId","@Picture.Extension")'></i>
-                                    <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@Picture.Extension">
-                                </div>
-                                i++;
-                            }
                         }
-                    </div>
+
+                        var i = 1;
+                        foreach (var Picture in Model.Pictures)
+                        {
+                            <div class="col-md-3 my-2 d-flex justify-content-center" id="@Picture.Extension">
+                                <figure class="figure-style">
+                                    @if (Picture.Extension != null)
+                                    {
+                                        <img class="thumbnail @i" onclick="SelectOutstandingPicture(this.id)" id="@i" src=@String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", Picture.Extension)>
+
+                                    }
+                                </figure>
+                                <i id="@i" class="fas fa-times-circle close-button-style @i" aria-hidden="true" onclick='deleteBlob("@Picture.ArticlePictureId","@Picture.Extension")'></i>
+                                <input name="urls[]" class="inputs" style="display: none;" id="@i" type="text" value="@Picture.Extension">
+                            </div>
+                            i++;
+                        }
+                    }
                 </div>
             </div>
+        </div>
 
-            @*<div class="col-md-12 shadow d-flex p-0 flex-wrap  mb-3">
+        @*<div class="col-md-12 shadow d-flex p-0 flex-wrap  mb-3">
                 <div class="col-md-12 article-container-header justify-content-between flex-wrap d-flex ">
                     <h3 class="">Agregar archivos </h3>
                     <span class="show-hide-bottom-form">
@@ -228,43 +236,43 @@
             </div>*@
 
 
-            <div class="col-md-12 ">
-                <hr />
-                <div class="d-flex flex-wrap justify-content-center ">
-                    <div class="m-2">
-                        <input type="button" value="Guardar" onclick="ValidateForm()" class="btn btn-success" id="houseFormButton" />
+        <div class="col-md-12 ">
+            <hr />
+            <div class="d-flex flex-wrap justify-content-center ">
+                <div class="m-2">
+                    <input type="button" value="Guardar" onclick="ValidateForm()" class="btn btn-success" id="houseFormButton" />
+                </div>
+                <div class="m-2">
+                    <a href="/Articles" class="btn btn-outline-secondary">Regresar</a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="UbicationFeaturesModal" tabindex="-1" role="dialog" aria-labelledby="UbicationFeaturesLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="FeatureslLabel">Lista de caracteristicas</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="m-2">
-                        <a href="/Articles" class="btn btn-outline-secondary">Regresar</a>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-flush" id="featuresList">
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-success" data-dismiss="modal">Listo!</button>
                     </div>
                 </div>
             </div>
+        </div>
 
+    }
 
-            <!-- Modal -->
-            <div class="modal fade" id="UbicationFeaturesModal" tabindex="-1" role="dialog" aria-labelledby="UbicationFeaturesLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="FeatureslLabel">Lista de caracteristicas</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <ul class="list-group list-group-flush" id="featuresList">
-                            </ul>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-success" data-dismiss="modal">Listo!</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        }
-
-    </div>
+</div>
 
 
 @section Scripts {
