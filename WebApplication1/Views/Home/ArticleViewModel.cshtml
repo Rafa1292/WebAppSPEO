@@ -3,6 +3,13 @@
 @{
     var slogan = "";
 
+    var initialPrice = Model.Article.Price;
+    var priceSize = initialPrice.Length - 3;
+    for (int x = priceSize; x > 0; x -= 3)
+    {
+        initialPrice = initialPrice.Insert(x, ",");
+    }
+
     if (!User.IsInRole("Create"))
     {
         slogan = "Mas de 500 propiedades disponibles...";
@@ -24,7 +31,7 @@
 
     var metaUrl = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}", Model.Article.Id.ToString());
     var metaPicture = String.Format("https://speoimages.blob.core.windows.net/shareimages/{0}{1}", Model.OutstandingPicture.Extension, ".jpg");
-    var metaDescription = Model.Article.Price;
+    var metaDescription = $"¢{initialPrice}";
 
 }
 
@@ -201,12 +208,6 @@
             <div class="col-md-7 mb-5">
                 <div class="col-12 flex-wrap d-flex justify-content-center align-items-center">
                     @{
-                        var initialPrice = Model.Article.Price;
-                        var priceSize = initialPrice.Length - 3;
-                        for (int x = priceSize; x > 0; x -= 3)
-                        {
-                            initialPrice = initialPrice.Insert(x, ",");
-                        }
                         var facebookShareUrl = String.Format("https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A44315%2FHome%2FArticleViewModel%3Fid%3D{0}&amp;src=sdkpreparse", Model.Article.Id);
 
                     }
