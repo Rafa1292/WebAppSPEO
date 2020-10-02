@@ -86,14 +86,15 @@
                 }
                 <div class="col-md-3 ">
                     @if (item.OutstandingPicture != null)
-                        {
-                            var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", item.OutstandingPicture.Extension);
-                        }
-                    <div class=" col-md-12 d-flex justify-content-center my-2">
-                        <div class="rounded approve-articles-image shadow" style="background-image: url(@imgSrc)">
+                    {
+                        var imgSrc = String.Format("https://speoimages.blob.core.windows.net/ubicationpictures/{0}", item.OutstandingPicture.Extension);
 
+                        <div class=" col-md-12 d-flex justify-content-center my-2">
+                            <div class="rounded approve-articles-image shadow" style="background-image: url(@imgSrc)">
+
+                            </div>
                         </div>
-                    </div>
+                    }
                     <div class="col-md-12 d-flex justify-content-center flex-wrap">
                         @Html.ActionLink("Aprobar", "ApproveArticle", new { id = item.Article.Id }, new { @class = "btn btn-success m-1 col-md-5" })
                         <button class="btn btn-danger m-1 col-md-5" id="btnReject_@item.Article.Id" onclick="openModal(@item.Article.Id)">Rechazar</button>
