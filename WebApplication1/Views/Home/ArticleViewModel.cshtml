@@ -24,7 +24,7 @@
 
     var metaUrl = String.Format("https://www.andreyquesada.com/Home/ArticleViewModel?id={0}", Model.Article.Id.ToString());
     var metaPicture = String.Format("https://speoimages.blob.core.windows.net/shareimages/{0}{1}", Model.OutstandingPicture.Extension, ".jpg");
-    var metaDescription = Model.Article.Description;
+    var metaDescription = Model.Article.Price;
 
 }
 
@@ -40,8 +40,8 @@
     <meta property="og:url" content="@metaUrl" />
     <meta property="og:type" content="article" />
     <meta property="og:image" content="@metaPicture" />
-    <meta property="og:title" content="Propiedades Andrey Quesada">
-    <meta property="og:description" content="@metaDescription">
+    <meta property="og:title" content="@metaDescription">
+    <meta property="og:description" content="Propiedades Andrey Quesada">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="600">
     <link href="~/Content/Site.css" rel="stylesheet" />
